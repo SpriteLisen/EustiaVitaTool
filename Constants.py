@@ -1,11 +1,14 @@
 TAG_INFO = "[INFO]: "
 TAG_ERR = "[Error]: "
 TAG_WARN = "[Warn]: "
+TAG_SAME = "[SAME]: "
+TAG_DIFF = "[DIFF]: "
 
 RESET = "\033[0m"
 RED = "\033[31m"
 YELLOW = "\033[33m"
 BLACK = "\033[90m"
+GREEN = "\033[92m"
 
 
 def log_info(msg):
@@ -19,6 +22,14 @@ def log_warn(msg):
 
 def log_error(msg):
     print(f"{RED}{TAG_ERR} {msg}{RESET}")
+
+
+def log_same(msg):
+    print(f"{GREEN}{TAG_SAME} {msg}{RESET}")
+
+
+def log_diff(msg):
+    print(f"{RED}{TAG_DIFF} {msg}{RESET}")
 
 
 # 打印帮助信息
