@@ -296,5 +296,5 @@ if __name__ == '__main__':
         print("repack_mrg")
     else:
         parser.print_usage()
-        sys.exit(20)
+        sys.exit(EXIT_WITH_HELP)
     sys.exit(0)
