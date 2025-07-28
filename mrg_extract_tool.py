@@ -158,16 +158,16 @@ class NameEntry:
         else:
             # Parse name count
             self.nam_file.seek(0x10)
-            self.nam_count, = unpack("<I", self.nam_file.read(0x4))
+            (self.entry_count,) = unpack("<I", self.nam_file.read(0x4))
 
-            log_info("{0} is index mode file, name count => {1}".format(in_nam.name, self.nam_count))
+            log_info("{0} is index mode file, name count => {1}".format(in_nam.name, self.entry_count))
 
             # Parse name index
             self.nam_file.seek(0x20)
             self.nam_index = {}
-            for i in range(self.nam_count):
+            for i in range(self.entry_count):
                 self.nam_index[i] = unpack("<I", self.nam_file.read(0x4))
-            self.nam_index[self.nam_count] = os.path.getsize(in_nam)
+            self.nam_index[self.entry_count] = os.path.getsize(in_nam)
 
     def get_name(self, index):
         if self.is_index_mode:
