@@ -391,7 +391,7 @@ class MergedPack:
         packed_data = io.BytesIO()
         for index, section in enumerate(sections):
             while packed_data.tell() % 16 != 0:
-                packed_data.write(b"\xff")
+                packed_data.write(PADDING_DATA)
                 # packed_data.write(b"\x00")
 
             section_start_offset = packed_data.tell()
@@ -419,7 +419,7 @@ class MergedPack:
         packed_bytes.write(packed_data.read())
 
         while packed_bytes.tell() % 8 != 0:
-            packed_bytes.write(b"\xff")
+            packed_bytes.write(PADDING_DATA)
             # packed_bytes.write(b"\x00")
 
         packed_bytes.seek(0)

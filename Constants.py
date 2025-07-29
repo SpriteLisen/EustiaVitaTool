@@ -46,6 +46,9 @@ DEFAULT_ENCODING = "Shift_JIS"
 # 默认的扇区大小
 DEFAULT_SECTOR_SIZE = 0x800
 
+# 用来对齐数据的字节
+PADDING_DATA = b"\xff"
+
 LIST_FILE_NAME = "list.txt"
 
 HEADER_FORMAT = "<HHHH"
