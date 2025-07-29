@@ -27,17 +27,14 @@ def parse_args():
 
     parser_unpack = subparsers.add_parser('unpack',
                                           help='unpack mrg and optionally create a filelist, it can auto parse .head & .nam file')
-    parser_unpack.add_argument('-l', '--list',
-                               default=None, dest='file list',
-                               help='Output filelist path (default: none -- only unpack files)')
-    parser_unpack.add_argument('input', metavar='input.mrg', help='Input .mrg file')
+    parser_unpack.add_argument('input', metavar='input.mrg', help='Input .mrg file [REQUIRED]')
 
-    parser_repack = subparsers.add_parser('repack', help='generate a hed|nam|mrg file from an existing filelist')
+    parser_repack = subparsers.add_parser('repack', help='generate a mrg file from an existing filelist')
     parser_repack.add_argument('-l', '--list',
                                required=True, dest='file list', type=argparse.FileType('r'),
                                help='Input filelist path [REQUIRED]')
-    parser_repack.add_argument('output', metavar='output.hed',
-                               help='Output .hed file. Same basename is used for .nam/.mrg')
+    parser_repack.add_argument('input', metavar='./input', help='Input repack dir [REQUIRED]')
+    parser_repack.add_argument('output', metavar='output.mrg', help='Output .mrg file [REQUIRED]')
 
     parser_instance.add_argument('-h', '--help',
                                  action=HelpAction, default=argparse.SUPPRESS,
@@ -224,6 +221,16 @@ class MergedPack:
 
         self.output_dir = in_mrg.with_name(in_hed.stem + '-unpacked')
 
+        if self.output_dir.exists():
+            log_warn("Removing existing directory: {0}".format(self.output_dir))
+            shutil.rmtree(self.output_dir)
+
+        self.output_dir.mkdir(parents=True)
+
+        self.list_file = open(
+            self.output_dir.joinpath("list.txt"), 'w', encoding='utf-8'
+        )
+
         # Single mrg file
         if self.head_entry is None and self.name_entry is None:
             self.is_single_file = True
@@ -236,6 +243,8 @@ class MergedPack:
             self.entry_count = self.head_entry.entry_count
 
     def release(self):
+        self.list_file.close()
+
         self.mrg_file.close()
 
         if self.head_entry is not None:
@@ -281,17 +290,49 @@ class MergedPack:
                 output_file.write(data)
                 extract_count += 1
 
+            self.list_file.write(real_file_name + "\n")
             log_info("Extract {0} succeed, size => {1}".format(real_file_name, output_file_name.stat().st_size))
 
         log_succeed("Successfully extracted a total of {0} files.".format(extract_count))
 
+    def extract_combin_archive(self):
+        extract_count = 0
+        self.head_entry.parse_data()
+
+        for i in range(self.entry_count):
+            entry_data = self.head_entry.entry_data[i]
+
+            # 跳过空的数据不进行写入
+            if entry_data is None:
+                log_warn("Pass empty entry data, index => {0}".format(i))
+                continue
+
+            self.mrg_file.seek(entry_data.offset)
+            mrg_entry_data = self.mrg_file.read(entry_data.size)
+
+            file_name = "entry_{i:03}.{suffix}".format(
+                i=i, suffix=detect_file_extension(mrg_entry_data)
+            ) if self.name_entry is None else self.name_entry.get_name(i)
+
+            path = self.output_dir.joinpath(file_name)
+            # 存在相同文件名的情况下自动重命名, 防止数据被覆盖
+            if path.exists():
+                root, ext = os.path.splitext(file_name)
+                newname = root + '-' + str(i) + ext
+                path = self.output_dir.joinpath(newname)
+
+            with open(path, 'wb') as f:
+                # can parse file magic head in this, replace the suffix
+                # like .mzp or .mzx and other suffix
+                f.write(mrg_entry_data)
+                extract_count += 1
+
+            self.list_file.write(file_name + "\n")
+            log_info("Extract {0} succeed, size => {1}".format(file_name, path.stat().st_size))
+
+        log_succeed("Successfully extracted a total of {0} files.".format(extract_count))
+
     def extract(self):
-        if self.output_dir.exists():
-            log_warn("Removing existing directory: {0}".format(self.output_dir))
-            shutil.rmtree(self.output_dir)
-
-        self.output_dir.mkdir(parents=True)
-
         if self.is_single_file:
             self.mrg_file.seek(0)
             file_head = self.mrg_file.read(0x8)
@@ -307,40 +348,7 @@ class MergedPack:
             else:
                 log_error("Unsupported this archive file => {0}".format(self.mrg_file.name))
         else:
-            extract_count = 0
-            self.head_entry.parse_data()
-
-            for i in range(self.entry_count):
-                entry_data = self.head_entry.entry_data[i]
-
-                # 跳过空的数据不进行写入
-                if entry_data is None:
-                    log_warn("Pass empty entry data, index => {0}".format(i))
-                    continue
-
-                self.mrg_file.seek(entry_data.offset)
-                mrg_entry_data = self.mrg_file.read(entry_data.size)
-
-                file_name = "entry_{i:03}.{suffix}".format(
-                    i=i, suffix=detect_file_extension(mrg_entry_data)
-                ) if self.name_entry is None else self.name_entry.get_name(i)
-
-                path = self.output_dir.joinpath(file_name)
-                # 存在相同文件名的情况下自动重命名, 防止数据被覆盖
-                if path.exists():
-                    root, ext = os.path.splitext(file_name)
-                    newname = root + '-' + str(i) + ext
-                    path = self.output_dir.joinpath(newname)
-
-                with open(path, 'wb') as f:
-                    # can parse file magic head in this, replace the suffix
-                    # like .mzp or .mzx and other suffix
-                    f.write(mrg_entry_data)
-                    extract_count += 1
-
-                log_info("Extract {0} succeed, size => {1}".format(file_name, path.stat().st_size))
-
-            log_succeed("Successfully extracted a total of {0} files.".format(extract_count))
+            self.extract_combin_archive()
 
 
 def do_unpack(input_args):
@@ -354,7 +362,6 @@ if __name__ == '__main__':
     if args.subcommand == "unpack":
         do_unpack(args)
     elif args.subcommand == "repack":
-        # repack_verb(args)
         print("repack_mrg")
     else:
         parser.print_usage()
