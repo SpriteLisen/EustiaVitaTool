@@ -1,3 +1,4 @@
+TAG_SUCCEED = "[SUCC]: "
 TAG_INFO = "[INFO]: "
 TAG_ERR = "[Error]: "
 TAG_WARN = "[Warn]: "
@@ -9,6 +10,10 @@ RED = "\033[31m"
 YELLOW = "\033[33m"
 BLACK = "\033[90m"
 GREEN = "\033[92m"
+
+
+def log_succeed(msg):
+    print(f"{GREEN}{TAG_SUCCEED} {msg}{RESET}")
 
 
 def log_info(msg):
@@ -49,3 +54,31 @@ MZX_MAGIC = b"MZX0"
 
 # NAM 的文件头
 NAM_MAGIC = b"MRG.NAM"
+
+SUFFIX_MRG = ".mrg"
+SUFFIX_MZX = ".mzx"
+SUFFIX_MZP = ".mzp"
+SUFFIX_BIN = ".bin"
+
+
+def detect_file_extension(data):
+    if data.startswith(MZX_MAGIC):
+        return SUFFIX_MZX
+
+    # 不准确, 特别在去掉 .hed 文件的单 mrg 文件上, 这样判定会出错
+    if data.startswith(MRG_MAGIC) and len(data) >= 8:
+        # 第 6~8 字节为 entry count（2 字节 little-endian）
+        entry_count = int.from_bytes(data[6:8], 'little')
+
+        # 每个 entry 8 字节 + 8 字节头 = 至少需要 6+2+8×n 字节
+        # expected_min_size = 6 + 2 + (entry_count * 8)
+        # if len(data) >= expected_min_size:
+        #     return '.mzp'
+
+        # 基于启发式判断：entry_count > 0 且不过大
+        if 0 < entry_count < 0x1000:
+            # return SUFFIX_MZP
+            # 其实本质是就是一个 mrg 文件, 最后按照 mzp 的格式去解构
+            return SUFFIX_MRG
+
+    return SUFFIX_BIN

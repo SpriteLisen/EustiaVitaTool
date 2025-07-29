@@ -54,7 +54,12 @@ class HeadEntry:
 
         _, first_entry_high = unpack('<HH', self.hed_file.read(0x04))
         self.entry_length = 8 if (first_entry_high & 0x0FFF) == 0 else 4
-        self.entry_count = in_hed.stat().st_size // self.entry_length
+
+        # 计算 hed 文件结束的标志占用多少位, 一般末尾连续 16 个字节都是 FF
+        end_flag_size = 16 // self.entry_length
+        log_info("Hed file end flag size => {0}".format(end_flag_size))
+
+        self.entry_count = (in_hed.stat().st_size // self.entry_length) - end_flag_size
         log_info("Estimate archive has {0} entries".format(self.entry_count))
 
     class Data:
@@ -193,6 +198,17 @@ class NameEntry:
         self.nam_file.close()
 
 
+class ArchiveEntry:
+    def __init__(self, sector_offset, offset, sector_size_upper_boundary, size, number_of_entries):
+        self.sector_offset = sector_offset
+        self.offset = offset
+        self.sector_size_upper_boundary = sector_size_upper_boundary
+        self.size = size
+        self.real_size = (sector_size_upper_boundary - 1) // 0x20 * 0x10000 + size
+        data_start_offset = 6 + 2 + number_of_entries * 8
+        self.real_offset = data_start_offset + self.sector_offset * 0x800 + self.offset
+
+
 class MergedPack:
     def __init__(self, in_mrg):
         assert in_mrg.suffix.lower() == '.mrg', "Input file must be .mrg!"
@@ -227,13 +243,47 @@ class MergedPack:
         if self.name_entry is not None:
             self.name_entry.release()
 
-    def detect_file_extension(self, data):
-        if data.startswith(MZX_MAGIC):
-            return '.mzx'
-        # elif data.startswith(b'mrgd00'):  # 之前的 mzp 头是 mrgd00... 但无法唯一判定, 因为 mrg 也是这个头
-        #    return '.mzp'
-        else:
-            return '.bin'  # fallback
+    def extract_single_archive(self, entry_count):
+        # 跳过文件头, 直接从数据位开始 load
+        self.mrg_file.seek(8)
+
+        # Parse Entries desc
+        entries_descriptors = []
+        for i in range(entry_count):
+            sector_offset, offset, sector_size_upper_boundary, size = unpack('<HHHH', self.mrg_file.read(8))
+            entries_descriptors.append(
+                ArchiveEntry(
+                    sector_offset=sector_offset, offset=offset,
+                    sector_size_upper_boundary=sector_size_upper_boundary,
+                    size=size, number_of_entries=entry_count
+                )
+            )
+
+        # Parse name
+        file_names = []
+        for i in range(entry_count):
+            file_name = "entry_{i:03}{suffix}".format(
+                i=i, suffix=SUFFIX_MZX
+            )
+            file_names.append(file_name)
+
+        # Do extract action
+        extract_count = 0
+        for index, entry in enumerate(entries_descriptors):
+            self.mrg_file.seek(entry.real_offset)
+            data = self.mrg_file.read(entry.real_size)
+            suffix = detect_file_extension(data)
+
+            real_file_name = file_names[index].replace(SUFFIX_MZX, suffix)
+
+            output_file_name = self.output_dir.joinpath(real_file_name)
+            with open(output_file_name, 'wb') as output_file:
+                output_file.write(data)
+                extract_count += 1
+
+            log_info("Extract {0} succeed, size => {1}".format(real_file_name, output_file_name.stat().st_size))
+
+        log_succeed("Successfully extracted a total of {0} files.".format(extract_count))
 
     def extract(self):
         if self.output_dir.exists():
@@ -243,7 +293,19 @@ class MergedPack:
         self.output_dir.mkdir(parents=True)
 
         if self.is_single_file:
-            pass
+            self.mrg_file.seek(0)
+            file_head = self.mrg_file.read(0x8)
+
+            suffix = detect_file_extension(file_head)
+
+            (entry_count,) = unpack('<H', file_head[6:8])
+            log_info("Found {0} entries in archive.".format(entry_count))
+
+            if suffix == SUFFIX_MRG:
+                log_info("This mrg file is a single archive.")
+                self.extract_single_archive(entry_count)
+            else:
+                log_error("Unsupported this archive file => {0}".format(self.mrg_file.name))
         else:
             extract_count = 0
             self.head_entry.parse_data()
@@ -260,7 +322,7 @@ class MergedPack:
                 mrg_entry_data = self.mrg_file.read(entry_data.size)
 
                 file_name = "entry_{i:03}.{suffix}".format(
-                    i=i, suffix=self.detect_file_extension(mrg_entry_data)
+                    i=i, suffix=detect_file_extension(mrg_entry_data)
                 ) if self.name_entry is None else self.name_entry.get_name(i)
 
                 path = self.output_dir.joinpath(file_name)
@@ -278,7 +340,7 @@ class MergedPack:
 
                 log_info("Extract {0} succeed, size => {1}".format(file_name, path.stat().st_size))
 
-            log_info("Successfully extracted a total of {0} files.".format(extract_count))
+            log_succeed("Successfully extracted a total of {0} files.".format(extract_count))
 
 
 def do_unpack(input_args):

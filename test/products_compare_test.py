@@ -50,6 +50,6 @@ if __name__ == '__main__':
     import sys
 
     if len(sys.argv) != 3:
-        log_error("Usage: python mrg_product_compare_test.py <dir1> <dir2>")
+        log_error("Usage: python products_compare_test.py <dir1> <dir2>")
     else:
         compare_directories(sys.argv[1], sys.argv[2])
