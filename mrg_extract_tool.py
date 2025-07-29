@@ -271,11 +271,11 @@ class MergedPack:
 
         head_entry = getattr(self, 'head_entry', None)
         if head_entry is not None:
-            head_entry.close()
+            head_entry.release()
 
         name_entry = getattr(self, 'name_entry', None)
         if name_entry is not None:
-            name_entry.close()
+            name_entry.release()
 
     def extract_single_archive(self, entry_count):
         # 跳过文件头, 直接从数据位开始 load
