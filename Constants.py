@@ -46,6 +46,10 @@ DEFAULT_ENCODING = "Shift_JIS"
 # 默认的扇区大小
 DEFAULT_SECTOR_SIZE = 0x800
 
+LIST_FILE_NAME = "list.txt"
+
+HEADER_FORMAT = "<HHHH"
+
 # MRG 的文件头
 MRG_MAGIC = b"mrgd00"
 

@@ -3,6 +3,7 @@ import sys
 assert sys.version_info >= (3, 7), "Python 3.7 or higher is required"
 
 import os
+import io
 import shutil
 from Constants import *
 import argparse
@@ -31,10 +32,15 @@ def parse_args():
 
     parser_repack = subparsers.add_parser('repack', help='generate a mrg file from an existing filelist')
     parser_repack.add_argument('-l', '--list',
-                               required=True, dest='file list', type=argparse.FileType('r'),
+                               required=True, dest='file_list', type=Path,
                                help='Input filelist path [REQUIRED]')
-    parser_repack.add_argument('input', metavar='./input', help='Input repack dir [REQUIRED]')
-    parser_repack.add_argument('output', metavar='output.mrg', help='Output .mrg file [REQUIRED]')
+    parser_repack.add_argument(
+        '--with-hed',
+        action='store_true',
+        help='Enable re-packing output .hed file support'
+    )
+    parser_repack.add_argument('input', metavar='./input', type=Path, help='Input repack dir [REQUIRED]')
+    parser_repack.add_argument('output', metavar='output.mrg', type=Path, help='Output .mrg file [REQUIRED]')
 
     parser_instance.add_argument('-h', '--help',
                                  action=HelpAction, default=argparse.SUPPRESS,
@@ -62,36 +68,36 @@ class HeadEntry:
     class Data:
         def __init__(self, raw_data):
             if len(raw_data) == 8:
-                ofs_low, ofs_high, size_sect, size_low = unpack('<HHHH', raw_data)
-                self.offset = 0x800 * (ofs_low | ((ofs_high & 0xF000) << 4))
-                self.rounded_size = self.size = 0x800 * size_sect
+                ofs_low, ofs_high, size_sect, size_low = unpack(HEADER_FORMAT, raw_data)
+                self.offset = DEFAULT_SECTOR_SIZE * (ofs_low | ((ofs_high & 0xF000) << 4))
+                self.rounded_size = self.size = DEFAULT_SECTOR_SIZE * size_sect
                 if size_low == 0:
                     self.size = self.rounded_size
                 else:
-                    self.size = size_low | ((0x800 * (size_sect - 1)) & 0xFFFF0000)
+                    self.size = size_low | ((DEFAULT_SECTOR_SIZE * (size_sect - 1)) & 0xFFFF0000)
 
             elif len(raw_data) == 4:
                 ofs_low, ofs_high = unpack('<HH', raw_data)
-                self.offset = 0x800 * (ofs_low | ((ofs_high & 0xF000) << 4))
-                self.rounded_size = self.size = 0x800 * (ofs_high & 0x0FFF)
+                self.offset = DEFAULT_SECTOR_SIZE * (ofs_low | ((ofs_high & 0xF000) << 4))
+                self.rounded_size = self.size = DEFAULT_SECTOR_SIZE * (ofs_high & 0x0FFF)
 
             else:
                 raise ValueError('Must a 4-byte or 8-byte binary block, source file may be incomplete')
 
         def to_block(self, blocksize):
             if blocksize == 8:
-                ofs_aligned = self.offset // 0x800
+                ofs_aligned = self.offset // DEFAULT_SECTOR_SIZE
                 ofs_low = ofs_aligned & 0xFFFF
                 ofs_high = (ofs_aligned & 0xF0000) >> 4
                 size_low = self.size & 0xFFFF
                 if size_low == 0:
-                    size_sect = self.size // 0x800
+                    size_sect = self.size // DEFAULT_SECTOR_SIZE
                 else:
-                    size_sect = self.size // 0x800 + 1
-                return pack('<HHHH', ofs_low, ofs_high, size_sect, size_low)
+                    size_sect = self.size // DEFAULT_SECTOR_SIZE + 1
+                return pack(HEADER_FORMAT, ofs_low, ofs_high, size_sect, size_low)
 
             elif blocksize == 4:
-                ofs_aligned = self.offset // 0x800
+                ofs_aligned = self.offset // DEFAULT_SECTOR_SIZE
                 ofs_low = ofs_aligned & 0xFFFF
                 ofs_high = (ofs_aligned & 0xF0000) >> 4
                 return pack('<HH', ofs_low, ofs_high)
@@ -203,54 +209,73 @@ class ArchiveEntry:
         self.size = size
         self.real_size = (sector_size_upper_boundary - 1) // 0x20 * 0x10000 + size
         data_start_offset = 6 + 2 + number_of_entries * 8
-        self.real_offset = data_start_offset + self.sector_offset * 0x800 + self.offset
+        self.real_offset = data_start_offset + self.sector_offset * DEFAULT_SECTOR_SIZE + self.offset
 
 
 class MergedPack:
-    def __init__(self, in_mrg):
-        assert in_mrg.suffix.lower() == '.mrg', "Input file must be .mrg!"
+    def __init__(self, in_mrg: Path = None, in_list: Path = None):
+        if in_mrg is not None:
+            assert in_mrg.suffix.lower() == '.mrg', "Input file must be .mrg!"
 
-        self.mrg_file = open(in_mrg, 'rb')
-        suffix_isupper = in_mrg.suffix.isupper()
+            self.mrg_file = open(in_mrg, 'rb')
+            suffix_isupper = in_mrg.suffix.isupper()
 
-        in_hed = in_mrg.with_suffix(".HED" if suffix_isupper else ".hed")
-        in_nam = in_mrg.with_suffix(".NAM" if suffix_isupper else ".nam")
+            in_hed = in_mrg.with_suffix(".HED" if suffix_isupper else ".hed")
+            in_nam = in_mrg.with_suffix(".NAM" if suffix_isupper else ".nam")
 
-        self.head_entry = HeadEntry(in_hed) if in_hed.exists() and in_hed.is_file() else None
-        self.name_entry = NameEntry(in_nam) if in_nam.exists() and in_nam.is_file() else None
+            self.head_entry = HeadEntry(in_hed) if in_hed.exists() and in_hed.is_file() else None
+            self.name_entry = NameEntry(in_nam) if in_nam.exists() and in_nam.is_file() else None
 
-        self.output_dir = in_mrg.with_name(in_hed.stem + '-unpacked')
+            self.output_dir = in_mrg.with_name(in_hed.stem + '-unpacked')
 
-        if self.output_dir.exists():
-            log_warn("Removing existing directory: {0}".format(self.output_dir))
-            shutil.rmtree(self.output_dir)
+            if self.output_dir.exists():
+                log_warn("Removing existing directory: {0}".format(self.output_dir))
+                shutil.rmtree(self.output_dir)
 
-        self.output_dir.mkdir(parents=True)
+            self.output_dir.mkdir(parents=True)
 
-        self.list_file = open(
-            self.output_dir.joinpath("list.txt"), 'w', encoding='utf-8'
-        )
+            self.list_file = open(
+                self.output_dir.joinpath(LIST_FILE_NAME), 'w', encoding='utf-8'
+            )
 
-        # Single mrg file
-        if self.head_entry is None and self.name_entry is None:
-            self.is_single_file = True
-            magic, self.entry_count = unpack("<6sH", self.mrg_file.read(0x8))
-            assert magic == MRG_MAGIC, "Invalid mrg file => {0}".format(in_mrg.name)
+            # Single mrg file
+            if self.head_entry is None and self.name_entry is None:
+                self.is_single_file = True
+                magic, self.entry_count = unpack("<6sH", self.mrg_file.read(0x8))
+                assert magic == MRG_MAGIC, "Invalid mrg file => {0}".format(in_mrg.name)
+            else:
+                assert self.head_entry is not None, "Must have a .hed file!"
+
+                self.is_single_file = False
+                self.entry_count = self.head_entry.entry_count
+
+            log_info("Start with extract mode.")
+        elif in_list is not None:
+            assert in_list.name == LIST_FILE_NAME, "list file name must be {0}".format(LIST_FILE_NAME)
+
+            list_file_path = Path(in_list)
+            with open(list_file_path, 'r', encoding='utf-8') as f:
+                self.file_names = [line.strip() for line in f.readlines() if line.strip()]
+
+            assert len(self.file_names) > 0, "file list must not be empty"
+
+            log_info("Start with re-pack mode.")
+            log_info("Will re-pack {0} files.".format(len(self.file_names)))
         else:
-            assert self.head_entry is not None, "Must have a .hed file!"
-
-            self.is_single_file = False
-            self.entry_count = self.head_entry.entry_count
+            raise Exception("MergedPack init error, must input .mrg or list file.")
 
     def release(self):
-        self.list_file.close()
+        mrg_file = getattr(self, 'mrg_file', None)
+        if mrg_file is not None:
+            mrg_file.close()
 
-        self.mrg_file.close()
+        head_entry = getattr(self, 'head_entry', None)
+        if head_entry is not None:
+            head_entry.close()
 
-        if self.head_entry is not None:
-            self.head_entry.release()
-        if self.name_entry is not None:
-            self.name_entry.release()
+        name_entry = getattr(self, 'name_entry', None)
+        if name_entry is not None:
+            name_entry.close()
 
     def extract_single_archive(self, entry_count):
         # 跳过文件头, 直接从数据位开始 load
@@ -259,7 +284,7 @@ class MergedPack:
         # Parse Entries desc
         entries_descriptors = []
         for i in range(entry_count):
-            sector_offset, offset, sector_size_upper_boundary, size = unpack('<HHHH', self.mrg_file.read(8))
+            sector_offset, offset, sector_size_upper_boundary, size = unpack(HEADER_FORMAT, self.mrg_file.read(8))
             entries_descriptors.append(
                 ArchiveEntry(
                     sector_offset=sector_offset, offset=offset,
@@ -350,10 +375,83 @@ class MergedPack:
         else:
             self.extract_combin_archive()
 
+    def repack_single_mrg_file(self, input_path: Path, output_file: Path):
+        log_info("Start re-packing single .mrg file")
+
+        sections = []
+
+        for file_name in self.file_names:
+            with open(input_path.joinpath(file_name), "rb") as f:
+                sections.append(f.read())
+
+        header = pack("<6sH", MRG_MAGIC, len(sections))
+        packed_bytes = io.BytesIO()
+        packed_bytes.write(header)
+
+        packed_data = io.BytesIO()
+        for index, section in enumerate(sections):
+            while packed_data.tell() % 16 != 0:
+                packed_data.write(b"\xff")
+                # packed_data.write(b"\x00")
+
+            section_start_offset = packed_data.tell()
+            section_sector_offset = section_start_offset // DEFAULT_SECTOR_SIZE
+            section_byte_offset = section_start_offset % DEFAULT_SECTOR_SIZE
+
+            size_sectors = len(section) // DEFAULT_SECTOR_SIZE
+            size_bytes = len(section) & 0xFFFF
+            if len(section) % DEFAULT_SECTOR_SIZE:
+                size_sectors += 1
+
+            packed_bytes.write(
+                pack(
+                    HEADER_FORMAT,
+                    section_sector_offset, section_byte_offset,
+                    size_sectors, size_bytes
+                )
+            )
+
+            packed_data.write(section)
+
+            log_info("Re-packed {0} succeed".format(self.file_names[index]))
+
+        packed_data.seek(0)
+        packed_bytes.write(packed_data.read())
+
+        while packed_bytes.tell() % 8 != 0:
+            packed_bytes.write(b"\xff")
+            # packed_bytes.write(b"\x00")
+
+        packed_bytes.seek(0)
+
+        with open(output_file, "wb") as f:
+            f.write(packed_bytes.read())
+
+        log_succeed("Successfully re-packed archive file => {0}".format(output_file.name))
+
+    def repack(self, with_hed: bool, input_path: Path, output_file: Path):
+        if output_file.exists():
+            output_file.unlink()
+            log_warn("Removing existing output file: {0}".format(output_file.name))
+
+        if with_hed:
+            pass
+        else:
+            self.repack_single_mrg_file(input_path, output_file)
+
 
 def do_unpack(input_args):
-    merged_pack = MergedPack(Path(input_args.input))
+    merged_pack = MergedPack(in_mrg=Path(input_args.input))
     merged_pack.extract()
+    merged_pack.release()
+
+
+def do_repack(input_args):
+    assert input_args.input is not None, "Input dir required."
+    assert input_args.output is not None, "Output file name required."
+
+    merged_pack = MergedPack(in_list=input_args.file_list)
+    merged_pack.repack(with_hed=input_args.with_hed, input_path=input_args.input, output_file=input_args.output)
     merged_pack.release()
 
 
@@ -362,7 +460,7 @@ if __name__ == '__main__':
     if args.subcommand == "unpack":
         do_unpack(args)
     elif args.subcommand == "repack":
-        print("repack_mrg")
+        do_repack(args)
     else:
         parser.print_usage()
         sys.exit(EXIT_WITH_HELP)
