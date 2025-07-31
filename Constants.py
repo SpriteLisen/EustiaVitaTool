@@ -1,6 +1,6 @@
 TAG_SUCCEED = "[SUCC]: "
 TAG_INFO = "[INFO]: "
-TAG_ERR = "[Error]: "
+TAG_ERR = "[ERRO]: "
 TAG_WARN = "[Warn]: "
 TAG_SAME = "[SAME]: "
 TAG_DIFF = "[DIFF]: "
@@ -45,9 +45,19 @@ DEFAULT_ENCODING = "Shift_JIS"
 
 # 默认的扇区大小
 DEFAULT_SECTOR_SIZE = 0x800
+# 默认的数据块大小
+DEFAULT_BLOCK_SIZE = 0x8
 
-# 用来对齐数据的字节
-PADDING_DATA = b"\xff"
+# .nam 文件结尾的空数据长度, 默认是 32 个字节, 全部填充 FF
+NAM_ENTRY_BLOCK_SIZE = 0x20
+
+# .hed 文件结尾的空数据长度, 默认是 16 个字节, 全部填充 FF
+HED_END_BLOCK_SIZE = 0x10
+
+# 用来对齐结尾数据的字节
+END_PADDING_DATA: bytes = b"\xff"
+# 用来对齐空数据的字节
+EMPTY_PADDING_DATA: bytes = b"\x00"
 
 LIST_FILE_NAME = "list.txt"
 
@@ -62,6 +72,8 @@ MZX_MAGIC = b"MZX0"
 # NAM 的文件头
 NAM_MAGIC = b"MRG.NAM"
 
+SUFFIX_HED = ".hed"
+SUFFIX_NAM = ".nam"
 SUFFIX_MRG = ".mrg"
 SUFFIX_MZX = ".mzx"
 SUFFIX_MZP = ".mzp"

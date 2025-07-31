@@ -12,6 +12,7 @@ from struct import unpack, unpack_from, pack
 
 
 class HelpAction(argparse._HelpAction):
+    # noinspection PyProtectedMember
     def __call__(self, parser_instance, namespace, values, option_string=None):
         parser_instance.print_help()
         for subparser_action in parser_instance._actions:
@@ -58,16 +59,17 @@ class HeadEntry:
         _, first_entry_high = unpack('<HH', self.hed_file.read(0x04))
         self.entry_length = 8 if (first_entry_high & 0x0FFF) == 0 else 4
 
-        # 计算 hed 文件结束的标志占用多少位, 一般末尾连续 16 个字节都是 FF
-        end_flag_size = 16 // self.entry_length
-        log_info("Hed file end flag size => {0}".format(end_flag_size))
-
-        self.entry_count = (in_hed.stat().st_size // self.entry_length) - end_flag_size
-        log_info("Estimate archive has {0} entries".format(self.entry_count))
+        # 总大小需要减去末尾 16 字符的结束 FF 空数据, 才能正确的计算文件大小
+        self.entry_count = (in_hed.stat().st_size - HED_END_BLOCK_SIZE) // self.entry_length
+        log_info(".nam archive has {0} entries".format(self.entry_count))
 
     class Data:
-        def __init__(self, raw_data):
-            if len(raw_data) == 8:
+        def __init__(self, raw_data=None, size=0, offset=0):
+            if raw_data is None:
+                self.size = size
+                self.offset = offset
+
+            elif len(raw_data) == 8:
                 ofs_low, ofs_high, size_sect, size_low = unpack(HEADER_FORMAT, raw_data)
                 self.offset = DEFAULT_SECTOR_SIZE * (ofs_low | ((ofs_high & 0xF000) << 4))
                 self.rounded_size = self.size = DEFAULT_SECTOR_SIZE * size_sect
@@ -84,16 +86,30 @@ class HeadEntry:
             else:
                 raise ValueError('Must a 4-byte or 8-byte binary block, source file may be incomplete')
 
-        def to_block(self, blocksize):
+        def to_block(self, blocksize, entry_index):
             if blocksize == 8:
                 ofs_aligned = self.offset // DEFAULT_SECTOR_SIZE
                 ofs_low = ofs_aligned & 0xFFFF
                 ofs_high = (ofs_aligned & 0xF0000) >> 4
-                size_low = self.size & 0xFFFF
-                if size_low == 0:
+
+                # 判断 size_sect
+                # 纠正扇区的取整, 如果不足一个扇区则按一个扇区算
+                if self.size % DEFAULT_SECTOR_SIZE == 0:
                     size_sect = self.size // DEFAULT_SECTOR_SIZE
                 else:
                     size_sect = self.size // DEFAULT_SECTOR_SIZE + 1
+
+                # 判断 size_low
+                # 若文件大小是 65536 的倍数, 低 16 位为 0 的情况下, 则看当前是在 16 字节的前半段偏移还是后半段偏移
+                # 根据具体的偏移位置给结束的标记
+                size_low = self.size & 0xFFFF
+                if size_low == 0:
+                    byte_pos_in_line = (entry_index * 8) % 16
+                    if byte_pos_in_line < 8:
+                        size_low = 0xA000
+                    else:
+                        size_low = 0xB000
+
                 return pack(HEADER_FORMAT, ofs_low, ofs_high, size_sect, size_low)
 
             elif blocksize == 4:
@@ -107,35 +123,10 @@ class HeadEntry:
     def parse_data(self):
         self.hed_file.seek(0)
 
-        # index = 0
-        # while True:
-        #     blob = self.hed_file.read(self.entry_length)
-        #     # 文件已经读完
-        #     if len(blob) < self.entry_length:
-        #         break
-        #
-        #     (first_word,) = unpack_from('<L', blob)
-        #     # 跳过空字符, 填充一个空数据进去, 这样能保障后续的流程不出错
-        #     if first_word == 0xFFFFFFFF:
-        #         self.entry_data[index] = None
-        #         index += 1
-        #         continue
-        #
-        #     # 跳过无效的数据, 这样可以不用进行统计
-        #     entry = HeadEntry.Data(blob)
-        #     # if entry.size == 0 or entry.offset == 0:
-        #     #     continue
-        #
-        #     self.entry_data[index] = entry
-        #     index += 1
-        #
-        # self.entry_count = len(self.entry_data)
-        # log_info("Actual archive has {0} entries".format(self.entry_count))
-
         for i in range(self.entry_count):
             blob = self.hed_file.read(self.entry_length)
 
-            # 跳过空字符, 填充一个空数据进去, 这样能保障后续的流程不出错
+            # 防止溢出读到结尾空字符的情况, 跳过空字符, 填充一个空数据进去, 这样能保障后续的流程不出错
             (first_word,) = unpack_from('<L', blob)
             if first_word == 0xFFFFFFFF:
                 self.entry_data[i] = None
@@ -154,10 +145,11 @@ class NameEntry:
 
         self.is_index_mode = True if self.nam_file.read(0x7) == NAM_MAGIC else False
         if not self.is_index_mode:
-            self.nam_length = 0x8 if in_nam.name.find('voice') >= 0 else 0x20
-            self.entry_count = in_nam.stat().st_size // self.nam_length
+            self.nam_length = DEFAULT_BLOCK_SIZE if in_nam.name.find('voice') >= 0 else NAM_ENTRY_BLOCK_SIZE
+            # 实际的数量需要减去一个数据块的长度, 因为尾部会多填充一个数据块的空数据作为结尾标识
+            self.entry_count = (in_nam.stat().st_size - NAM_ENTRY_BLOCK_SIZE) // self.nam_length
             log_info(
-                "{0} is not index mode file, calc length => {1}, name count => {2}".format(
+                "{0} is not index mode file, block size => {1}, entry count => {2}".format(
                     in_nam.name,
                     self.nam_length,
                     self.entry_count
@@ -171,7 +163,7 @@ class NameEntry:
             log_info("{0} is index mode file, name count => {1}".format(in_nam.name, self.entry_count))
 
             # Parse name index
-            self.nam_file.seek(0x20)
+            self.nam_file.seek(NAM_ENTRY_BLOCK_SIZE)
             self.nam_index = {}
             for i in range(self.entry_count):
                 self.nam_index[i] = unpack("<I", self.nam_file.read(0x4))
@@ -207,7 +199,7 @@ class ArchiveEntry:
         self.offset = offset
         self.sector_size_upper_boundary = sector_size_upper_boundary
         self.size = size
-        self.real_size = (sector_size_upper_boundary - 1) // 0x20 * 0x10000 + size
+        self.real_size = (sector_size_upper_boundary - 1) // NAM_ENTRY_BLOCK_SIZE * 0x10000 + size
         data_start_offset = 6 + 2 + number_of_entries * 8
         self.real_offset = data_start_offset + self.sector_offset * DEFAULT_SECTOR_SIZE + self.offset
 
@@ -215,16 +207,18 @@ class ArchiveEntry:
 class MergedPack:
     def __init__(self, in_mrg: Path = None, in_list: Path = None):
         if in_mrg is not None:
-            assert in_mrg.suffix.lower() == '.mrg', "Input file must be .mrg!"
+            assert in_mrg.suffix.lower() == SUFFIX_MRG, "Input file must be .mrg!"
 
             self.mrg_file = open(in_mrg, 'rb')
             suffix_isupper = in_mrg.suffix.isupper()
 
-            in_hed = in_mrg.with_suffix(".HED" if suffix_isupper else ".hed")
-            in_nam = in_mrg.with_suffix(".NAM" if suffix_isupper else ".nam")
+            in_hed = in_mrg.with_suffix(".HED" if suffix_isupper else SUFFIX_HED)
+            in_nam = in_mrg.with_suffix(".NAM" if suffix_isupper else SUFFIX_NAM)
 
             self.head_entry = HeadEntry(in_hed) if in_hed.exists() and in_hed.is_file() else None
             self.name_entry = NameEntry(in_nam) if in_nam.exists() and in_nam.is_file() else None
+
+            assert self.head_entry.entry_count == self.name_entry.entry_count, "The entry count in .hed and .nam must be the same."
 
             self.output_dir = in_mrg.with_name(in_hed.stem + '-unpacked')
 
@@ -241,7 +235,7 @@ class MergedPack:
             # Single mrg file
             if self.head_entry is None and self.name_entry is None:
                 self.is_single_file = True
-                magic, self.entry_count = unpack("<6sH", self.mrg_file.read(0x8))
+                magic, self.entry_count = unpack("<6sH", self.mrg_file.read(DEFAULT_BLOCK_SIZE))
                 assert magic == MRG_MAGIC, "Invalid mrg file => {0}".format(in_mrg.name)
             else:
                 assert self.head_entry is not None, "Must have a .hed file!"
@@ -343,8 +337,8 @@ class MergedPack:
             # 存在相同文件名的情况下自动重命名, 防止数据被覆盖
             if path.exists():
                 root, ext = os.path.splitext(file_name)
-                newname = root + '-' + str(i) + ext
-                path = self.output_dir.joinpath(newname)
+                file_name = root + '-' + str(i) + ext
+                path = self.output_dir.joinpath(file_name)
 
             with open(path, 'wb') as f:
                 # can parse file magic head in this, replace the suffix
@@ -360,7 +354,7 @@ class MergedPack:
     def extract(self):
         if self.is_single_file:
             self.mrg_file.seek(0)
-            file_head = self.mrg_file.read(0x8)
+            file_head = self.mrg_file.read(DEFAULT_BLOCK_SIZE)
 
             suffix = detect_file_extension(file_head)
 
@@ -391,8 +385,7 @@ class MergedPack:
         packed_data = io.BytesIO()
         for index, section in enumerate(sections):
             while packed_data.tell() % 16 != 0:
-                packed_data.write(PADDING_DATA)
-                # packed_data.write(b"\x00")
+                packed_data.write(END_PADDING_DATA)
 
             section_start_offset = packed_data.tell()
             section_sector_offset = section_start_offset // DEFAULT_SECTOR_SIZE
@@ -419,8 +412,7 @@ class MergedPack:
         packed_bytes.write(packed_data.read())
 
         while packed_bytes.tell() % 8 != 0:
-            packed_bytes.write(PADDING_DATA)
-            # packed_bytes.write(b"\x00")
+            packed_bytes.write(END_PADDING_DATA)
 
         packed_bytes.seek(0)
 
@@ -429,13 +421,94 @@ class MergedPack:
 
         log_succeed("Successfully re-packed archive file => {0}".format(output_file.name))
 
+    def repack_triple_mrg(self, input_path: Path, output_path: Path):
+        # 删掉旧的 .hed 输出文件
+        hed_path = output_path.with_suffix(SUFFIX_HED)
+        if hed_path.exists():
+            hed_path.unlink()
+            log_warn("Removing existing output file: {0}".format(hed_path.name))
+
+        # 删掉旧的 .nam 输出文件
+        nam_path = output_path.with_suffix(SUFFIX_NAM)
+        if nam_path.exists():
+            nam_path.unlink()
+            log_warn("Removing existing output file: {0}".format(nam_path.name))
+
+        log_info("Start re-packing triple files: .hed, .mrg, .nam")
+
+        hed_entries = []
+
+        # 写出 .mrg 文件 (.hed 单独处理, 此处仅写入文件压缩内容)
+        mrg_file = open(output_path, "wb")
+
+        for file_name in self.file_names:
+            file_path = input_path.joinpath(file_name)
+            entry_file = open(file_path, "rb")
+
+            entry = HeadEntry.Data(
+                size=file_path.stat().st_size,
+                offset=mrg_file.tell()
+            )
+            hed_entries.append(entry)
+
+            remaining = entry.size
+            while remaining > 32768:
+                mrg_file.write(entry_file.read(32768))
+                remaining -= 32768
+            if remaining > 0:
+                mrg_file.write(entry_file.read(remaining))
+            complement = entry.size & 0x7FF
+            if complement > 0:
+                while complement & 0xF != 0:
+                    mrg_file.write(b'\x00')
+                    complement += 1
+                while complement & 0x7FF != 0:
+                    mrg_file.write(b'\x0C' + 15 * b'\x00')
+                    complement += 0x10
+
+            entry_file.close()
+
+            log_info(f"Packed {file_name} => offset={entry.offset:08X}, size={entry.size}")
+
+        mrg_file.close()
+
+        # 写出 .hed 文件
+        with open(hed_path, "wb") as f_hed:
+            for index, entry in enumerate(hed_entries):
+                f_hed.write(entry.to_block(DEFAULT_BLOCK_SIZE, index))
+            # 末尾写 16字节 0xFF 标记 .hed 文件结束
+            f_hed.write(END_PADDING_DATA * 16)
+
+        # 写出 .nam 文件
+        with open(nam_path, 'wb') as f_nam:
+            for i, file_name in enumerate(self.file_names):
+                # 还原的时候需要去掉提取时因文件重名而增加的后缀名称
+                file_name = file_name.replace('-' + str(i), "")
+                # 限制文件名最长 32 字节（含后缀）
+                lite_name = file_name.encode('ascii')
+                lite_name = lite_name[:NAM_ENTRY_BLOCK_SIZE]
+                f_nam.write(lite_name)
+
+                # 补齐到 32 字节, 前面都是 00, 后面 2个字节是换行符
+                pad_len = NAM_ENTRY_BLOCK_SIZE - 2 - len(lite_name)
+                if pad_len > 0:
+                    f_nam.write(EMPTY_PADDING_DATA * pad_len)
+
+                # 写入换行符 CR LF
+                f_nam.write(b'\x0D\x0A')
+
+            # 文件结尾补全 32 字节 0
+            f_nam.write(EMPTY_PADDING_DATA * NAM_ENTRY_BLOCK_SIZE)
+
+        log_succeed(f"Successfully re-packed: {hed_path.name}, {output_path.name}, {nam_path.name}")
+
     def repack(self, with_hed: bool, input_path: Path, output_file: Path):
         if output_file.exists():
             output_file.unlink()
             log_warn("Removing existing output file: {0}".format(output_file.name))
 
         if with_hed:
-            pass
+            self.repack_triple_mrg(input_path, output_file)
         else:
             self.repack_single_mrg_file(input_path, output_file)
 

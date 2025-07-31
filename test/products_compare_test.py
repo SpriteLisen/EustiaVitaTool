@@ -13,13 +13,29 @@ from Constants import *
 def binary_equal(file1, file2):
     """逐字节比较两个文件是否完全一致"""
     with open(file1, 'rb') as f1, open(file2, 'rb') as f2:
+        offset = 0
         while True:
             b1 = f1.read(4096)
             b2 = f2.read(4096)
-            if b1 != b2:
+
+            min_len = min(len(b1), len(b2))
+            for i in range(min_len):
+                if b1[i] != b2[i]:
+                    log_error(f"Difference at offset 0x{offset + i:08X} ({offset + i}):")
+                    log_error(f"  {file1}: 0x{b1[i]:08X}")
+                    log_error(f"  {file2}: 0x{b2[i]:08X}")
+                    return False
+
+            if len(b1) != len(b2):
+                log_error(f"Files differ in length at offset 0x{offset + min_len:X} ({offset + min_len})")
+                log_error(f"  {file1} length: {offset + len(b1)}")
+                log_error(f"  {file2} length: {offset + len(b2)}")
                 return False
-            if not b1:  # EOF
+
+            if not b1:  # both EOF
                 return True
+
+            offset += len(b1)
 
 
 def compare_directories(dir1, dir2):
@@ -41,7 +57,7 @@ def compare_directories(dir1, dir2):
             log_same(filename)
         else:
             log_diff(filename)
-            raise Exception("File do not match => {0}".format(filename))
+            assert False, "File do not match => {0}".format(filename)
 
     log_info("Compared {0} files successfully.".format(len(files1)))
 
