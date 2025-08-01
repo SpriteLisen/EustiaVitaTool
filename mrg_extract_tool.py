@@ -3,7 +3,6 @@ import sys
 assert sys.version_info >= (3, 7), "Python 3.7 or higher is required"
 
 import os
-import io
 import shutil
 from Constants import *
 import argparse
@@ -372,54 +371,56 @@ class MergedPack:
     def repack_single_mrg_file(self, input_path: Path, output_file: Path):
         log_info("Start re-packing single .mrg file")
 
-        sections = []
+        mrg_file = open(output_file, "wb")
 
+        sections = []
         for file_name in self.file_names:
             with open(input_path.joinpath(file_name), "rb") as f:
                 sections.append(f.read())
 
-        header = pack("<6sH", MRG_MAGIC, len(sections))
-        packed_bytes = io.BytesIO()
-        packed_bytes.write(header)
+        entry_count = len(sections)
 
-        packed_data = io.BytesIO()
-        for index, section in enumerate(sections):
-            while packed_data.tell() % 16 != 0:
-                packed_data.write(END_PADDING_DATA)
+        # 写入头部信息
+        mrg_file.write(pack("<6sH", MRG_MAGIC, entry_count))
 
-            section_start_offset = packed_data.tell()
-            section_sector_offset = section_start_offset // DEFAULT_SECTOR_SIZE
-            section_byte_offset = section_start_offset % DEFAULT_SECTOR_SIZE
+        # === 正确计算真实 offset ===
+        current_offset = 0
 
-            size_sectors = len(section) // DEFAULT_SECTOR_SIZE
-            size_bytes = len(section) & 0xFFFF
-            if len(section) % DEFAULT_SECTOR_SIZE:
-                size_sectors += 1
+        for section in sections:
+            sector_offset = current_offset // DEFAULT_SECTOR_SIZE
+            byte_offset = current_offset % DEFAULT_SECTOR_SIZE
 
-            packed_bytes.write(
+            raw_sectors = (len(section) + DEFAULT_SECTOR_SIZE - 1) // DEFAULT_SECTOR_SIZE
+
+            if byte_offset + len(section) > DEFAULT_SECTOR_SIZE * raw_sectors:
+                size_sectors = raw_sectors + 1
+            else:
+                size_sectors = raw_sectors
+
+            mrg_file.write(
                 pack(
-                    HEADER_FORMAT,
-                    section_sector_offset, section_byte_offset,
-                    size_sectors, size_bytes
+                    "<HHHH", sector_offset, byte_offset,
+                    size_sectors, len(section) & 0xFFFF
                 )
             )
 
-            packed_data.write(section)
+            current_offset += len(section)
+            current_offset += padding_bytes_needed(current_offset)
 
-            log_info("Re-packed {0} succeed".format(self.file_names[index]))
+        # 写入实际文件数据
+        for section in sections:
+            mrg_file.write(section)
 
-        packed_data.seek(0)
-        packed_bytes.write(packed_data.read())
+            # 写入 section 之前先补齐
+            current_offset = mrg_file.tell()
 
-        while packed_bytes.tell() % 8 != 0:
-            packed_bytes.write(END_PADDING_DATA)
+            pad_len = padding_bytes_needed(current_offset)
+            if pad_len > 0:
+                mrg_file.write(b'\xFF' * pad_len)
 
-        packed_bytes.seek(0)
+        mrg_file.close()
 
-        with open(output_file, "wb") as f:
-            f.write(packed_bytes.read())
-
-        log_succeed("Successfully re-packed archive file => {0}".format(output_file.name))
+        log_succeed(f"Successfully re-packed archive file => {output_file.name}")
 
     def repack_triple_mrg(self, input_path: Path, output_path: Path):
         # 删掉旧的 .hed 输出文件

@@ -80,6 +80,47 @@ SUFFIX_MZP = ".mzp"
 SUFFIX_BIN = ".bin"
 
 
+def padding_bytes_needed(offset: int) -> int:
+    # 目前发现会根据最后一位的 offset 进行补位, 总结规则为：
+    # 刚好是 8 | 16 位, 则直接补 8 位
+    # 小于 8 位补齐到 8 位
+    # 大于 8 小于 16 位则补齐 16 位
+
+    tail = offset % 16
+
+    if tail == 8 or tail == 0:
+        # offset 刚好在 8 or 16，要继续补 8 位
+        return 8
+    elif 0 < tail < 8:
+        # tail in [1, 7]
+        return 8 - tail
+    else:
+        # tail in [9, 15]
+        return 16 - tail
+
+
+def detect_file_extension_with_bytes(data):
+    count_mrg = data.count(MRG_MAGIC)
+    count_mzx0 = data.count(MZX_MAGIC)
+    entry_count = int.from_bytes(data[6:8], 'little')
+
+    log_info(f"entry_count => {entry_count}, 出现次数: mrgd00 = {count_mrg}, MZX0 = {count_mzx0}")
+
+    if data.startswith(MZX_MAGIC):
+        return SUFFIX_MZX
+
+    # 目前观察, 如果是一个 MZP 文件, 则会以 mrgd00 开头, 然后 MZX0 出现的次数为 entry_count - 1
+    if data.startswith(MRG_MAGIC):
+
+        if count_mzx0 == entry_count - 1:
+            return SUFFIX_MZP
+        else:
+            # 其他情况暂时看作就是一个 mrg 文件
+            return SUFFIX_MRG
+
+    return SUFFIX_BIN
+
+
 def detect_file_extension(data):
     if data.startswith(MZX_MAGIC):
         return SUFFIX_MZX
