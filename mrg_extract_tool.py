@@ -300,7 +300,7 @@ class MergedPack:
         for index, entry in enumerate(entries_descriptors):
             self.mrg_file.seek(entry.real_offset)
             data = self.mrg_file.read(entry.real_size)
-            suffix = detect_file_extension(data)
+            suffix = detect_file_extension_with_bytes(data)
 
             real_file_name = file_names[index].replace(SUFFIX_MZX, suffix)
 
@@ -330,7 +330,7 @@ class MergedPack:
             mrg_entry_data = self.mrg_file.read(entry_data.size)
 
             file_name = "entry_{i:03}.{suffix}".format(
-                i=i, suffix=detect_file_extension(mrg_entry_data)
+                i=i, suffix=detect_file_extension_with_bytes(mrg_entry_data)
             ) if self.name_entry is None else self.name_entry.get_name(i)
 
             path = self.output_dir.joinpath(file_name)
