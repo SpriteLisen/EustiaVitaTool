@@ -417,7 +417,7 @@ class MergedPack:
 
             pad_len = padding_bytes_needed(current_offset)
             if pad_len > 0:
-                mrg_file.write(b'\xFF' * pad_len)
+                mrg_file.write(END_PADDING_DATA * pad_len)
 
         mrg_file.close()
 

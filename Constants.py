@@ -55,7 +55,7 @@ NAM_ENTRY_BLOCK_SIZE = 0x20
 HED_END_BLOCK_SIZE = 0x10
 
 # 用来对齐结尾数据的字节
-END_PADDING_DATA: bytes = b"\xff"
+END_PADDING_DATA: bytes = b'\xFF'
 # 用来对齐空数据的字节
 EMPTY_PADDING_DATA: bytes = b"\x00"
 
