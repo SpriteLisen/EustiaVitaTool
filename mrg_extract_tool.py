@@ -1,11 +1,7 @@
-import sys
-
-assert sys.version_info >= (3, 7), "Python 3.7 or higher is required"
-
 import os
 import shutil
-from Constants import *
 import argparse
+from Constants import *
 from pathlib import Path
 from struct import unpack, unpack_from, pack
 
@@ -190,17 +186,6 @@ class NameEntry:
 
     def release(self):
         self.nam_file.close()
-
-
-class ArchiveEntry:
-    def __init__(self, sector_offset, offset, sector_size_upper_boundary, size, number_of_entries):
-        self.sector_offset = sector_offset
-        self.offset = offset
-        self.sector_size_upper_boundary = sector_size_upper_boundary
-        self.size = size
-        self.real_size = (sector_size_upper_boundary - 1) // NAM_ENTRY_BLOCK_SIZE * 0x10000 + size
-        data_start_offset = 6 + 2 + number_of_entries * 8
-        self.real_offset = data_start_offset + self.sector_offset * DEFAULT_SECTOR_SIZE + self.offset
 
 
 class MergedPack:

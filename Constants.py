@@ -1,3 +1,7 @@
+import sys
+
+assert sys.version_info >= (3, 7), "Python 3.7 or higher is required"
+
 TAG_SUCCEED = "[SUCC]: "
 TAG_INFO = "[INFO]: "
 TAG_ERR = "[ERRO]: "
@@ -39,6 +43,8 @@ def log_diff(msg):
 
 # 打印帮助信息
 EXIT_WITH_HELP = 999
+# 出错退出的 code
+EXIT_WITH_ERROR = 888
 
 # 默认编码
 DEFAULT_ENCODING = "Shift_JIS"
@@ -142,3 +148,14 @@ def detect_file_extension(data):
             return SUFFIX_MRG
 
     return SUFFIX_BIN
+
+
+class ArchiveEntry:
+    def __init__(self, sector_offset, offset, sector_size_upper_boundary, size, number_of_entries):
+        self.sector_offset = sector_offset
+        self.offset = offset
+        self.sector_size_upper_boundary = sector_size_upper_boundary
+        self.size = size
+        self.real_size = (sector_size_upper_boundary - 1) // NAM_ENTRY_BLOCK_SIZE * 0x10000 + size
+        data_start_offset = 6 + 2 + number_of_entries * 8
+        self.real_offset = data_start_offset + self.sector_offset * DEFAULT_SECTOR_SIZE + self.offset
