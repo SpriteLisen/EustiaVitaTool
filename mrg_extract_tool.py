@@ -373,15 +373,10 @@ class MergedPack:
         current_offset = 0
 
         for section in sections:
-            sector_offset = current_offset // DEFAULT_SECTOR_SIZE
-            byte_offset = current_offset % DEFAULT_SECTOR_SIZE
-
-            raw_sectors = (len(section) + DEFAULT_SECTOR_SIZE - 1) // DEFAULT_SECTOR_SIZE
-
-            if byte_offset + len(section) > DEFAULT_SECTOR_SIZE * raw_sectors:
-                size_sectors = raw_sectors + 1
-            else:
-                size_sectors = raw_sectors
+            sector_offset, byte_offset, size_sectors = calculate_entry_descriptor(
+                current_offset,
+                len(section)
+            )
 
             mrg_file.write(
                 pack(

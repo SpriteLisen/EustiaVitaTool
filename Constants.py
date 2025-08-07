@@ -70,13 +70,13 @@ LIST_FILE_NAME = "list.txt"
 HEADER_FORMAT = "<HHHH"
 
 # MRG 的文件头
-MRG_MAGIC = b"mrgd00"
+MRG_MAGIC: bytes = b"mrgd00"
 
 # MZX 的文件头
-MZX_MAGIC = b"MZX0"
+MZX_MAGIC: bytes = b"MZX0"
 
 # NAM 的文件头
-NAM_MAGIC = b"MRG.NAM"
+NAM_MAGIC: bytes = b"MRG.NAM"
 
 SUFFIX_HED = ".hed"
 SUFFIX_NAM = ".nam"
@@ -84,6 +84,20 @@ SUFFIX_MRG = ".mrg"
 SUFFIX_MZX = ".mzx"
 SUFFIX_MZP = ".mzp"
 SUFFIX_BIN = ".bin"
+
+
+def calculate_entry_descriptor(current_offset: int, data_length: int, sector_size: int = DEFAULT_SECTOR_SIZE):
+    sector_offset = current_offset // sector_size
+    byte_offset = current_offset % sector_size
+
+    raw_sectors = (data_length + sector_size - 1) // sector_size
+
+    if byte_offset + data_length > sector_size * raw_sectors:
+        size_sectors = raw_sectors + 1
+    else:
+        size_sectors = raw_sectors
+
+    return sector_offset, byte_offset, size_sectors
 
 
 def padding_bytes_needed(offset: int) -> int:
