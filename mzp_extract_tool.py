@@ -324,8 +324,10 @@ class MzpEntry:
         self.mzp_data.seek(entry.real_offset)
         head_data = io.BytesIO(self.mzp_data.read(0x8))
         # log_info("tile head: {0}".format(head_data.read(0x8)))
-        sig, size = unpack('<LL', head_data.getvalue())
-        tile_data = io.BytesIO(self.mzp_data.read(size))
+        # sig, size = unpack('<LL', head_data.getvalue())
+        # tile_data = io.BytesIO(self.mzp_data.read(size))
+        # 减去头部的大小就是正确的 size
+        tile_data = io.BytesIO(self.mzp_data.read(entry.real_size - 8))
 
         if OPEN_DEBUG_FILE:
             debug_file_name = "{0}_{1}.tile.mzx0".format(self.in_mzp.name, index)
