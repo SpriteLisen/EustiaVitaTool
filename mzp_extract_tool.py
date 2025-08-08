@@ -1,6 +1,7 @@
 import io
 import json
 import zlib
+import numpy as np
 from PIL import Image
 from Constants import *
 from pathlib import Path
@@ -18,10 +19,10 @@ def parse_args():
 
     parser_unpack = subparsers.add_parser('unpack',
                                           help='unpack mzp file')
-    parser_unpack.add_argument('input', metavar='input.mzp', type=Path, help='Input .mzp file [REQUIRED]')
+    parser_unpack.add_argument('input', metavar='input.mzp', type=Path, help='Input .mzp file or dir [REQUIRED]')
 
     parser_repack = subparsers.add_parser('repack', help='generate a mzp file from an existing file')
-    parser_repack.add_argument('input', metavar='./input.*', type=Path, help='Input repack file [REQUIRED]')
+    parser_repack.add_argument('input', metavar='./input.*', type=Path, help='Input .png file [REQUIRED]')
     parser_repack.add_argument('output', metavar='output.mzp', type=Path, help='Output .mzp file [REQUIRED]')
 
     parser_instance.add_argument('-h', '--help',
@@ -438,34 +439,89 @@ class MzpEntry:
         log_succeed("Extracted {0} to {1} succeed.".format(self.in_mzp.name, png_file_name))
 
     def _png_tile_to_mzp_bytes(self, tile_img: Image.Image) -> bytes:
-        tile_img = tile_img.convert("P")
+        mode = tile_img.mode
+        tile_size = self.tile_width * self.tile_height
 
-        # create tile size img, copy palette
-        padded_img = Image.new("P", (self.tile_width, self.tile_height), color=0)
-        padded_img.putpalette(tile_img.getpalette())
+        if mode == "P":
+            raw_data = tile_img.tobytes()
+            if self.bitmap_bpp == 8:
+                return raw_data
+            elif self.bitmap_bpp == 4:
+                res = bytearray()
+                for i in range(0, len(raw_data), 2):
+                    low = raw_data[i] & 0x0F
+                    high = raw_data[i + 1] & 0x0F if i + 1 < len(raw_data) else 0
+                    res.append((high << 4) | low)
+                return bytes(res)
+            else:
+                raise Exception(f"Unsupported bitmap_bpp: {self.bitmap_bpp}")
 
-        # paste left top
-        crop_width, crop_height = tile_img.size
-        region = tile_img.crop((0, 0, crop_width, crop_height))
-        padded_img.paste(region, (0, 0))
+        elif mode in ("RGB", "RGBA"):
+            # 不再进行BGR转换，直接使用原始RGB顺序
+            if self.bitmap_bpp == 24 and mode == "RGB":
+                data = np.frombuffer(tile_img.tobytes(), dtype=np.uint8).reshape(-1, 3)
+            elif self.bitmap_bpp == 32 and mode == "RGBA":
+                data = np.frombuffer(tile_img.tobytes(), dtype=np.uint8).reshape(-1, 4)
+            else:
+                raise Exception(f"Incompatible bitmap_bpp {self.bitmap_bpp} for mode {mode}")
 
-        # save test img (optional)
-        # padded_img.save("debug_padded.png")
+            P_list = []
+            Q_list = []
+            offset_list = []
+            alpha_list = [] if self.bitmap_bpp == 32 else None
 
-        raw_data = padded_img.tobytes()
-        padded_img.close()
+            for i in range(tile_size):
+                if self.bitmap_bpp == 24:
+                    r, g, b = data[i]
+                else:
+                    r, g, b, a = data[i]
 
-        if self.bitmap_bpp == 8:
-            return raw_data
-        elif self.bitmap_bpp == 4:
-            res = bytearray()
-            for i in range(0, len(raw_data), 2):
-                low = raw_data[i] & 0x0F
-                high = raw_data[i + 1] & 0x0F if i + 1 < len(raw_data) else 0
-                res.append((high << 4) | low)
-            return bytes(res)
+                # 计算基色值 (去除低位)
+                r_base = (r >> 3) << 3  # 保留高5位
+                g_base = (g >> 2) << 2  # 保留高6位 (关键修复)
+                b_base = (b >> 3) << 3  # 保留高5位
 
-        raise Exception("Not supported bitmap bpp => {0}".format(self.bitmap_bpp))
+                # 计算偏移量 (直接差值)
+                r_offset = r - r_base
+                g_offset = g - g_base
+                b_offset = b - b_base
+
+                # 提取g的位分量
+                g_high3 = (g_base >> 5) & 0x07  # g的高3位 (位5-7)
+                g_low3 = (g_base >> 2) & 0x07  # g的中间3位 (位2-4)
+
+                # 构造P值: b低5位 | g低3位(高位)
+                P_val = ((b_base >> 3) & 0x1F) | (g_low3 << 5)
+
+                # 构造Q值: r高5位(高位) | g高3位(低位)
+                Q_val = ((r_base >> 3) << 3) | g_high3
+
+                P_list.append(P_val)
+                Q_list.append(Q_val)
+
+                # 打包偏移字节: r_offset(3位) | g_offset(2位) | b_offset(3位)
+                offset_byte = (r_offset << 5) | ((g_offset & 0x03) << 3) | b_offset
+                offset_list.append(offset_byte)
+
+                if self.bitmap_bpp == 32:
+                    # noinspection PyUnboundLocalVariable
+                    alpha_list.append(a)
+
+            result = bytearray()
+            # 写入P/Q对
+            for p, q in zip(P_list, Q_list):
+                result.append(p)
+                result.append(q)
+            # 写入偏移量
+            result.extend(offset_list)
+            # 写入alpha通道 (32bpp)
+            if self.bitmap_bpp == 32:
+                result.extend(alpha_list)
+
+            return bytes(result)
+
+        else:
+            raise Exception(f"Unsupported image mode: {mode}")
 
     def repack_to_mzp(self):
         img = Image.open(self.in_png)
@@ -513,7 +569,6 @@ class MzpEntry:
             log_info(f"Start tile{tile_idx}, start_x: {x_start}, start_y: {y_start}, end_x: {x_end}, end_y: {y_end}")
             # Crop tile pixel
             tile_img = img.crop((x_start, y_start, x_end, y_end))
-            img.close()
 
             # Convert mzp need bytes
             tile_bytes = self._png_tile_to_mzp_bytes(tile_img)
@@ -553,6 +608,8 @@ class MzpEntry:
                     tile_file.write(out_mzp_file.read(compressed_len))
                 log_info("Save debug file => {0}".format(tile_debug_file.name))
 
+        img.close()
+
         # Seek entry0 head info, override new entry info
         out_mzp_file.seek(8 + 8 * 1)  # 跳过 header 和 entry0 描述信息
         for desc in new_entry_descriptors:
@@ -569,8 +626,15 @@ class MzpEntry:
 
 
 def do_unpack(input_args):
-    mzp_entry = MzpEntry(in_mzp=input_args.input)
-    mzp_entry.extract_to_png()
+    input_path: Path = input_args.input
+
+    if input_path.is_dir():
+        for mzp_file_path in input_path.glob('*.[Mm][Zz][Pp]'):
+            mzp_entry = MzpEntry(in_mzp=mzp_file_path)
+            mzp_entry.extract_to_png()
+    else:
+        mzp_entry = MzpEntry(in_mzp=input_args.input)
+        mzp_entry.extract_to_png()
 
 
 def do_repack(input_args):
