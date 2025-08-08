@@ -61,6 +61,7 @@ EXIT_WITH_ERROR = 888
 
 # 默认编码
 DEFAULT_ENCODING = "Shift_JIS"
+MZX_ENCODING = "CP932"
 
 # 默认的扇区大小
 DEFAULT_SECTOR_SIZE = 0x800
@@ -95,6 +96,7 @@ SUFFIX_HED = ".hed"
 SUFFIX_NAM = ".nam"
 SUFFIX_MRG = ".mrg"
 SUFFIX_MZX = ".mzx"
+SUFFIX_TPL = ".tpl"
 SUFFIX_MZP = ".mzp"
 SUFFIX_BIN = ".bin"
 
@@ -137,9 +139,9 @@ def detect_file_extension_with_bytes(data):
     count_mzx0 = data.count(MZX_MAGIC)
     entry_count = int.from_bytes(data[6:8], 'little')
 
-    log_info(f"entry_count => {entry_count}, 出现次数: mrgd00 = {count_mrg}, MZX0 = {count_mzx0}")
+    # log_info(f"entry_count => {entry_count}, 出现次数: mrgd00 = {count_mrg}, MZX0 = {count_mzx0}")
 
-    if data.startswith(MZX_MAGIC):
+    if data.startswith(MZX_MAGIC) and count_mrg == 0:
         return SUFFIX_MZX
 
     # 目前观察, 如果是一个 MZP 文件, 则会以 mrgd00 开头, 然后 MZX0 出现的次数为 entry_count - 1
