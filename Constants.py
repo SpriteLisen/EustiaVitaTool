@@ -1,4 +1,5 @@
 import sys
+import argparse
 
 assert sys.version_info >= (3, 7), "Python 3.7 or higher is required"
 
@@ -39,6 +40,18 @@ def log_same(msg):
 
 def log_diff(msg):
     print(f"{RED}{TAG_DIFF} {msg}{RESET}")
+
+
+class HelpAction(argparse._HelpAction):
+    # noinspection PyProtectedMember
+    def __call__(self, parser_instance, namespace, values, option_string=None):
+        parser_instance.print_help()
+        for subparser_action in parser_instance._actions:
+            if isinstance(subparser_action, argparse._SubParsersAction):
+                for choice, subparser in subparser_action.choices.items():
+                    print("\n\n== {} ==".format(choice))
+                    print(subparser.format_help())
+        parser_instance.exit()
 
 
 # 打印帮助信息

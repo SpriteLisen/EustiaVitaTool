@@ -1,21 +1,8 @@
 import os
 import shutil
-import argparse
 from Constants import *
 from pathlib import Path
 from struct import unpack, unpack_from, pack
-
-
-class HelpAction(argparse._HelpAction):
-    # noinspection PyProtectedMember
-    def __call__(self, parser_instance, namespace, values, option_string=None):
-        parser_instance.print_help()
-        for subparser_action in parser_instance._actions:
-            if isinstance(subparser_action, argparse._SubParsersAction):
-                for choice, subparser in subparser_action.choices.items():
-                    print("\n\n== {} ==".format(choice))
-                    print(subparser.format_help())
-        parser_instance.exit()
 
 
 def parse_args():
