@@ -9,6 +9,7 @@ from struct import unpack, pack
 from mzx_tool import mzx_compress, mzx_decompress
 
 output_dir = "mzp-unpacked"
+output_mzp_dir = "mzp-repacked"
 
 OPEN_DEBUG_FILE = False
 
@@ -23,7 +24,7 @@ def parse_args():
 
     parser_repack = subparsers.add_parser('repack', help='generate a mzp file from an existing file')
     parser_repack.add_argument('input', metavar='./input.*', type=Path, help='Input .png file [REQUIRED]')
-    parser_repack.add_argument('output', metavar='output.mzp', type=Path, help='Output .mzp file [REQUIRED]')
+    parser_repack.add_argument('output', type=Path, nargs='?', help='Output .mzp file')
 
     parser_instance.add_argument('-h', '--help',
                                  action=HelpAction, default=argparse.SUPPRESS,
@@ -631,17 +632,46 @@ def do_unpack(input_args):
     input_path: Path = input_args.input
 
     if input_path.is_dir():
-        for mzp_file_path in input_path.glob('*.[Mm][Zz][Pp]'):
+        target_files = list(input_path.glob('*.[Mm][Zz][Pp]'))
+        file_count = len(target_files)
+
+        for index, mzp_file_path in enumerate(target_files):
             mzp_entry = MzpEntry(in_mzp=mzp_file_path)
             mzp_entry.extract_to_png()
+
+            percentage = ((index + 1) / file_count) * 100
+            log_prog(f"Progress: {percentage:.2f}%, Total: {file_count}, now: {index + 1}")
     else:
         mzp_entry = MzpEntry(in_mzp=input_args.input)
         mzp_entry.extract_to_png()
 
 
 def do_repack(input_args):
-    mzp_entry = MzpEntry(in_png=input_args.input, out_mzp=input_args.output)
-    mzp_entry.repack_to_mzp()
+    input_path: Path = input_args.input
+
+    if input_path.is_dir():
+        target_files = list(input_path.glob('*.[Pp][Nn][Gg]'))
+        file_count = len(target_files)
+
+        for index, png_file_path in enumerate(target_files):
+            mzp_output_dir = input_args.output if input_args.output is not None \
+                else input_args.input / output_mzp_dir
+            mzp_output_dir.mkdir(parents=True, exist_ok=True)
+            output_file = mzp_output_dir / png_file_path.with_suffix(SUFFIX_MZP).name
+
+            mzp_entry = MzpEntry(in_png=png_file_path, out_mzp=output_file)
+            mzp_entry.repack_to_mzp()
+
+            percentage = ((index + 1) / file_count) * 100
+            log_prog(f"Progress: {percentage:.2f}%, Total: {file_count}, now: {index + 1}")
+    else:
+        mzp_output_dir = input_args.output if input_args.output is not None \
+            else input_args.input / output_mzp_dir
+        mzp_output_dir.mkdir(parents=True, exist_ok=True)
+        output_file = mzp_output_dir / input_args.input.with_suffix(SUFFIX_MZP).name
+
+        mzp_entry = MzpEntry(in_png=input_args.input, out_mzp=output_file)
+        mzp_entry.repack_to_mzp()
 
 
 if __name__ == '__main__':
