@@ -301,7 +301,7 @@ class MergedPack:
             self.mrg_file.seek(entry_data.offset)
             mrg_entry_data = self.mrg_file.read(entry_data.size)
 
-            file_name = "entry_{i:03}.{suffix}".format(
+            file_name = "entry_{i:03}{suffix}".format(
                 i=i, suffix=detect_file_extension_with_bytes(mrg_entry_data)
             ) if self.name_entry is None else self.name_entry.get_name(i)
 

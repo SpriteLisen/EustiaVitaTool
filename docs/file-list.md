@@ -16,5 +16,7 @@ PCSG00338/
 │ ├── SYS_YESNO_PARTS.MRG【是 & 否选择按钮】
 │ └── TITLE0(N)_PARTS.MRG【游戏初始化 & 各线通关后的启动页 UI & 按钮】
 │
-└── allscr.mrg【游戏所有脚本文案资源整合包】
+├── allscr.mrg【游戏所有脚本文案资源整合包】
+│
+└── gotf.mrg【字库图集整合包】
 ```
