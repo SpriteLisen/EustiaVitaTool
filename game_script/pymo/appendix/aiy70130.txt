@@ -1,0 +1,1222 @@
+﻿#bgm_stop
+#se_stop
+#label *aiy70130
+#fade_in 500
+b_filename "aiy70130"
+b_f_122 1
+b_f_123 1
+b_Size 5
+b_f_12f 
+mov %branch_flag, 1:if %3012 = 0 mov %branch_flag, 0
+if FSEL!=0,goto *aiy70130_L000b4
+goto *aiy70130_L000b4
+#label *aiy70130_L000b4
+
+b_f_12f 
+mov %branch_flag, 1:if %3012 != 0 mov %branch_flag, 0
+if FSEL!=0,goto *aiy70130_L000f8
+goto *aiy70130_L000f8
+#label *aiy70130_L000f8
+
+#call bg_3571
+#chara_y 5,77,sgmsgwnd000000,50,0,77,200
+#bgm bgm_0404_loop
+#vo aiy310702940
+#say 【凯伊姆】,「……」
+#chara_y 5,21,tati_010707,50,0,21,88,face_010707,19,0,88,200
+b_Refresh 
+#vo aiy010704960
+#say 【缇娅】,「……那个－」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#say 我和缇娅正在相对而视。
+#say 原因不明。
+#vo aiy310702950
+#say 【凯伊姆】,「这是怎么回事？」
+#chara_y 5,21,tati_010747,50,0,21,88,face_010747,19,0,88,200
+b_Refresh 
+#vo aiy010704970
+#say 【缇娅】,「就算您问我也……」
+#chara_y 5,21,tati_010727,50,0,21,88,face_010727,19,0,88,200
+b_Refresh 
+#vo aiy010704980
+#say 【缇娅】,「……该怎么办呢？」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310702960
+#say 【凯伊姆】,「怎么办呢」
+#say 看来，我们是被身为牢狱名产的不合理空间给吸了进来。
+#say 根据传说，所谓的不合理空间，是从不知从何处飞来的不合理生物吐出的不合理光线制造出来的。
+#say 在不合理空间中发生不合理的时空震荡时，集中起来的不合理粒子就会成为绝对的存在。
+#say 总而言之，就是所谓的不合理大集合之类的东西。
+#say 牢狱是不合理的细菌孕育的温床。
+#vo aiy310703010
+#say 【凯伊姆】,「……」
+#say 也就是说，这是梦。
+#say 是梦。
+#say 我充分地理解了，这是个毫无道理可言的地方。
+#say 于是……
+#say 我试着将自己不讲理的想法贯注在缇娅的身上。
+#se 09440
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_cls 10,100
+b_f_392 50, 1
+#chara_y 5,21,tati_010927,50,0,21,200
+b_Refresh 
+b_f_388 50, 1
+#chara_y 5,21,tati_010926,50,0,21,88,face_010926,19,0,88,200
+b_Refresh 
+#vo aiy010705020
+#say 【缇娅】,「哎……？」
+#se_stop
+#chara_y 5,21,tati_010956,50,0,21,88,face_010956,19,0,88,200
+b_Refresh 
+#vo aiy010705030
+#say 【缇娅】,「哇哇哇哇哇哇，为什么我会光着身子？哎！？哎哎哎！？」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#say 缇娅忙不迭地将身子遮了起来。
+#say 我成功地瞬间脱掉了缇娅的衣服。
+#say 这种不讲理还真是不让人讨厌。
+#say 好！
+#vo aiy310703020
+#say 【凯伊姆】,「唔……」
+#se 09440
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_cls 10,100
+b_f_392 50, 1
+#chara_y 5,21,tati_010806,50,0,21,200
+b_Refresh 
+b_f_388 50, 1
+#chara_y 5,21,tati_010806,50,0,21,88,face_010806,19,0,88,200
+b_Refresh 
+#vo aiy010705040
+#say 【缇娅】,「啊，啊咧？」
+#se_stop
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310703030
+#say 【凯伊姆】,「咕……」
+#se 09440
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_cls 10,100
+b_f_392 50, 1
+#chara_y 5,21,tati_010906,50,0,21,200
+b_Refresh 
+b_f_388 50, 1
+#chara_y 5,21,tati_010955,50,0,21,88,face_010955,19,0,88,200
+b_Refresh 
+#vo aiy010705050
+#say 【缇娅】,「哇——！！」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310703040
+#say 【凯伊姆】,「哈！」
+#se 09440
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_cls 10,100
+b_f_392 50, 1
+#chara_y 5,21,tati_340115,50,0,21,200
+b_Refresh 
+b_f_388 50, 1
+#chara_y 5,88,face_340115,19,0,88,200
+b_Refresh 
+#vo aiy340700380
+#say 【吉克】,「你叫我吗！？」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310703050
+#say 【凯伊姆】,「给我消失」
+#se 09440
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_cls 10,100
+b_f_392 50, 1
+#chara_y 5,21,tati_010403,50,0,21,200
+b_Refresh 
+b_f_388 50, 1
+#bgm_stop
+#chara_y 5,21,tati_010411,50,0,21,88,face_010411,19,0,88,200
+b_Refresh 
+#vo aiy010705060
+#say 【缇娅】,「呜呜……」
+#bgm bgm_0201_loop
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310703060
+#say 【凯伊姆】,「不管怎么看都是件奇怪的衣服啊」
+#chara_y 5,21,tati_010446,50,0,21,88,face_010446,19,0,88,200
+b_Refresh 
+#vo aiy010705080
+#say 【缇娅】,「您不喜欢这样的衣服吗？」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310703080
+#say 【凯伊姆】,「嘛，穿的人是你的话还不算坏」
+#chara_y 5,21,tati_010428,50,0,21,88,face_010428,19,0,88,200
+b_Refresh 
+#vo aiy010705090
+#say 【缇娅】,「……」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#say 缇娅的脸红了起来。
+#chara_y 5,21,tati_010449,50,0,21,88,face_010449,19,0,88,200
+b_Refresh 
+#vo aiy010705100
+#say 【缇娅】,「我从没想过您会对我说这样的话」
+#chara_y 5,21,tati_010408,50,0,21,88,face_010408,19,0,88,200
+b_Refresh 
+#vo aiy010705110
+#say 【缇娅】,「就好像做梦一样」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#say 管它是不是做梦，用不着在意这种事啊。
+#chara_y 5,21,tati_010433,50,0,21,88,face_010433,19,0,88,200
+b_Refresh 
+#vo aiy010705120
+#say 【缇娅】,「但，但是，为什么我的衣服会被换掉呢？」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310703090
+#say 【凯伊姆】,「因为，这是在我的梦里」
+#chara_y 5,21,tati_010406,50,0,21,88,face_010406,19,0,88,200
+b_Refresh 
+#vo aiy010705130
+#say 【缇娅】,「那么，这身衣服也是凯伊姆先生所希望的呢」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310703100
+#say 【凯伊姆】,「不是很好么，总比光着身子强」
+#vo aiy310703110
+#say 【凯伊姆】,「不过，光着身子把场景转换到大道上也不错啊」
+#chara_y 5,21,tati_010411,50,0,21,88,face_010411,19,0,88,200
+b_Refresh 
+#vo aiy010705150
+#say 【缇娅】,「太不讲理了」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#say 缇娅露出一副怄气的表情。
+#chara_y 5,21,tati_010409,50,0,21,88,face_010409,19,0,88,200
+b_Refresh 
+#vo aiy010705160
+#say 【缇娅】,「不过，既然是您希望的，那我也就没什么可说的了」
+#chara_y 5,21,tati_010428,50,0,21,88,face_010428,19,0,88,200
+b_Refresh 
+#vo aiy010705170
+#say 【缇娅】,「只要是为了凯伊姆先生，我就没关系的」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310703120
+#say 【凯伊姆】,「开玩笑的」
+#bgm_stop
+#say 我触碰着缇娅的脸颊。
+#say 既然在这种不合理的空间里，那么就顺其自然地做些不适当的行为吧。
+#vo aiy310703130
+#say 【凯伊姆】,「我可不想让你的身体被其他家伙看到」
+#chara_y 5,21,tati_010412,50,0,21,88,face_010412,19,0,88,200
+b_Refresh 
+#vo aiy010705180
+#say 【缇娅】,「嗯，请您独占我吧」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310703140
+#say 【凯伊姆】,「就算你不说，我也会这么做」
+#say 我将嘴唇向她靠近。
+#bgm bgm_0415_loop
+#chara_y 5,21,tati_zzz010414,50,0,21,88,face_010414,19,0,88,200
+b_Refresh 
+#vo aiy010705190
+#say 【缇娅】,「嗯……啾……」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#say 像个婴儿一样，用只是把嘴唇凑上去的方式接吻。
+#chara_y 5,21,tati_zzz010429,50,0,21,88,face_010429,19,0,88,200
+b_Refresh 
+#vo aiy010705200
+#say 【缇娅】,「那个，我有一句话想说，但是又怕您说我不检点」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#say 缇娅犹犹豫豫地说道。
+#vo aiy310703150
+#say 【凯伊姆】,「什么？」
+#chara_y 5,21,tati_zzz010449,50,0,21,88,face_010449,19,0,88,200
+b_Refresh 
+#vo aiy010705210
+#say 【缇娅】,「我想试着在凯伊姆先生的房间做这种事」
+#chara_y 5,21,tati_zzz010408,50,0,21,88,face_010408,19,0,88,200
+b_Refresh 
+#vo aiy010705220
+#say 【缇娅】,「毕竟，那里才是咱们回忆的地方呢」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310703160
+#say 【凯伊姆】,「这样啊」
+#say 我抚摸着她那柔软的秀发。
+#say 然后，再一次吻上她的嘴唇。
+#say 两人的嘴唇比刚才更久地重合在一起。
+#chara_y 5,21,tati_zzz010414,50,0,21,88,face_010414,19,0,88,200
+b_Refresh 
+#vo aiy010705230
+#say 【缇娅】,「呼……嗯……啾……」
+#chara_y 5,21,tati_zzz010414,50,0,21,88,face_010414,19,0,88,200
+b_Refresh 
+#vo aiy010705240
+#say 【缇娅】,「咕啾……嗯呼……嗯嗯」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#say 缇娅抓住我的胳膊。
+#say 就好像跟着父母外出的小孩子一样，拼命地抱住我不放。
+#say 而这个动作，让我对她的爱意又加深了一层。
+#vo aiy310703170
+#say 【凯伊姆】,「……」
+#say 真不可思议。
+#say 在梦中不管做什么事情都可以被原谅，但我却仍旧想要这么珍惜这个家伙。
+#say 不，不对。
+#say 是我体内中的欲望，在命令我要去珍惜她。
+#chara_y 5,21,tati_zzz010409,50,0,21,88,face_010409,19,0,88,200
+b_Refresh 
+#vo aiy010705250
+#say 【缇娅】,「凯伊姆先生……我喜欢您……」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310703180
+#say 【凯伊姆】,「我也是」
+#say 毫无疑问，这就是所谓的喜欢。
+#say 是我从来都不曾体验过的感情。
+#say 或许，我已经将眼前这不可思议的场景老实地全盘接受了。
+#vo aiy310703190
+#say 【凯伊姆】,「缇娅，来我身边」
+#chara_y 5,21,tati_zzz010437,50,0,21,88,face_010437,19,0,88,200
+b_Refresh 
+#vo aiy010705260
+#say 【缇娅】,「……好的……」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#say 缇娅抬起眼睛看着我。
+#say 然后，投入了我的怀中。
+#chara_y 5,21,tati_zzz010408,50,0,21,88,face_010408,19,0,88,200
+b_Refresh 
+#vo aiy010705270
+#say 【缇娅】,「我真的，好开心」
+#chara_y 5,21,tati_zzz010414,50,0,21,88,face_010414,19,0,88,200
+b_Refresh 
+#vo aiy010705280
+#say 【缇娅】,「感觉除此之外，就别无他求了呢」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310703200
+#say 【凯伊姆】,「我也是」
+#say 我抱紧缇娅。
+#say 慢慢地，解开她的衣服。
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#bg bg_0000,bg_alpha,1000
+
+b_Fadeout 1, 1
+#bgm_stop
+b_f_15d 1
+#bgm bgm_0417_loop
+#bg hcg_010701,bg_alpha,1000
+#add Shcg_010701,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy010705290
+#text 【缇娅】    「嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我从背后抱住缇娅。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 让她把住桌脚，保持着身体的姿势。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705300
+#text 【缇娅】    「总，总觉得……这个姿势很让人害羞呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「放心，很可爱的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705310
+#text 【缇娅】    「既然您这么说……我也就不讨厌了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「那就好」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我把住缇娅的腰。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 从裤子中抽出的阴茎，已经抵在了缇娅的阴唇上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705320
+#text 【缇娅】    「啊……唔，呼啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705330
+#text 【缇娅】    「啊，啊，啊……唔，嗯，嗯唔唔……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 入口已经相当温暖。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 也有着湿润的感触。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705340
+#text 【缇娅】    「好像……已经被弄湿了呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅害羞似得小声嘟囔着。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705350
+#text 【缇娅】    「非常抱歉」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「用不着道歉」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705360
+#text 【缇娅】    「可，可是……果然还是很很令人害羞啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705370
+#text 【缇娅】    「太没有教养的话，会被凯伊姆先生讨厌的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 作为回应、我将变得硬邦邦的阴茎向缇娅压去。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705380
+#text 【缇娅】    「伊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 应该也向缇娅传达了我现在的情况。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我也没有什么教养。你会讨厌吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705390
+#text 【缇娅】    「啊，不会……我，很高兴」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705400
+#text 【缇娅】    「凯，凯伊姆先生也高兴吗？那个……对我，湿了的事……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「别一一打听」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705410
+#text 【缇娅】    「但，但是……好想听到认真的回答啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「很高兴」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705420
+#text 【缇娅】    「……太好了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅颔首。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 说出口后，脸颊热得出乎意料。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 下半身也，有了强烈的反应。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705430
+#text 【缇娅】    「嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 鼓起的阴茎，抵在了缇娅的下腹部。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705440
+#text 【缇娅】    「好像，变得相当的硬邦邦呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「插入的话也不要紧吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705450
+#text 【缇娅】    「大概……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「那样的话」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 稍许分开缇娅的双腿。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 调整自己的角度。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705460
+#text 【缇娅】    「啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 捕捉到缇娅的入口，就这样慢慢地往下半身注入力量。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_010702,bg_alpha,1000
+#add Shcg_010702,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy010705470
+#text 【缇娅】    「嗯……啊，啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 伴随着湿润的感触，我的性器很简单地吞入了缇娅的体内。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705480
+#text 【缇娅】    「啊，啊……啊，啊，啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705490
+#text 【缇娅】    「呼呀，呀，呀……咿唔，呼啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅也非常简单地喊出来声。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705500
+#text 【缇娅】    「凯伊姆……先生，一下子，进入到这么深的话……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705510
+#text 【缇娅】    「啊，呼，呼啊……呼呀啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「好像……没有感觉到疼痛吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705520
+#text 【缇娅】    「疼，疼痛的话……没有关系……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705530
+#text 【缇娅】    「咿呀，呀，呀……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705540
+#text 【缇娅】    「身体……被吓了一跳……呀，呼呀……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅的身体，稍稍颤抖着。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 为了平息她的颤抖，我紧紧地将她的腰抓住。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705550
+#text 【缇娅】    「啊，嗯嗯！嗯唔，咕，嗯，嗯唔唔唔……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 想要反抗似的，缇娅的身体跳了起来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「别乱动。会露出来的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705560
+#text 【缇娅】    「但是……呼呀！呀！呀啊啊啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705570
+#text 【缇娅】    「呼啊……呼啊啊！哈啊……咿唔唔唔唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 一阵暴乱之后，缇娅终于冷静了下来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705580
+#text 【缇娅】    「哈咿……呼啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 即便如此，就像是长跑之后那样，缇娅不停地喘着气。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705590
+#text 【缇娅】    「吓……吓了我一跳……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「这是我的台词」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705600
+#text 【缇娅】    「因为……突然进入到那么深的地方……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我要进去咯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅的里面，似乎变得更加湿润了。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 就好像是在想我寻求满足一样。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「要动咯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705610
+#text 【缇娅】    「请您手下留情，拜托了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「就算约定了也不一定能遵守啦」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705620
+#text 【缇娅】    「怎么这样……呀啊！啊，啊啊，咿呀……唔！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_010703,bg_alpha,1000
+#add Shcg_010703,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy010705630
+#text 【缇娅】    「呼啊……啊，啊，啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705640
+#text 【缇娅】    「啊呜呜……呜啊，呼啊……呼啊啊啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 摇动腰肢，缇娅有了简单的反应。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 耳朵周围，变得一片通红。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705650
+#text 【缇娅】    「咿呀呜呜……呼啊，呜哇……啊，啊啊啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅的体内很狭窄。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 而且，在我的摩擦下，变得愈发地收紧。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我的分身一边对抗着那份强大的压力，一边渐渐地变得越来越热，越来越大。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705660
+#text 【缇娅】    「呜呜……呜啊……凯伊姆，先生……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705670
+#text 【缇娅】    「在里面……相当的粗暴呢……呼啊，呼啊啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705680
+#text 【缇娅】    「总举得……呜，啊，好厉害……呢……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 硕大的翅膀在眼前呼扇地震颤着。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 在已经发红的后背上，长着的纯白翅膀。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这副光景，看上去就仿佛不像这世间的东西一样。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我爱你」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705690
+#text 【缇娅】    「啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 突然，我对她如是说道。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这并非能够随意而言之的话语。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 但是，在与缇娅紧密相连的如今，我终于能自然地将这句话从口中说出。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705700
+#text 【缇娅】    「诶……？呼啊……啊，啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705710
+#text 【缇娅】    「啊哈，啊哈哈哈……诶嘿嘿嘿嘿……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅全无紧张感地笑了笑。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 不过……这样就好。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我所希望的，就是看到缇娅这样的笑容。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705720
+#text 【缇娅】    「凯伊姆……先生……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705730
+#text 【缇娅】    「我该怎么办啊……非常，高兴呢……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「那样就好」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705740
+#text 【缇娅】    「明明是这种时候，我却无法让自己不笑出来」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不太像你啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705750
+#text 【缇娅】    「可是……可是……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我很喜欢，你的这个特点啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705760
+#text 【缇娅】    「咿……呼啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她的表情，应该又变得舒缓下来了吧。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 虽然我只能看到缇娅的后颈，但这种事情即使不看，也是心知肚明。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705770
+#text 【缇娅】    「啊……好高兴……停不下来了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705780
+#text 【缇娅】    「凯伊姆先生……我，快要高兴的死掉了……呜啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「真是夸张的家伙啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705790
+#text 【缇娅】    「真的啦……因为……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705800
+#text 【缇娅】    「太过幸福了，让我变得奇怪了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「那么，就别说这么不吉利的话」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705810
+#text 【缇娅】    「可，可是……呼喵！呼呀……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 为了不让缇娅去想那些奇怪的事，我开始稍稍加强腰部的动作。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705820
+#text 【缇娅】    「啊……呼啊，呀……唔！呀啊啊啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705830
+#text 【缇娅】    「请，请再让我，享受一下幸福的余韵……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705840
+#text 【缇娅】    「呀，呀，呀……呀啊，咿呀……呼呀！呼呀啊啊啊啊……！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我无视掉缇娅的抗议，一心不乱地摇摆着腰部。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 说实话，我现在已经停不下来了。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 如今的我，只是在任由自己的欲望所驱使，拼命地想要感受缇娅体内的感觉。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705850
+#text 【缇娅】    「嗯嗯……呼啊，呼啊啊啊……啊，啊，啊……唔！啊啊！啊啊啊啊啊！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705860
+#text 【缇娅】    「我，我也想……说……呀呜！呼呀，呀啊啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我们彼此都不再控制自己。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 腰部摆动的幅度变得越来越大。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705870
+#text 【缇娅】    「嗯哈啊啊……呜啊唔，啊，嗯啊啊……嗯咕，啊啊！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705880
+#text 【缇娅】    「呀，咿呀！咿呀……呼呀，呼呀啊……啊，啊，啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705890
+#text 【缇娅】    「哈啊！呼啊……呜啊……啊，啊，啊……嗯，嗯唔，嗯唔唔唔！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_cls 10,100
+#bg hcg_010704,bg_alpha,1000
+#add Shcg_010704,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#text 哔噜,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 呜！哔库－－！哔噜－－－……！,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705900
+#text 【缇娅】    「呼啊！呼啊啊……嗯唔！嗯唔唔唔……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将自己的欲望满满地注入缇娅的体内。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705910
+#text 【缇娅】    「啊，啊，啊……哈啊，啊，啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 随着阴茎重复着的收缩与膨胀，缇娅的身体也在不断地颤抖。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 而那双翅膀，比她的身体颤抖得更加厉害。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705920
+#text 【缇娅】    「嗯唔，嗯，嗯唔唔唔……哈啊，啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 一根羽毛从翅膀上脱落，掉在了地上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705930
+#text 【缇娅】    「哈呼……已，已经……凯伊姆，先生……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_cls 10,100
+#vo aiy010705940
+#text 【缇娅】    「咿呜呜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我的射精还没有结束。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 每当被精液注入到体内，缇娅就发出一阵娇声。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705950
+#text 【缇娅】    「哈啊啊……哈啊，呼啊……呼啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_010705,bg_alpha,1000
+#add Shcg_010705,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy010705960
+#text 【缇娅】    「哈啊，已经……结束了吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将肉棒留在缇娅的体内，感受着那份触感。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705970
+#text 【缇娅】    「凯伊姆先生……真是的……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅发出了执拗的声音。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「嗯？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010705990
+#text 【缇娅】    「请您……让我也说出来吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「你之前已经说过了吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706000
+#text 【缇娅】    「这种事情，不管几次都想说」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706010
+#text 【缇娅】    「可以的话明明希望能在最舒服的时候说的……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 说着，缇娅大大地吸了口气。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706020
+#text 【缇娅】    「我最喜欢你了。凯伊姆先生」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 阴茎猛地颤了一下。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706030
+#text 【缇娅】    「咿呀，呀，呀……凯，凯伊姆先生……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 少女的告白，赤裸裸地转化成了肉欲。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 看来，缇娅的那份单纯也已经传染给了我。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「就这样再来一次，可以吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 而对于我这单纯的提议，缇娅则是红着脸，扭扭捏捏地给予了回应。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706040
+#text 【缇娅】    「可是……我估计已经站不起来了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「这样的话……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#chara_y 0,10,black_sprite,0,0,10,1000
+b_Fadeout 1, 1
+#text 我将阴茎从缇娅体内拔出，仰面躺倒在床上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 然后，顺势让缇娅骑了上来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_010801,bg_alpha,1000
+#add Shcg_010801,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy010706050
+#text 【缇娅】    「啊……　啊，啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 哦……,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅的脸就在我的眼前。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 如今的她，正是一幅心醉神驰的表情。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她居然还会有这样的表情啊……,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 看上去，就好像是一个成熟的女性一样。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这令我的胸口再度开始激烈地鼓动。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706060
+#text 【缇娅】    「凯伊姆先生……心跳的好快呢……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「是啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 离得很近的不只是脸。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我身体的每一寸肌肤，都正在和缇娅紧紧地相连在一起。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 而我那高昂的心跳，也尽数传到了缇娅的身上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706070
+#text 【缇娅】    「呼啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 同样，缇娅的兴奋也向我传了过来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 在她的体内，微微地响起不规则的心跳声。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 虽然表情已经很有女性的韵味，但她的身体却仍旧残有一份稚嫩。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 而整座都市的命运，正是背负在这个少女奢华的双肩上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706080
+#text 【缇娅】    「在考虑什么，很复杂的事情吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊，不是……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706090
+#text 【缇娅】    「天使的圣子可是能看穿一切的哦」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 说着，缇娅露出了少许有些寂寞的笑容。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「撒谎」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706100
+#text 【缇娅】    「嗯？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「现在的你……只是缇娅」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706110
+#text 【缇娅】    「呵呵，的确是呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706120
+#text 【缇娅】    「是缇娅的话，您就能来抱我了吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「当然」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706130
+#text 【缇娅】    「啊哈……好高兴」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706140
+#text 【缇娅】    「那么，拜托……您了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅一点点地将腰沉了下来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706150
+#text 【缇娅】    「嗯，嗯嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_010802,bg_alpha,1000
+#add Shcg_010802,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy010706160
+#text 【缇娅】    「咿呀，呼啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 龟头刚一碰到阴道的入口，随即就钻到了里面。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 与其说是索求，倒不如说是我们的身体正在彼此吸引。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 而双方的性器也随之理所当然地结合在一起。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706170
+#text 【缇娅】    「哈啊，哈……呼啊，呼啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706180
+#text 【缇娅】    「总觉得……真是，厉害呢……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「你从刚刚开始就一直在说“好厉害”吧？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706190
+#text 【缇娅】    「那，那是因为……这样说的话……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706200
+#text 【缇娅】    「啊，啊，啊……呼啊……呼啊啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706210
+#text 【缇娅】    「啊……好像……，已经，动弹不得了呢……嗯呜呜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我就算一直保持这样也无所谓」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706220
+#text 【缇娅】    「可是……我也想，动起来……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「到底是怎样啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706230
+#text 【缇娅】    「啊啊……我也不是很清楚……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706240
+#text 【缇娅】    「虽然不是很清楚……啊，呼啊……凯伊姆……先生……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「嗯？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706250
+#text 【缇娅】    「和喜欢的人合为一体……真的是，非常愉快呢……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「这是当然的吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706260
+#text 【缇娅】    「我，不知道……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅带着困惑的表情说道。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她就连这种事情都不曾体会过，就孤身一人去了塔中么。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我想要教给这家伙更多的事。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 想要让她看到更多的光景。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「……一起生活下去吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706270
+#text 【缇娅】    「嗯？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我，会教你各种各样的事情的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 心脏猛地一跳。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706280
+#text 【缇娅】    「这样的话真是，美妙呢……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 一股想要抱紧缇娅的心情油然而生。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706290
+#text 【缇娅】    「凯，凯伊姆先生……好高兴……好喜欢您……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「缇娅」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706300
+#text 【缇娅】    「嗯，哈呜……请继续……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「是啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将手指陷入缇娅的身体。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 然后，立刻将腰部向上用力突击。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_010803,bg_alpha,1000
+#add Shcg_010803,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy010706310
+#text 【缇娅】    「咿呀……啊，啊啊啊啊，啊……唔，呼啊……唔！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706320
+#text 【缇娅】    「呀，呀，呀……咿呀，嗯……呼啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅的口中开始漏出甜美的声音。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 从交合处溢出的缇娅，沿着我的腿跟流到床上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「缇娅，缇娅」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706330
+#text 【缇娅】    「凯，凯伊姆，先生……凯伊姆先生……唔！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 两个单纯的人，紧紧凭着对彼此单纯的思念而愈发地高涨。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 啾噗，啾啪……啾库，咕啾……。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706340
+#text 【缇娅】    「哈啊……嗯，啊，啊啊，哈呜……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706350
+#text 【缇娅】    「嗯，嗯，嗯唔唔……呼啊，呼啊啊啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706360
+#text 【缇娅】    「翅膀……变得，好重……啊啊……嗯嗯！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 看来，她已经是浑身脱力了。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 羽毛一片片地掉落在床上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706370
+#text 【缇娅】    「嗯……呼啊……哈啊，哈啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706380
+#text 【缇娅】    「啊，啊，啊……嗯，嗯唔唔唔唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「缇娅……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706390
+#text 【缇娅】    「呜咕……嗯，是……是……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「想要……更进一步的联系……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将缇娅的屁股分开。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 然后，更加用力地向上贯穿。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706400
+#text 【缇娅】    「伊……啊啊啊啊……嗯嗯，呼啊啊！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706410
+#text 【缇娅】    「啊，啊，啊……唔，伊啊，伊啊啊啊啊啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706420
+#text 【缇娅】    「凯伊姆先生……唔，凯伊姆，先……生」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706430
+#text 【缇娅】    「到这么深的地方……啊，啊，啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706440
+#text 【缇娅】    「要……坏掉，了……呜呜，啊，嗯嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 唾液自一脸恍惚的缇娅嘴角淌出。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706450
+#text 【缇娅】    「呀，呼呀，呼呀……唔，呼啊，呼啊啊啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706460
+#text 【缇娅】    「哈啊……唔，哈呼，呼啊……唔，啊，啊，唔唔唔唔唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅的体温开始上升。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 心跳也随之变得越来越快。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706470
+#text 【缇娅】    「凯伊姆……先生……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅紧紧地倒在我的身上，将我抱紧。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她那娇小的乳房，严严实实地压在我的胸口上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 那对椒乳虽然很小，但却有着令人非常舒适的柔软度。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706480
+#text 【缇娅】    「哈啊……唔，嗯……啾……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 一股湿润而炽热的感触自脖颈处传来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 是缇娅用舌头舔上了我的脖子。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706490
+#text 【缇娅】    「呼啊……有，汗的味道……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 作为回应，我也舔起了缇娅的脸颊。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706500
+#text 【缇娅】    「伊……呀，嗯唔唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「缇娅的，好甜……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706510
+#text 【缇娅】    「呼诶……呼诶……？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅的脸变得更加红了。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706520
+#text 【缇娅】    「呼呀……啊，啊嗯，讨，讨，讨厌……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 那份兴奋，很快便传到了她的下半身。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706530
+#text 【缇娅】    「讨，厌……唔，在里面，啊啊，颤动……了……啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「感觉就好像在被榨取一样」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706540
+#text 【缇娅】    「啊啊，这样……很不成……样子……吧？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不过……我很高兴」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706550
+#text 【缇娅】    「谢谢……您……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 说完，我们彼此舔舐起对方的嘴唇来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706560
+#text 【缇娅】    「呼啊……嗯，啾噜……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706570
+#text 【缇娅】    「嗯，嗯，嗯……唔，噗哈，呼啊，哈啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 同时，下半身的动作也变得愈发激烈。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706580
+#text 【缇娅】    「咿咕……呼啊，呼啊啊啊啊啊……唔，啊，啊，啊……唔，啊啊，呼啊！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我用尽全力握住缇娅的臀部，将阴茎狠狠地在阴道中撞击。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706590
+#text 【缇娅】    「啊……啊啊啊……唔，呼啊，呼啊啊啊啊啊……唔，哈咿，咿咕，咿唔唔唔！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706600
+#text 【缇娅】    「啊啊，凯伊姆，先生……唔，已经，我，快要……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706610
+#text 【缇娅】    「不，不行……唔，不快一点，的话，真的，要，坏掉了……啊，啊啊！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706620
+#text 【缇娅】    「咕唔唔唔唔，啊，嗯，呀，啊嗯，呼呀……嗯，咕，啊啊啊！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706630
+#text 【缇娅】    「已经……已经，呜啊，呼啊……！呀，呀，呀，啊啊，嗯啊啊啊啊啊啊……唔！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_cls 10,100
+#bg hcg_010804,bg_alpha,1000
+#add Shcg_010804,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#text 哔噜！哔库－－－！,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706640
+#text 【缇娅】    「咿呀！呜啊……呼啊，呼啊……呼啊啊啊啊啊啊啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706650
+#text 【缇娅】    「啊，啊啊啊……在，最深处，射出来了……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706660
+#text 【缇娅】    「凯伊姆，先生……啊啊，哈啊，肚子里，好热……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706670
+#text 【缇娅】    「咿嗯！嗯，嗯，嗯……嗯唔唔唔唔……唔！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我伸出双手，抓住反射般想要逃开的缇娅的身体。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706680
+#text 【缇娅】    「啊啊……呜呜，呜呜……呜啊，呼啊啊啊啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅的身体，本能地接下了我射出的东西。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 感觉，就好像被紧紧地吸住一般。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 或许，精液会直接流入子宫也说不定。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706690
+#text 【缇娅】    「哈啊……哈啊，哈啊……唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706700
+#text 【缇娅】    「呼啊，啊……啊啊，呼啊啊啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_010805,bg_alpha,1000
+#add Shcg_010805,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy010706710
+#text 【缇娅】    「恩……嗯唔……嗯唔唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 射精结束之后，缇娅浑身瘫软地倒在了我的胸前。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706720
+#text 【缇娅】    「哈啊，呼啊……好厉害，呢……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 一次又一次地说着『好厉害』这句话。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这份满足的声音，让我也变得十分高兴。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「好，接下来想穿什么衣服？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706730
+#text 【缇娅】    「那个……您还真精神呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#se 09440
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_cls 10,100
+#vo aiy010706740
+#text 【缇娅】    「啊咧？不知为什么，力量涌出来了！？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「好，衣服要怎么办？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「莉莉乌姆的制服如何？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706750
+#text 【缇娅】    「不行不行不行的，那种妖艳的衣服，怎么可能和我相称啊！？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不试试怎么知道」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706760
+#text 【缇娅】    「汪呜汪呜汪呜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「就算你叫也没用」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「唔唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我集中意念。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 难得有这个机会，就让缇娅穿件会让她高兴的衣服吧。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy010706770
+#text 【缇娅】    「不行ーーーー」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 缇娅抓起床上的枕头。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊，等等！？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#se 09440
+#vo aiy010706780
+#text 【缇娅】    「嘿！！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+b_Window 0
+#wait_se 09730
+#quake
+#quake
+#text 然后，直接朝我的脸扔了过来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#bg bg_0000,bg_alpha,1000
+
+b_Fadeout 1, 1
+#se_stop
+b_f_15d 0
+#call bg_9999
+#chara_y 5,77,sgmsgwnd000000,50,0,77,88,face_010901,19,0,88,200
+b_Refresh 
+#vo aiy010706790
+#say 【缇娅】,「啊……这件衣服……！？」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#say 下一瞬间──
+#say 我仿佛看到了缇娅身披华丽的婚纱的样子。
+#add Saiy70130,1
+b_f_12f 
+mov %branch_flag, 1:if %3012 != 0 mov %branch_flag, 0
+if FSEL!=0,goto *aiy70130_L09114
+return
+goto *aiy70130_L09114
+#label *aiy70130_L09114
+
+b_f_0e6 204, 1
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+b_Window 0
+b_f_119 
+#bgm_stop
+#bgm_stop
+#se_stop
+b__soundstop 1
+b__soundstop 2
+b__soundstop 3
+#bg bg_0000,bg_alpha,3000
+#chara_y 0,10,white_sprite,0,0,10,1000
+#chara_y 0,10,aped_03,0,0,10,1500
+#wait 8000
+b_f_110 8000
+b_f_0e6 153, 1
+b_RouteFlag 
+#bg bg_0000,bg_alpha,3000
+b_Fadeout 1, 1
+#label *aiy70130_L09418
+#ret
+return
+#label *aiy70130_end
