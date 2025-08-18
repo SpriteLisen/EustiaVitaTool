@@ -191,7 +191,7 @@ def parse_pymo_script(pymo_script_path):
     output_file.close()
 
     # 合并所有文本
-    all_text = "".join(screen_msgs + says + persons + person_says)
+    all_text = "".join(screen_msgs + says + persons + person_says + selects)
 
     # 统计字符集合
     # \u3000 是全角的空格
