@@ -21,6 +21,8 @@ def parse_ons_script(ons_script_path):
     persons = []
     # 人物对白文案
     person_says = []
+    # 选择分支文案
+    selects = []
 
     # 1. b__screenmsg: 抓取第一个 "" 中的内容
     re_screen_msg = re.compile(r'^b__screenmsg.*?"(.*?)"')
@@ -28,6 +30,7 @@ def parse_ons_script(ons_script_path):
     re_say = re.compile(r'^b__say(?!_)\S*\s*"(.*?)"')
     # 3. b__say_1: 抓取两个 "" 中的内容
     re_say1 = re.compile(r'^b__say_1.*?"(.*?)".*?"(.*?)"')
+    # 4. b_f_164: 抓取分支中的内容
 
     with open(file_path, "r", encoding="gb2312", errors="ignore") as f:
         for line in f:
@@ -63,6 +66,14 @@ def parse_ons_script(ons_script_path):
                 output_file.write(person_say + "\n")
                 continue
 
+            # 匹配 b_f_164 分支选择
+            matches = re.findall(r'^b_f_164\s*("[^"]*"(?:\s*,\s*"[^"]*")*)', line, re.DOTALL)
+            matches = [m.strip('"') for m in matches if m and m != 'b_f_164']
+            if matches:
+                for m in matches:
+                    selects.append(m)
+                continue
+
     output_file.close()
 
     # 输出测试
@@ -72,7 +83,7 @@ def parse_ons_script(ons_script_path):
     # print("person_says:", person_says)
 
     # 合并所有文本
-    all_text = "".join(screen_msgs + says + persons + person_says)
+    all_text = "".join(screen_msgs + says + persons + person_says + selects)
 
     # 统计字符集合
     # \u3000 是全角的空格
@@ -81,6 +92,8 @@ def parse_ons_script(ons_script_path):
     # 输出
     print("总字符数:", len(unique_chars))
     print("字符列表:", unique_chars)
+
+    print("分支列表:", selects)
 
 
 def parse_pymo_script(pymo_script_path):
@@ -98,18 +111,42 @@ def parse_pymo_script(pymo_script_path):
     persons = []
     # 人物对白文案
     person_says = []
+    # 选择分支文案
+    selects = []
 
     # 1. b__screenmsg: 抓取第一个 "" 中的内容
     re_screen_msg = re.compile(r'^b__screenmsg.*?"(.*?)"')
     # 2. #say content || #say 【name】,「content」
     re_say = re.compile(r'^#say\s+([^,\s]+)(?:,([^,\s]+))?')
+    # 3. #sel n
+    re_select = re.compile(r'^#sel\s+(\d+)')
 
     # 解析实际内容
     def parse_content(files):
         for main_script in files:
             with open(main_script, "r", encoding="utf8", errors="ignore") as f:
+                in_case = False
+                now_select_count = 0
+                now_select_index = 0
+
                 for line in f:
                     line = line.strip()
+
+                    # 解析分支文案
+                    select_match = re_select.match(line)
+                    if select_match:
+                        in_case = True
+                        now_select_count = int(select_match.group(1))
+                        continue
+
+                    if in_case:
+                        now_select_index += 1
+                        selects.append(line)
+                        if now_select_index >= now_select_count:
+                            now_select_index = 0
+                            now_select_count = 0
+                            in_case = False
+                        continue
 
                     # 匹配 b__screenmsg
                     m1 = re_screen_msg.match(line)
@@ -163,6 +200,8 @@ def parse_pymo_script(pymo_script_path):
     # 输出
     print("总字符数:", len(unique_chars))
     print("字符列表:", unique_chars)
+
+    print("分支列表:", selects)
 
 
 if __name__ == "__main__":
