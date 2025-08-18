@@ -235,7 +235,8 @@ def parse_psv_script(psv_script_path):
     mtlk_pattern = re.compile(r'!_MTLK\([^,]*,\s*([^)]*)\)')
     selr_pattern = re.compile(r'<\w+>_SELR\([^;]*;/([^)]*)\)\)')
 
-    for psv_script in file_path.glob('*.[Tt][Pp][Ll]'):
+    files = sorted(file_path.glob('*.[Tt][Pp][Ll]'), key=lambda x: x.name.lower())
+    for psv_script in files:
         # entry_200 是测试文本
         if psv_script.name == "entry_200.tpl":
             continue
