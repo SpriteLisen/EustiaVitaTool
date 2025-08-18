@@ -67,10 +67,10 @@ def parse_ons_script(ons_script_path):
                 continue
 
             # 匹配 b_f_164 分支选择
-            matches = re.findall(r'^b_f_164\s*("[^"]*"(?:\s*,\s*"[^"]*")*)', line, re.DOTALL)
-            matches = [m.strip('"') for m in matches if m and m != 'b_f_164']
+            matches = re.match(r'^b_f_164\s*("[^"]*"(?:\s*,\s*"[^"]*")*)', line)
             if matches:
-                for m in matches:
+                options = re.findall(r'"([^"]*)"', matches.group(1))
+                for m in options:
                     selects.append(m)
                 continue
 
@@ -79,7 +79,7 @@ def parse_ons_script(ons_script_path):
     # 输出测试
     # print("screenmsg:", screen_msgs)
     # print("says:", says)
-    # print("persons:", persons)
+    # print("persons:", sorted(set(persons)))
     # print("person_says:", person_says)
 
     # 合并所有文本
@@ -93,6 +93,7 @@ def parse_ons_script(ons_script_path):
     print("总字符数:", len(unique_chars))
     print("字符列表:", unique_chars)
 
+    print("分支总数:", len(selects))
     print("分支列表:", selects)
 
 
@@ -190,6 +191,12 @@ def parse_pymo_script(pymo_script_path):
 
     output_file.close()
 
+    # 输出测试
+    # print("screenmsg:", screen_msgs)
+    # print("says:", says)
+    # print("persons:", sorted(set(persons)))
+    # print("person_says:", person_says)
+
     # 合并所有文本
     all_text = "".join(screen_msgs + says + persons + person_says + selects)
 
@@ -201,9 +208,99 @@ def parse_pymo_script(pymo_script_path):
     print("总字符数:", len(unique_chars))
     print("字符列表:", unique_chars)
 
+    print("分支总数:", len(selects))
+    print("分支列表:", selects)
+
+
+def parse_psv_script(psv_script_path):
+    file_path = Path(psv_script_path)
+
+    output_path = file_path.with_name(output_dir)
+
+    output_file_path = output_path / "psv_version.txt"
+    output_file = open(output_file_path, "w", encoding="utf-8")
+
+    # 全屏一行渲染的文案内容
+    screen_msgs = []
+    # 对白文案
+    says = []
+    # 人物名称
+    persons = []
+    # 选择分支文案
+    selects = []
+
+    # 定义正则表达式模式
+    rtth_pattern = re.compile(r'!_RTTH\([^,]*,([^)]*)\)\)')
+    zmyyyy_pattern = re.compile(r'<\w+>_ZM\w+\(([^)]*)\)')
+    mtlk_pattern = re.compile(r'!_MTLK\([^,]*,\s*([^)]*)\)')
+    selr_pattern = re.compile(r'<\w+>_SELR\([^;]*;/([^)]*)\)\)')
+
+    for psv_script in file_path.glob('*.[Tt][Pp][Ll]'):
+        # entry_200 是测试文本
+        if psv_script.name == "entry_200.tpl":
+            continue
+
+        with open(psv_script, "r", encoding="shift_jis", errors="ignore") as f:
+            for line in f:
+                line = line.strip()
+
+                # 1. 解析整行文案
+                if line.startswith('!_RTTH'):
+                    match = rtth_pattern.search(line)
+                    if match:
+                        screen_msg = match.group(1)
+                        screen_msgs.append(screen_msg)
+                        output_file.write(screen_msg + "\n")
+
+                # 2. 解析文本内容
+                elif '_ZM' in line and '(' in line and ')' in line:
+                    match = zmyyyy_pattern.search(line)
+                    if match:
+                        say = match.group(1)
+                        says.append(say)
+                        output_file.write(say + "\n")
+
+                # 3. 解析人名
+                elif line.startswith('!_MTLK'):
+                    match = mtlk_pattern.search(line)
+                    if match:
+                        person = match.group(1)
+                        persons.append(person)
+                        output_file.write(person + "\n")
+
+                # 4. 解析分支内容
+                elif '_SELR(' in line:
+                    match = selr_pattern.search(line)
+                    if match:
+                        select = match.group(1)
+                        selects.append(select)
+                        output_file.write(select + "\n")
+
+    output_file.close()
+
+    # 输出测试
+    print("screenmsg:", screen_msgs)
+    # print("says:", says)
+    print("persons:", sorted(set(persons)))
+
+    # 合并所有文本
+    all_text = "".join(screen_msgs + says + persons + selects)
+
+    # 统计字符集合
+    # \u3000 是全角的空格
+    unique_chars = sorted(set(all_text))
+
+    # 输出
+    print("总字符数:", len(unique_chars))
+    print("字符列表:", unique_chars)
+
+    print("分支总数:", len(selects))
     print("分支列表:", selects)
 
 
 if __name__ == "__main__":
     parse_ons_script("game_script/ons_version.txt")
+    print("----------------------------------------------------------------------------------------------------------")
     parse_pymo_script("game_script/pymo")
+    print("----------------------------------------------------------------------------------------------------------")
+    parse_psv_script("game_script/psv")
