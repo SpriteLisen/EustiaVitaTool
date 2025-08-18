@@ -2,60 +2,44 @@
 
 import pandas as pd
 from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
 import os
 from tqdm import tqdm
 import hashlib
 import torch
 from multiprocessing import cpu_count
 import platform
+import time
 
 # ------------------- 配置 -------------------
-# 自动检测设备类型
 if torch.cuda.is_available():
     device = "cuda"
 elif torch.backends.mps.is_available() and platform.system() == "Darwin":
-    device = "mps"  # Apple Metal
+    device = "mps"
 else:
     device = "cpu"
 
 print(f"使用设备: {device} ({platform.system()} {platform.machine()})")
 
-if device == "cpu":
-    torch.set_num_threads(cpu_count())
-    torch.set_num_interop_threads(cpu_count())
+torch.set_num_threads(cpu_count())
+torch.set_num_interop_threads(cpu_count())
 
 os.environ['http_proxy'] = 'http://127.0.0.1:7890'
 os.environ['https_proxy'] = 'http://127.0.0.1:7890'
 
 CACHE_DIR = "translation_cache"
 os.makedirs(CACHE_DIR, exist_ok=True)
-BATCH_SIZE = 32 if device == "mps" else 64  # MPS需要更小的batch size
-THRESHOLD = 0.82  # 语义相似度阈值
+BATCH_SIZE = 64 if device != "mps" else 32
+THRESHOLD = 0.82
+TOP_K = 5
+SEARCH_BATCH = 512  # 分批处理 PSV 向量，避免显存爆掉
 
-
-# -------------------------------------------
 
 # ------------------- 模型加载 -------------------
 def load_model():
-    model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    model_name = "paraphrase-multilingual-mpnet-base-v2"
     cache_dir = os.path.join(os.path.expanduser("~"), ".cache", "sentence_transformers")
     os.makedirs(cache_dir, exist_ok=True)
-
-    # 特殊处理MPS设备
-    model = SentenceTransformer(
-        model_name,
-        cache_folder=cache_dir,
-        device=device
-    )
-
-    # MPS设备需要关闭某些优化
-    if device == "mps":
-        model._target_device = torch.device("mps")
-        for module in model._modules.values():
-            if hasattr(module, "to"):
-                module.to("mps")
-
+    model = SentenceTransformer(model_name, cache_folder=cache_dir, device=device)
     return model
 
 
@@ -87,31 +71,7 @@ class TranslationCache:
         text_hash = get_text_hash(ja_text)
         new_row = pd.DataFrame([[text_hash, ja_text, zh_text]], columns=['hash', 'ja_text', 'zh_text'])
         self.df = pd.concat([self.df, new_row], ignore_index=True)
-        self.df.to_csv(self.cache_file, index=False)
-
-
-# ------------------- 文本匹配 -------------------
-class TextMatcher:
-    def __init__(self):
-        self.cache = {}
-
-    @staticmethod
-    def preprocess_text(text):
-        if pd.isna(text):
-            return ""
-        return str(text).strip()
-
-    def encode_texts(self, texts):
-        """分批编码文本，兼容 CPU/GPU"""
-        embeddings = []
-        for i in range(0, len(texts), BATCH_SIZE):
-            batch_texts = texts[i:i + BATCH_SIZE]
-            batch_embeddings = model.encode(batch_texts, batch_size=BATCH_SIZE, device=device, convert_to_tensor=True)
-            embeddings.append(batch_embeddings)
-        return torch.cat(embeddings, dim=0)
-
-    def compute_similarity(self, source_embedding, target_embeddings):
-        return cosine_similarity(source_embedding.unsqueeze(0), target_embeddings).flatten()
+        self.df.to_csv(self.cache_file, index=False, encoding='utf-8-sig')
 
 
 # ------------------- 文件加载 -------------------
@@ -126,78 +86,121 @@ def load_files():
     return psv_df, ons_df, pymo_df
 
 
+# ------------------- 编码 -------------------
+def encode_texts(texts, cache_file):
+    if os.path.exists(cache_file):
+        embeddings = torch.load(cache_file, map_location=device)
+    else:
+        embeddings = model.encode(texts, batch_size=BATCH_SIZE, device=device, convert_to_tensor=True)
+        torch.save(embeddings, cache_file)
+    # L2 normalize
+    embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=1)
+    return embeddings
+
+
+def format_time(seconds: float) -> str:
+    if seconds < 60:
+        return f"{seconds:.2f} 秒"
+    elif seconds < 3600:
+        return f"{seconds / 60:.2f} 分钟"
+    else:
+        return f"{seconds / 3600:.2f} 小时"
+
+
 # ------------------- 主逻辑 -------------------
 def main():
     translation_cache = TranslationCache()
-    matcher = TextMatcher()
     psv_df, ons_df, pymo_df = load_files()
 
-    # 预处理目标文本
-    ons_texts = [matcher.preprocess_text(t) for t in ons_df['zh_text'].tolist() if matcher.preprocess_text(t)]
-    pymo_texts = [matcher.preprocess_text(t) for t in pymo_df['zh_text'].tolist() if matcher.preprocess_text(t)]
+    # 文本预处理
+    ons_texts = [str(t).strip() for t in ons_df['zh_text'].tolist() if pd.notna(t)]
+    pymo_texts = [str(t).strip() for t in pymo_df['zh_text'].tolist() if pd.notna(t)]
+    ja_texts = [str(t).strip() for t in psv_df['ja_text'].tolist()]
 
-    # 预先编码目标文本
+    # 编码目标文本
     print("编码 ONS 文本向量...")
-    ons_embeddings = matcher.encode_texts(ons_texts) if ons_texts else None
+    ons_embeddings_file = os.path.join(CACHE_DIR, "ons_embeddings.pt")
+    ons_embeddings = encode_texts(ons_texts, ons_embeddings_file).to(device)
+
     print("编码 PYMO 文本向量...")
-    pymo_embeddings = matcher.encode_texts(pymo_texts) if pymo_texts else None
+    pymo_embeddings_file = os.path.join(CACHE_DIR, "pymo_embeddings.pt")
+    pymo_embeddings = encode_texts(pymo_texts, pymo_embeddings_file).to(device)
 
+    print("编码 PSV 文本向量...")
+    psv_embeddings_file = os.path.join(CACHE_DIR, "psv_embeddings.pt")
+    psv_embeddings = encode_texts(ja_texts, psv_embeddings_file).to(device)
+
+    # 分批 GPU 矩阵比对
     results = []
-    pbar = tqdm(total=len(psv_df), desc="处理进度")
+    start_time = time.perf_counter()
+    pbar = tqdm(total=len(ja_texts), desc="处理进度")
 
-    for _, row in psv_df.iterrows():
-        ja_text = matcher.preprocess_text(row['ja_text'])
-        best_match = None
-        best_source = None
-        best_sim = 0
+    for start in range(0, len(ja_texts), SEARCH_BATCH):
+        end = min(start + SEARCH_BATCH, len(ja_texts))
+        psv_batch = psv_embeddings[start:end]  # [batch_size, dim]
 
-        # 编码当前日文
-        source_embedding = matcher.encode_texts([ja_text])[0]
+        # 计算内积相似度
+        if len(ons_texts) > 0:
+            sim_ons = torch.matmul(psv_batch, ons_embeddings.T)  # [batch_size, ons_count]
+            topk_sim_ons, topk_idx_ons = torch.topk(sim_ons, k=TOP_K, dim=1)
+        else:
+            topk_sim_ons = torch.zeros((end - start, TOP_K), device=device)
+            topk_idx_ons = torch.zeros((end - start, TOP_K), dtype=torch.long, device=device)
 
-        # 1. ONS匹配
-        if ons_embeddings is not None:
-            sims = matcher.compute_similarity(source_embedding, ons_embeddings)
-            max_idx = sims.argmax()
-            max_sim = sims[max_idx].item()
-            if max_sim >= THRESHOLD:
-                best_match = ons_texts[max_idx]
+        if len(pymo_texts) > 0:
+            sim_pymo = torch.matmul(psv_batch, pymo_embeddings.T)
+            topk_sim_pymo, topk_idx_pymo = torch.topk(sim_pymo, k=TOP_K, dim=1)
+        else:
+            topk_sim_pymo = torch.zeros((end - start, TOP_K), device=device)
+            topk_idx_pymo = torch.zeros((end - start, TOP_K), dtype=torch.long, device=device)
+
+        # 生成结果
+        for i in range(end - start):
+            ja_text = ja_texts[start + i]
+            best_match = None
+            best_source = None
+            best_sim = 0.0
+
+            # ONS
+            if len(ons_texts) > 0 and topk_sim_ons[i, 0] >= THRESHOLD:
+                best_match = ons_texts[topk_idx_ons[i, 0]]
                 best_source = "ons"
-                best_sim = max_sim
+                best_sim = float(topk_sim_ons[i, 0])
 
-        # 2. PYMO匹配
-        if pymo_embeddings is not None and best_sim < 0.93:
-            sims = matcher.compute_similarity(source_embedding, pymo_embeddings)
-            max_idx = sims.argmax()
-            max_sim = sims[max_idx].item()
-            if max_sim >= THRESHOLD and max_sim > best_sim:
-                best_match = pymo_texts[max_idx]
+            # PYMO
+            if len(pymo_texts) > 0 and best_sim < 0.93 and topk_sim_pymo[i, 0] >= THRESHOLD:
+                best_match = pymo_texts[topk_idx_pymo[i, 0]]
                 best_source = "pymo"
-                best_sim = max_sim
+                best_sim = float(topk_sim_pymo[i, 0])
 
-        # 3. 翻译缓存
-        if not best_match:
-            cached_trans = translation_cache.get_translation(ja_text)
-            if cached_trans:
-                best_match = cached_trans
-                best_source = "translate(cached)"
-            else:
-                zh_text = f"[翻译]{ja_text}"  # 占位
-                translation_cache.add_translation(ja_text, zh_text)
-                best_match = zh_text
-                best_source = "translate"
+            # 翻译缓存
+            if not best_match:
+                cached_trans = translation_cache.get_translation(ja_text)
+                if cached_trans:
+                    best_match = cached_trans
+                    best_source = "translate(cached)"
+                else:
+                    zh_text = f"[翻译]{ja_text}"
+                    translation_cache.add_translation(ja_text, zh_text)
+                    best_match = zh_text
+                    best_source = "translate"
 
-        results.append({
-            'original': ja_text,
-            'translation': best_match,
-            'source': best_source,
-            'similarity': best_sim if best_source in ['ons', 'pymo'] else None
-        })
-        pbar.update(1)
+            results.append({
+                'original': ja_text,
+                'translation': best_match,
+                'source': best_source,
+                'similarity': best_sim if best_source in ['ons', 'pymo'] else None
+            })
+            pbar.update(1)
 
     pbar.close()
 
+    end_time = time.perf_counter()
+    elapsed = end_time - start_time
+    print(f"GPU/CPU 比对耗时: {format_time(elapsed)}")
+
     # 保存结果
-    pd.DataFrame(results).to_csv('final_translations.csv', index=False, encoding='utf-8')
+    pd.DataFrame(results).to_csv('final_translations.csv', index=False, encoding='utf-8-sig')
     print("处理完成，结果已保存到 final_translations.csv")
 
 
