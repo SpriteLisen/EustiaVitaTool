@@ -55,7 +55,7 @@ def parse_ons_script(ons_script_path):
             m3 = re_say1.match(line)
             if m3:
                 person_say = m3.group(1)
-                person_name = m3.group(2)
+                person_name = "【" + m3.group(2) + "】"
                 person_says.append(person_say)  # 对白
                 persons.append(person_name)  # 人物名
 
