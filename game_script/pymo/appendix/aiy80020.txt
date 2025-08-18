@@ -109,7 +109,7 @@ b_Refresh
 #chara_y 5,22,tati_150101,69,0,22,88,face_150101,19,0,88,200
 b_Refresh 
 #vo aiy150700170
-#say 【莉莎】,「嗯，什么什么ー？」
+#say 【莉莎】,「嗯，什么什么～？」
 #chara_y 5,22,tati_150102,69,0,22,88,face_150102,19,0,88,200
 b_Refresh 
 #vo aiy150700180
@@ -1308,7 +1308,7 @@ b_Refresh
 #chara_y 5,88,NULL,0,0,1,200 
 b_Refresh 
 #vo aiy130700420
-#say 【拉菲莉亚】,「呀啊ーーーーー！？」
+#say 【拉菲莉亚】,「呀啊～～～～～！？」
 #chara_y 5,88,NULL,0,0,1,200 
 b_Refresh 
 #se_stop

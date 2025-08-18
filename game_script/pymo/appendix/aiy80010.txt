@@ -211,7 +211,7 @@ b_f_392 250, 1
 #chara_y 5,77,sgmsgwnd000000,50,0,77,88,face_010132,19,0,88,200
 b_Refresh 
 #vo aiy010706970
-#say 【缇娅】,「嗯咕ーーーーーーーー！！！！！」
+#say 【缇娅】,「嗯咕～～～～～～～～！！！！！」
 #chara_y 5,88,NULL,0,0,1,200 
 b_Refresh 
 #bg bg_0000,bg_alpha,1000
@@ -788,7 +788,7 @@ b_Refresh
 #chara_y 5,21,tati_120113,50,0,21,88,face_120113,19,0,88,200
 b_Refresh 
 #vo aiy120700500
-#say 【梅尔特】,「明天再见ー」
+#say 【梅尔特】,「明天再见～」
 #chara_y 5,88,NULL,0,0,1,200 
 b_Refresh 
 #say 我背过梅尔特十分开朗的声音，走出店铺。
