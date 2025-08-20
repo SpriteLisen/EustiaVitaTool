@@ -92,68 +92,75 @@ class TplEntry:
         processed_lines = []
 
         # now, revert operation from prep_tpl
-        # line_num = 1
+        line_num = 1
         # full_wid_comma = chr(0xff0c)
 
         for line in self.tpl_lines:
             line = line.rstrip('\r\n')
 
-            if len(line) > 1 and line[0] == '!':
-                processed_lines.append(line[1:])
-            else:
-                if line.count("(") != line.count(")"):
-                    log_warn(f"Bracket mismatch at line: {line}")
-                if line.count(chr(0xff08)) != line.count(chr(0xff09)):
-                    log_warn(f"Bracket mismatch at line: {line}")
-
-                processed_lines.append(line)
-
-            # m = re.search(r'^<[0-9]+>(.+)', line)
-            # if m is not None:
-            #     parts = m.group(1).split('=', 2)
-            #     line = parts[0] if len(parts) < 2 else parts[1]
-            #     expr = re.search(r'^([^(]+)\((.+)\)', line)
-            #
-            #     if expr is not None:
-            #         before = expr.group(1) + "("
-            #         subj = expr.group(2)
-            #         after = ")"
-            #     else:
-            #         before = after = ""
-            #         subj = line
-            #
-            #     line = before + subj.replace(
-            #         ", ", full_wid_comma
-            #     ).replace(
-            #         ",", full_wid_comma
-            #     ).replace(
-            #         ";/", ","
-            #     ).replace(
-            #         "_n", "@n"
-            #     ).replace(
-            #         "_r", "^"
-            #     ) + after
-            #
-            #     if line.count("(") != line.count(")"):
-            #         log_warn(f"Bracket mismatch at line {line_num}: {line}")
-            #     if line.count(chr(0xff08)) != line.count(chr(0xff09)):
-            #         log_warn(f"Bracket mismatch at line {line_num}: {line}")
-            #
-            #     processed_lines.append(line)
-            # elif len(line) > 1 and line[0] == '!':
+            # if len(line) > 1 and line[0] == '!':
             #     processed_lines.append(line[1:])
             # else:
-            #     if len(line) > 0:
-            #         m = re.search(r'^~(.*)~$', line)
-            #         if m is None:
-            #             log_warn(
-            #                 f"{self.in_tpl.name} line {line_num} - text should be enclosed in ~~ {line}"
-            #             )
-            #         else:
-            #             processed_lines.append(m.group(1))
-            # line_num += 1
+            #     if line.count("(") != line.count(")"):
+            #         log_warn(f"Bracket mismatch at line: {line}")
+            #     if line.count(chr(0xff08)) != line.count(chr(0xff09)):
+            #         log_warn(f"Bracket mismatch at line: {line}")
+            #
+            #     processed_lines.append(line)
 
-        result_bytes = ';'.join(processed_lines).encode(MZX_ENCODING)
+            m = re.search(r'^<[0-9]+>(.+)', line)
+            if m is not None:
+                # parts = m.group(1).split('=', 2)
+                # line = parts[0] if len(parts) < 2 else parts[1]
+                # expr = re.search(r'^([^(]+)\((.+)\)', line)
+                #
+                # if expr is not None:
+                #     before = expr.group(1) + "("
+                #     subj = expr.group(2)
+                #     after = ")"
+                # else:
+                #     before = after = ""
+                #     subj = line
+
+                # line = before + subj.replace(
+                #     ", ", full_wid_comma
+                # ).replace(
+                #     ",", full_wid_comma
+                # ).replace(
+                #     ";/", ","
+                # ).replace(
+                #     "_n", "@n"
+                # ).replace(
+                #     "_r", "^"
+                # ) + after
+
+                # 替换换行符
+                line = line.replace(
+                    "_n", "@n"
+                ).replace(
+                    "_r", "^"
+                )
+
+                if line.count("(") != line.count(")"):
+                    log_warn(f"Bracket mismatch at line {line_num}: {line}")
+                if line.count(chr(0xff08)) != line.count(chr(0xff09)):
+                    log_warn(f"Bracket mismatch at line {line_num}: {line}")
+
+                processed_lines.append(line)
+            elif len(line) > 1 and line[0] == '!':
+                processed_lines.append(line[1:])
+            else:
+                if len(line) > 0:
+                    m = re.search(r'^~(.*)~$', line)
+                    if m is None:
+                        log_warn(
+                            f"{self.in_tpl.name} line {line_num} - text should be enclosed in ~~ {line}"
+                        )
+                    else:
+                        processed_lines.append(m.group(1))
+            line_num += 1
+
+        # result_bytes = ';'.join(processed_lines).encode(MZX_ENCODING)
 
         mzx_out_path = self.in_tpl.with_name(mzx_output_dir)
         mzx_out_path.mkdir(parents=True, exist_ok=True)
@@ -162,9 +169,29 @@ class TplEntry:
         if out_mzx_file_path.exists():
             log_warn("Remove exists mzx file {0}".format(out_mzx_file_path.name))
             out_mzx_file_path.unlink()
-        mzx_data = mzx_compress(src=io.BytesIO(result_bytes), invert=True)
+
+        total_length = 0
+        processed_lines = [(l + ";").encode(MZX_ENCODING) for l in processed_lines]
+        output_bytes = io.BytesIO()
+        for line in processed_lines:
+            # 强行进行补位, 防止压缩算法导致出现奇怪的问题
+            if len(line) % 2 == 1:
+                line += b'\x00'
+
+            total_length += len(line)
+
+            # 使用 level=2 压缩每行
+            compressed_line = mzx_compress(io.BytesIO(line), invert=True)
+            compressed_line.seek(8)  # 跳过每行压缩头
+            output_bytes.write(compressed_line.read())
+
+        # mzx_data = mzx_compress(src=io.BytesIO(result_bytes), invert=True)
         with open(out_mzx_file_path, 'wb') as outfile:
-            outfile.write(mzx_data.getvalue())
+            # outfile.write(mzx_data.getvalue())
+            # 用逐行压缩内容替换掉整段压缩, 重新构建头信息
+            outfile.write(MZX_MAGIC)
+            outfile.write(total_length.to_bytes(4, 'little'))
+            outfile.write(output_bytes.getvalue())
 
         log_succeed(f"Successfully repacked mxz file => {out_mzx_file_path.name}")
 
