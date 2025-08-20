@@ -41,7 +41,7 @@ class TplEntry:
         elif in_tpl is not None:
             self.in_tpl = in_tpl
 
-            tpl_file = in_tpl.open("rt", encoding=DEFAULT_ENCODING)
+            tpl_file = in_tpl.open("rt", encoding=MZX_ENCODING)
             self.tpl_lines = tpl_file.readlines()
             tpl_file.close()
         else:
