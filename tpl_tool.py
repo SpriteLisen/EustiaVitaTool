@@ -117,14 +117,15 @@ class TplEntry:
                 ).replace(
                     ";/", ","
                 ).replace(
-                    "(", chr(0xff08)
-                ).replace(
-                    ")", chr(0xff09)
-                ).replace(
                     "_n", "@n"
                 ).replace(
                     "_r", "^"
                 ) + after
+
+                if line.count("(") != line.count(")"):
+                    log_warn(f"Bracket mismatch at line {line_num}: {line}")
+                if line.count(chr(0xff08)) != line.count(chr(0xff09)):
+                    log_warn(f"Bracket mismatch at line {line_num}: {line}")
 
                 processed_lines.append(line)
             elif len(line) > 1 and line[0] == '!':
