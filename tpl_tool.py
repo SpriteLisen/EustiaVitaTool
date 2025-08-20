@@ -92,54 +92,66 @@ class TplEntry:
         processed_lines = []
 
         # now, revert operation from prep_tpl
-        line_num = 1
-        full_wid_comma = chr(0xff0c)
+        # line_num = 1
+        # full_wid_comma = chr(0xff0c)
+
         for line in self.tpl_lines:
             line = line.rstrip('\r\n')
-            m = re.search(r'^<[0-9]+>(.+)', line)
-            if m is not None:
-                parts = m.group(1).split('=', 2)
-                line = parts[0] if len(parts) < 2 else parts[1]
-                expr = re.search(r'^([^(]+)\((.+)\)', line)
 
-                if expr is not None:
-                    before = expr.group(1) + "("
-                    subj = expr.group(2)
-                    after = ")"
-                else:
-                    before = after = ""
-                    subj = line
-
-                line = before + subj.replace(
-                    ", ", full_wid_comma
-                ).replace(
-                    ",", full_wid_comma
-                ).replace(
-                    ";/", ","
-                ).replace(
-                    "_n", "@n"
-                ).replace(
-                    "_r", "^"
-                ) + after
-
-                if line.count("(") != line.count(")"):
-                    log_warn(f"Bracket mismatch at line {line_num}: {line}")
-                if line.count(chr(0xff08)) != line.count(chr(0xff09)):
-                    log_warn(f"Bracket mismatch at line {line_num}: {line}")
-
-                processed_lines.append(line)
-            elif len(line) > 1 and line[0] == '!':
+            if len(line) > 1 and line[0] == '!':
                 processed_lines.append(line[1:])
             else:
-                if len(line) > 0:
-                    m = re.search(r'^~(.*)~$', line)
-                    if m is None:
-                        log_warn(
-                            f"{self.in_tpl.name} line {line_num} - text should be enclosed in ~~ {line}"
-                        )
-                    else:
-                        processed_lines.append(m.group(1))
-            line_num += 1
+                if line.count("(") != line.count(")"):
+                    log_warn(f"Bracket mismatch at line: {line}")
+                if line.count(chr(0xff08)) != line.count(chr(0xff09)):
+                    log_warn(f"Bracket mismatch at line: {line}")
+
+                processed_lines.append(line)
+
+            # m = re.search(r'^<[0-9]+>(.+)', line)
+            # if m is not None:
+            #     parts = m.group(1).split('=', 2)
+            #     line = parts[0] if len(parts) < 2 else parts[1]
+            #     expr = re.search(r'^([^(]+)\((.+)\)', line)
+            #
+            #     if expr is not None:
+            #         before = expr.group(1) + "("
+            #         subj = expr.group(2)
+            #         after = ")"
+            #     else:
+            #         before = after = ""
+            #         subj = line
+            #
+            #     line = before + subj.replace(
+            #         ", ", full_wid_comma
+            #     ).replace(
+            #         ",", full_wid_comma
+            #     ).replace(
+            #         ";/", ","
+            #     ).replace(
+            #         "_n", "@n"
+            #     ).replace(
+            #         "_r", "^"
+            #     ) + after
+            #
+            #     if line.count("(") != line.count(")"):
+            #         log_warn(f"Bracket mismatch at line {line_num}: {line}")
+            #     if line.count(chr(0xff08)) != line.count(chr(0xff09)):
+            #         log_warn(f"Bracket mismatch at line {line_num}: {line}")
+            #
+            #     processed_lines.append(line)
+            # elif len(line) > 1 and line[0] == '!':
+            #     processed_lines.append(line[1:])
+            # else:
+            #     if len(line) > 0:
+            #         m = re.search(r'^~(.*)~$', line)
+            #         if m is None:
+            #             log_warn(
+            #                 f"{self.in_tpl.name} line {line_num} - text should be enclosed in ~~ {line}"
+            #             )
+            #         else:
+            #             processed_lines.append(m.group(1))
+            # line_num += 1
 
         result_bytes = ';'.join(processed_lines).encode(MZX_ENCODING)
 
