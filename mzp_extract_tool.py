@@ -616,6 +616,16 @@ class MzpEntry:
         # Seek entry0 head info, override new entry info
         out_mzp_file.seek(8 + 8 * 1)  # 跳过 header 和 entry0 描述信息
         for desc in new_entry_descriptors:
+            fields = [
+                ("sector_offset", desc.sector_offset),
+                ("offset", desc.offset),
+                ("sector_size_upper_boundary", desc.sector_size_upper_boundary),
+                ("size", desc.size)
+            ]
+            for name, value in fields:
+                if value > 0xFFFF:
+                    log_error(f"字段 {name} 超出 0xFFFF: {value}")
+
             out_mzp_file.write(
                 pack(
                     "<4H",
