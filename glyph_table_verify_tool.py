@@ -1,6 +1,20 @@
 import os
 
 
+def print_glyph_table_with_tpl(folder_path):
+    # 读取所有 txt 文件
+    nowIndex = 0
+    for filename in os.listdir(folder_path):
+        nowIndex += 1
+        print(f"<0109>_ZM3e912(-----{nowIndex}-----)")
+        if filename.endswith(".txt"):
+            file_path = os.path.join(folder_path, filename)
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                for line in f.readlines():
+                    none_line = line.replace("\n", "").replace("\r", "")
+                    print(f"<0109>_ZM3e912({none_line})")
+
+
 def process_txt_files(folder_path):
     all_texts = []
 
@@ -46,3 +60,4 @@ def process_txt_files(folder_path):
 if __name__ == "__main__":
     folder = "glyphTable/characterTable"
     process_txt_files(folder)
+    print_glyph_table_with_tpl(folder)
