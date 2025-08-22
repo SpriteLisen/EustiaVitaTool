@@ -38,11 +38,11 @@ def process_txt_files(folder_path):
     print(final_text)
 
     print(f"\n总字数: {len(final_text)}")
-    
+
     if len(final_text) == 3627:
         print("-------------字符数不满足要求!!!!")
 
 
 if __name__ == "__main__":
-    folder = "glyphTable"
+    folder = "glyphTable/characterTable"
     process_txt_files(folder)

@@ -40,8 +40,8 @@ def paint_tiles(input_path, output_path, modify_cells, grid_w=14, grid_h=14, col
     print(f"已修改 {len(modify_cells)} 个格子，保存为 {output_path}")
 
 
-file = "origin_data/seif-unpacked/mzp-unpacked/png/entry_020.png"
-output_path = "origin_data/seif-unpacked/mzp-unpacked/png/change/entry_020.png"
+file = "glyphTable/seif/entry_020.png"
+output_path = "glyphTable/seif/change/entry_020.png"
 
 # 示例：把第0行第0列 & 第1行第2列的格子变成调色板索引255
 paint_tiles(
