@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+from opencc import OpenCC
 
 output_dir = "extract_text"
 
@@ -32,7 +33,7 @@ def parse_ons_script(ons_script_path):
     re_say1 = re.compile(r'^b__say_1.*?"(.*?)".*?"(.*?)"')
     # 4. b_f_164: 抓取分支中的内容
 
-    with open(file_path, "r", encoding="gb2312", errors="ignore") as f:
+    with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
         for line in f:
             line = line.strip()
 
@@ -90,11 +91,11 @@ def parse_ons_script(ons_script_path):
     unique_chars = sorted(set(all_text))
 
     # 输出
-    print("总字符数:", len(unique_chars))
-    print("字符列表:", unique_chars)
+    # print("总字符数:", len(unique_chars))
+    # print("字符列表:", unique_chars)
 
-    print("分支总数:", len(selects))
-    print("分支列表:", selects)
+    # print("分支总数:", len(selects))
+    # print("分支列表:", selects)
 
 
 def parse_pymo_script(pymo_script_path):
@@ -180,21 +181,27 @@ def parse_pymo_script(pymo_script_path):
 
     # 解析主剧情
     main_script_path = file_path / "main"
-    parse_content(main_script_path.glob('*.[Tt][Xx][Tt]'))
+    parse_content(
+        sorted(main_script_path.glob('*.[Tt][Xx][Tt]'), key=lambda x: x.name.lower())
+    )
 
     # 解析附录剧情
     appendix_script_path = file_path / "appendix"
-    parse_content(appendix_script_path.glob('*.[Tt][Xx][Tt]'))
+    parse_content(
+        sorted(appendix_script_path.glob('*.[Tt][Xx][Tt]'), key=lambda x: x.name.lower())
+    )
 
     # 解析终末话语
-    parse_content(file_path.glob('*.[Tt][Xx][Tt]'))
+    parse_content(
+        sorted(file_path.glob('*.[Tt][Xx][Tt]'), key=lambda x: x.name.lower())
+    )
 
     output_file.close()
 
     # 输出测试
     # print("screenmsg:", screen_msgs)
     # print("says:", says)
-    # print("persons:", sorted(set(persons)))
+    print("persons:", sorted(set(persons)))
     # print("person_says:", person_says)
 
     # 合并所有文本
@@ -208,8 +215,15 @@ def parse_pymo_script(pymo_script_path):
     print("总字符数:", len(unique_chars))
     print("字符列表:", unique_chars)
 
-    print("分支总数:", len(selects))
-    print("分支列表:", selects)
+    cc = OpenCC('t2s')  # 繁体 -> 简体
+    traditional = []
+    for ch in unique_chars:
+        if cc.convert(ch) != ch:  # 转换后不一样，说明是繁体字
+            traditional.append(ch)
+    print("繁体字:", traditional)
+
+    # print("分支总数:", len(selects))
+    # print("分支列表:", selects)
 
 
 def parse_psv_script(psv_script_path):
@@ -280,9 +294,9 @@ def parse_psv_script(psv_script_path):
     output_file.close()
 
     # 输出测试
-    print("screenmsg:", screen_msgs)
+    # print("screenmsg:", screen_msgs)
     # print("says:", says)
-    print("persons:", sorted(set(persons)))
+    # print("persons:", sorted(set(persons)))
 
     # 合并所有文本
     all_text = "".join(screen_msgs + says + persons + selects)
@@ -295,8 +309,8 @@ def parse_psv_script(psv_script_path):
     print("总字符数:", len(unique_chars))
     print("字符列表:", unique_chars)
 
-    print("分支总数:", len(selects))
-    print("分支列表:", selects)
+    # print("分支总数:", len(selects))
+    # print("分支列表:", selects)
 
 
 if __name__ == "__main__":

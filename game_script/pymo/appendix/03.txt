@@ -107,7 +107,7 @@ b_f_388 50, 1
 #chara_y 5,21,tati_010955,50,0,21,88,face_010955,19,0,88,200
 b_Refresh 
 #vo aiy010705050
-#say 【缇娅】,「哇——！！」
+#say 【缇娅】,「哇――！！」
 #chara_y 5,88,NULL,0,0,1,200 
 b_Refresh 
 #vo aiy310703040
@@ -1186,7 +1186,7 @@ b_Refresh
 #say 【缇娅】,「啊……这件衣服……！？」
 #chara_y 5,88,NULL,0,0,1,200 
 b_Refresh 
-#say 下一瞬间──
+#say 下一瞬间――
 #say 我仿佛看到了缇娅身披华丽的婚纱的样子。
 #add Saiy70130,1
 b_f_12f 
