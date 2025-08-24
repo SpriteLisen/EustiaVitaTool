@@ -144,6 +144,7 @@ def parse_pymo_script(pymo_script_path):
                     if in_case:
                         now_select_index += 1
                         selects.append(line)
+                        output_file.write(line + "\n")
                         if now_select_index >= now_select_count:
                             now_select_index = 0
                             now_select_count = 0
