@@ -258,7 +258,8 @@ def parse_psv_script(psv_script_path):
 
         with open(psv_script, "r", encoding="shift_jis", errors="ignore") as f:
             for line in f:
-                line = line.strip()
+                # 文本中有一些部分在结尾会多出一个 . 符号
+                line = line.strip().replace("」.", "」")
 
                 # 1. 解析整行文案
                 if line.startswith('!_RTTH'):
