@@ -223,8 +223,8 @@ def parse_pymo_script(pymo_script_path):
             traditional.append(ch)
     print("繁体字:", traditional)
 
-    # print("分支总数:", len(selects))
-    # print("分支列表:", selects)
+    print("分支总数:", len(selects))
+    print("分支列表:", selects)
 
 
 def parse_psv_script(psv_script_path):
