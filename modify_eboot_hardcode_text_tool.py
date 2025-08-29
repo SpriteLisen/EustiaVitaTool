@@ -8,7 +8,7 @@ def text_to_shift_jis_bytes(text):
     将文本转换为Shift-JIS编码的字节
     """
     try:
-        return text.encode('shift_jis'), None
+        return text.encode('CP932'), None
     except UnicodeEncodeError as e:
         return None, f"Shift-JIS编码失败: {e}"
 
@@ -52,7 +52,7 @@ def get_space_padding(original_bytes, target_length):
         return original_bytes
 
     # 尝试找到一个可以用来填充的安全字节, 00, ff 都不行
-    safe_byte = b'\x20'
+    safe_byte = b'\x00'
     padding_bytes = safe_byte * remaining
 
     return original_bytes + padding_bytes
@@ -208,7 +208,7 @@ def process_elf_with_translation(original_elf_path, output_elf_path, decode_info
                 address_hex = row[0].strip()
                 original_text = row[1].strip()
                 char_length = int(row[2].strip())
-                byte_length = char_length * 2  # 转换为字节长度
+                byte_length = char_length  # 转换为字节长度
 
                 # 检查是否有翻译
                 if original_text not in translation_dict:
@@ -249,6 +249,7 @@ def process_elf_with_translation(original_elf_path, output_elf_path, decode_info
                     continue
 
                 translated_byte_length = len(translated_bytes)
+                # translated_byte_length = len(translated_bytes) * 2
                 print(f"  翻译字节长度: {translated_byte_length}")
 
                 # 检查长度
