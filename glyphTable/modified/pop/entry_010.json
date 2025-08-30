@@ -1,0 +1,12 @@
+{
+    "entry_count": 2,
+    "bitmap_bpp": 4,
+    "width": 512,
+    "height": 504,
+    "tile_width": 512,
+    "tile_height": 512,
+    "tile_x_count": 1,
+    "tile_y_count": 1,
+    "tile_crop": 0,
+    "origin_head_data": "6d72676430300200000000000100510000005800270055370002f801000200020100010001000000000000000000004a00000048f0f0f07f6666667fffffff7f1e1e1e7eb0b0b07f0000007f0000007e5050507f9999997f4040407fd8d8d87f8080807fc0c0c07f01ffffffffffffff"
+}
