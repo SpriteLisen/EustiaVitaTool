@@ -3,6 +3,20 @@ import argparse
 
 assert sys.version_info >= (3, 7), "Python 3.7 or higher is required"
 
+normal_char = "　、。，．・：；？！゛ヽヾゝ" + \
+              "ゞ〃々〆〇ー―‐～∥｜…‥“" + \
+              "”≪≫《》＜＞＿＋－×÷＝±" + \
+              "αβγ（）■〈〉「」『』【】" + \
+              "￥＄％＃＆＊＠※○●◇◆□▲" + \
+              "♪★０１２３４５６７８９ＡＢ" + \
+              "ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ" + \
+              "ＱＲＳＴＵＶＷＸＹＺａｂｃｄ" + \
+              "ｅｆｇｈｉｊｋｌｍｎｏｐｑｒ" + \
+              "ｓｔｕｖｗｘｙｚぁあぃいぅう" + \
+              ".1234567890@_<>|()-^" + \
+              "abcdefghijklmnopqrstuvwxyz" + \
+              "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
 TAG_SUCCEED = "[SUCC]: "
 TAG_PROGRESS = "[PROG]: "
 TAG_INFO = "[INFO]: "
