@@ -18,35 +18,6 @@ def get_space_padding(original_bytes, target_length):
     生成适当的空格填充
     根据上下文选择半角或全角空格
     """
-    # padding_bytes = b''
-    # remaining = target_length - len(original_bytes)
-    #
-    # if remaining <= 0:
-    #     return original_bytes
-    #
-    # # 检查原始字节的最后一个字符是否为全角字符
-    # use_fullwidth = False
-    # if len(original_bytes) >= 2:
-    #     # 如果最后一个字符是全角字符，使用全角空格
-    #     last_char = original_bytes[-2:]
-    #     if len(last_char) == 2 and last_char[0] >= 0x81:
-    #         use_fullwidth = True
-    #
-    # if use_fullwidth:
-    #     # 使用全角空格 (81 40)
-    #     fullwidth_space = b'\x81\x40'
-    #     padding_count = remaining // 2
-    #     padding_bytes = fullwidth_space * padding_count
-    #
-    #     # 如果还有剩余1字节，使用半角空格
-    #     if remaining % 2 == 1:
-    #         padding_bytes += b'\x20'
-    # else:
-    #     # 使用半角空格 (20)
-    #     padding_bytes = b'\x20' * remaining
-    #
-    # return original_bytes + padding_bytes
-
     remaining = target_length - len(original_bytes)
     if remaining <= 0:
         return original_bytes
@@ -125,39 +96,14 @@ def load_translation_dict(translation_file):
             reader = csv.reader(f)
             for row_num, row in enumerate(reader, 1):
                 if len(row) >= 2:
-                    original = row[0].strip()
-                    translated = row[1].strip()
+                    original = row[0]
+                    translated = row[1]
                     translation_dict[original] = translated
         return translation_dict, None
     except FileNotFoundError:
         return None, f"找不到翻译文件: {translation_file}"
     except Exception as e:
         return None, f"读取翻译文件时出错: {e}"
-
-
-def analyze_original_data(original_data):
-    """
-    分析原始数据的填充模式
-    """
-    if not original_data:
-        return "半角空格"
-
-    # 检查是否以null终止
-    if original_data.endswith(b'\x00'):
-        return "null终止"
-
-    # 检查是否以空格填充
-    if original_data.endswith(b'\x20'):
-        return "半角空格"
-
-    if original_data.endswith(b'\x81\x40'):
-        return "全角空格"
-
-    # 检查混合模式
-    if b'\x20' in original_data[-10:] or b'\x81\x40' in original_data[-10:]:
-        return "混合空格"
-
-    return "未知模式"
 
 
 def process_elf_with_translation(original_elf_path, output_elf_path, decode_info_path, translation_path):
@@ -206,7 +152,7 @@ def process_elf_with_translation(original_elf_path, output_elf_path, decode_info
                 processed_count += 1
 
                 address_hex = row[0].strip()
-                original_text = row[1].strip()
+                original_text = row[1]
                 char_length = int(row[2].strip())
                 byte_length = char_length  # 转换为字节长度
 
@@ -236,10 +182,6 @@ def process_elf_with_translation(original_elf_path, output_elf_path, decode_info
                     print(f"  ❌ 读取原始数据错误: {read_error}")
                     error_count += 1
                     continue
-
-                # 分析原始数据的填充模式
-                padding_mode = analyze_original_data(original_data)
-                print(f"  原始填充模式: {padding_mode}")
 
                 # 将翻译文本转换为Shift-JIS字节
                 translated_bytes, encode_error = text_to_shift_jis_bytes(translated_text)
