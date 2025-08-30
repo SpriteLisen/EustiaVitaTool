@@ -180,8 +180,8 @@ class TplEntry:
 
             total_length += len(line)
 
-            # 使用 level=2 压缩每行
-            compressed_line = mzx_compress(io.BytesIO(line), invert=True)
+            # 改成不用复制的压缩算法, 否则在多个日文字符粘连时会导致脚本出错
+            compressed_line = mzx_compress(io.BytesIO(line), invert=True, level=0)
             compressed_line.seek(8)  # 跳过每行压缩头
             output_bytes.write(compressed_line.read())
 
