@@ -1,6 +1,16 @@
 import csv
+import json
 import shutil
 from elftools.elf.elffile import ELFFile
+
+
+def map_string_with_dict(mapping: dict, text: str) -> str:
+    result_chars = []
+    for ch in text:
+        if ch not in mapping:
+            raise KeyError(f"字符 '{ch}' 没有在映射表中定义！")
+        result_chars.append(mapping[ch])
+    return "".join(result_chars)
 
 
 def text_to_shift_jis_bytes(text):
@@ -90,6 +100,10 @@ def load_translation_dict(translation_file):
     """
     加载翻译对照表
     """
+    json_file = open("glyphTable/character-mapping.json", mode="r")
+    mapping_data = json.load(json_file)
+    json_file.close()
+
     translation_dict = {}
     try:
         with open(translation_file, 'r', encoding='utf-8-sig') as f:
@@ -98,7 +112,12 @@ def load_translation_dict(translation_file):
                 if len(row) >= 2:
                     original = row[0]
                     translated = row[1]
-                    translation_dict[original] = translated
+
+                    # 使用映射结果替换原始结果
+                    mapping_text = map_string_with_dict(mapping_data, translated)
+                    print(f"译文: {translated}, 映射结果: {mapping_text}")
+
+                    translation_dict[original] = mapping_text
         return translation_dict, None
     except FileNotFoundError:
         return None, f"找不到翻译文件: {translation_file}"
