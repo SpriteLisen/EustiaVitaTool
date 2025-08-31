@@ -252,7 +252,7 @@ def compare_strings(csv_file_path, elf_file_path):
 def main():
     # 配置参数
     csv_file_path = "eboot/decode-info-fixed.csv"  # CSV文件路径
-    elf_file_path = "eboot/vita3k/eboot.elf"  # ELF文件路径
+    elf_file_path = "eboot/device/eboot.elf"  # ELF文件路径
 
     # 执行比对
     results = compare_strings(csv_file_path, elf_file_path)

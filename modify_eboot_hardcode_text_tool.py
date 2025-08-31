@@ -277,8 +277,8 @@ def process_elf_with_translation(original_elf_path, output_elf_path, decode_info
 
 def main():
     # 配置参数
-    original_elf_path = "eboot/vita3k/eboot.elf"  # 原始ELF文件
-    output_elf_path = "eboot/vita3k/eboot_patched.elf"  # 输出ELF文件
+    original_elf_path = "eboot/device/eboot.elf"  # 原始ELF文件
+    output_elf_path = "eboot/device/eboot_patched.elf"  # 输出ELF文件
     decode_info_path = "eboot/decode-info-fixed.csv"  # 地址信息文件
     translation_path = "eboot/translate-info.csv"  # 翻译文件
 
