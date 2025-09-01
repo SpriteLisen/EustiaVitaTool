@@ -88,6 +88,7 @@ class Byte(object):
 
 
 class MzpEntry:
+    KEY_ENTRY_0_START_OFFSET = "entry_0_start_offset"
     KEY_ENTRY_COUNT = "entry_count"
     KEY_BITMAP_BPP = "bitmap_bpp"
     KEY_WIDTH = "width"
@@ -113,6 +114,7 @@ class MzpEntry:
             self.mzp_data = io.BytesIO(data)
             # 跳过文件头
             self.mzp_data.seek(6)
+            self.entry_0_start_offset = 0
             self.entry_count, = unpack('<H', self.mzp_data.read(2))
             log_info("Found {0} entries.".format(self.entry_count))
 
@@ -164,6 +166,7 @@ class MzpEntry:
 
             self.in_png = in_png
             self.out_mzp = out_mzp
+            self.entry_0_start_offset = json_data[MzpEntry.KEY_ENTRY_0_START_OFFSET]
             self.entry_count = json_data[MzpEntry.KEY_ENTRY_COUNT]
             self.bitmap_bpp = json_data[MzpEntry.KEY_BITMAP_BPP]
             self.width = json_data[MzpEntry.KEY_WIDTH]
@@ -220,6 +223,22 @@ class MzpEntry:
         self.mzp_data.seek(self.entries_descriptors[0].real_offset)
         self.width, self.height, self.tile_width, self.tile_height, self.tile_x_count, self.tile_y_count, \
             self.bmp_type, self.bmp_depth, self.tile_crop = unpack('<HHHHHHHBB', self.mzp_data.read(0x10))
+
+        # 记录 entry0 当前的位置
+        self.entry_0_start_offset = self.mzp_data.tell()
+
+        # entry0:
+        # 头数据需要更新:
+        #
+        # 08~0F的位置分别写入 <HHHH => ArchiveEntry(
+        #     sector_offset, offset,
+        #     sector_size_upper_boundary, size, self.entry_count
+        # )
+        #
+        #
+        # entry0_real_offset
+        # mzp.seek(entry0_real_offset + 0x10)
+
         self.tile_size = self.tile_width * self.tile_height
         if self.bmp_type not in [0x01, 0x03, 0x08, 0x0B]:
             log_error("Unknown type 0x{:02X}".format(self.bmp_type))
