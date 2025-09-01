@@ -91,6 +91,8 @@ class MzpEntry:
     KEY_ENTRY_0_START_OFFSET = "entry_0_start_offset"
     KEY_ENTRY_COUNT = "entry_count"
     KEY_BITMAP_BPP = "bitmap_bpp"
+    KEY_BMP_TYPE = "bmp_type"
+    KEY_BMP_DEPTH = "bmp_depth"
     KEY_WIDTH = "width"
     KEY_HEIGHT = "height"
     KEY_TILE_WIDTH = "tile_width"
@@ -169,6 +171,8 @@ class MzpEntry:
             self.entry_0_start_offset = json_data[MzpEntry.KEY_ENTRY_0_START_OFFSET]
             self.entry_count = json_data[MzpEntry.KEY_ENTRY_COUNT]
             self.bitmap_bpp = json_data[MzpEntry.KEY_BITMAP_BPP]
+            self.bmp_type = json_data[MzpEntry.KEY_BMP_TYPE]
+            self.bmp_depth = json_data[MzpEntry.KEY_BMP_DEPTH]
             self.width = json_data[MzpEntry.KEY_WIDTH]
             self.height = json_data[MzpEntry.KEY_HEIGHT]
             self.tile_width = json_data[MzpEntry.KEY_TILE_WIDTH]
@@ -188,8 +192,11 @@ class MzpEntry:
 
             json.dump(
                 {
+                    MzpEntry.KEY_ENTRY_0_START_OFFSET: self.entry_0_start_offset,
                     MzpEntry.KEY_ENTRY_COUNT: self.entry_count,
                     MzpEntry.KEY_BITMAP_BPP: self.bitmap_bpp,
+                    MzpEntry.KEY_BMP_TYPE: self.bmp_type,
+                    MzpEntry.KEY_BMP_DEPTH: self.bmp_depth,
                     MzpEntry.KEY_WIDTH: self.width,
                     MzpEntry.KEY_HEIGHT: self.height,
                     MzpEntry.KEY_TILE_WIDTH: self.tile_width,
@@ -222,7 +229,7 @@ class MzpEntry:
     def extract_desc(self):
         self.mzp_data.seek(self.entries_descriptors[0].real_offset)
         self.width, self.height, self.tile_width, self.tile_height, self.tile_x_count, self.tile_y_count, \
-            self.bmp_type, self.bmp_depth, self.tile_crop = unpack('<HHHHHHHBB', self.mzp_data.read(0x10))
+        self.bmp_type, self.bmp_depth, self.tile_crop = unpack('<HHHHHHHBB', self.mzp_data.read(0x10))
 
         # 记录 entry0 当前的位置
         self.entry_0_start_offset = self.mzp_data.tell()
@@ -545,6 +552,72 @@ class MzpEntry:
         else:
             raise Exception(f"Unsupported image mode: {mode}")
 
+    def get_rgba_palette(self, img: Image.Image, palette_count: int):
+        """
+        从 PIL P 模式图像中获取调色板 (RGBA)，返回一个 list。
+        """
+        # 取出 RGB 调色板
+        # p_img = img.convert("P")
+        # 需要解决过度不平滑的问题
+        p_img = img.quantize(colors=256, method=3)
+        rgba_palette = [None] * len(p_img.palette.colors)
+        for rgba, idx in p_img.palette.colors.items():
+            rgba_palette[idx] = rgba
+
+        # 用 (0,0,0,0) 补全到 palette_count
+        if len(rgba_palette) < palette_count:
+            rgba_palette += [(0, 0, 0, 0)] * (palette_count - len(rgba_palette))
+
+        return p_img, rgba_palette
+
+    def generate_p_and_palette(self, img, palette_count):
+        """
+        将 RGBA 图片转换为 P 模式，并返回对应的 RGBA 调色板列表
+        """
+        pixels = list(img.getdata())
+        palette_colors = []
+        seen_colors = {}
+
+        # 收集前 palette_count 个唯一颜色
+        for r, g, b, a in pixels:
+            if (r, g, b, a) not in seen_colors:
+                palette_colors.append((r, g, b, a))
+                seen_colors[(r, g, b, a)] = None
+            if len(palette_colors) >= palette_count:
+                break
+
+        # 补齐到 palette_count
+        while len(palette_colors) < palette_count:
+            palette_colors.append((0, 0, 0, 0))
+
+        # 创建 P 图并填充调色板 (只用 RGB)
+        p_img = Image.new("P", img.size)
+        flat_palette = [v for rgba in palette_colors for v in rgba[:3]]
+        p_img.putpalette(flat_palette)
+
+        # nearest color 缓存
+        color_to_index = {}
+
+        def nearest_idx(r, g, b):
+            if (r, g, b) in color_to_index:
+                return color_to_index[(r, g, b)]
+            best = 0
+            mindist = 999999
+            for i in range(palette_count):
+                pr, pg, pb = flat_palette[i * 3:i * 3 + 3]
+                d = (pr - r) ** 2 + (pg - g) ** 2 + (pb - b) ** 2
+                if d < mindist:
+                    mindist = d
+                    best = i
+            color_to_index[(r, g, b)] = best
+            return best
+
+        # 映射每个像素到调色板索引
+        pixels_idx = [nearest_idx(r, g, b) for r, g, b, a in pixels]
+        p_img.putdata(pixels_idx)
+
+        return p_img, palette_colors  # 返回 P 图和 RGBA 调色板
+
     def repack_to_mzp(self):
         img = Image.open(self.in_png)
 
@@ -564,6 +637,53 @@ class MzpEntry:
 
         # copy origin head data to new mzp file
         out_mzp_file.write(self.origin_head_data_hex)
+
+        head_end = out_mzp_file.tell()
+
+        # 记录 entry0 当前的位置
+        out_mzp_file.seek(self.entry_0_start_offset)
+
+        self.tile_size = self.tile_width * self.tile_height
+        if self.bmp_type not in [0x01, 0x03, 0x08, 0x0B]:
+            log_error("Unknown type 0x{:02X}".format(self.bmp_type))
+            sys.exit(EXIT_WITH_ERROR)
+
+        # 索引模型则往回覆盖调色板信息
+        if is_indexed_bitmap(self.bmp_type):
+            if self.bmp_depth == 0x01:
+                self.palette_count = 0x100
+            elif self.bmp_depth == 0x00 or self.bmp_depth == 0x10:
+                self.palette_count = 0x10
+            elif self.bmp_depth == 0x11 or self.bmp_depth == 0x91:
+                self.palette_count = 0x100
+            else:
+                log_error("Unknown depth 0x{:02X}".format(self.bmp_depth))
+                sys.exit(EXIT_WITH_ERROR)
+
+            # p_img, palette = self.get_rgba_palette(img, self.palette_count)
+            p_img, palette = self.generate_p_and_palette(img, self.palette_count)
+            # 覆盖掉旧的 RGBA 图片
+            img = p_img
+
+            if self.bmp_depth in [0x00, 0x10]:
+                for i in range(self.palette_count):
+                    r, g, b, a = palette.pop(0)
+                    out_mzp_file.write(pack("BBBB", r, g, b, a))
+
+            elif self.bmp_depth in [0x11, 0x91, 0x01]:
+                pal_start = self.entry_0_start_offset
+                for h in range(0, self.palette_count * 4 // 0x80, 1):
+                    for i in range(2):
+                        for j in range(2):
+                            out_mzp_file.seek(h * 0x80 + (i + j * 2) * 0x20 + pal_start)
+                            for k in range(8):
+                                r, g, b, a = palette.pop(0)
+                                out_mzp_file.write(pack("BBBB", r, g, b, a))
+            else:
+                log_error("Unsupported palette type 0x{:02X}".format(self.bmp_depth))
+                sys.exit(EXIT_WITH_ERROR)
+
+        out_mzp_file.seek(head_end)
 
         # 用于记录每个 tile 的新的 entry 描述信息
         new_entry_descriptors = []
