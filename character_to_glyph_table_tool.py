@@ -53,13 +53,13 @@ def build_gray_to_palette_map(palette):
 
 
 def draw_char_into_cell_mask(char, cell_w, cell_h, ttf_path,
-                             max_fontsize=None, scale=10, gray_levels=5):
+                             max_fontsize=None, scale=10, gray_levels=6):
     """返回一个 L 模式 mask，文字为白(255)背景黑(0)，灰度可量化"""
     if max_fontsize is None:
         max_fontsize = min(cell_w, cell_h)
 
     w_big, h_big = cell_w * scale, cell_h * scale
-    fontsize = (max_fontsize - 6) * scale  # 调小留边
+    fontsize = (max_fontsize - 4) * scale  # 调小留边
 
     while fontsize > 4 * scale:
         try:
@@ -236,7 +236,7 @@ config = {
 }
 
 if __name__ == "__main__":
-    choose_config = config["got"]
+    choose_config = config["se"]
 
     target_input_glyph_table_dir = choose_config["table_dir"]
 
