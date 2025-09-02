@@ -9,3 +9,5 @@
 [mahoyo_tools](https://github.com/loicfrance/mahoyo_tools)
 
 [deepLuna](https://github.com/Hakanaou/deepLuna)
+
+[PSV_WHITE_ALBUM2](https://github.com/wetor/PSV_WHITE_ALBUM2)
