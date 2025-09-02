@@ -89,6 +89,91 @@ class Byte(object):
         return self.number & 0x0F
 
 
+# 更精确的逆向算法
+def alpha_8bpp_to_4bpp_precise(a_8bpp):
+    """
+    更精确的逆向转换
+    """
+    if a_8bpp >= 254:  # 接近255的值
+        return 0x80
+
+    # 寻找最接近的4bpp值
+    best_match = 0
+    min_diff = 256
+
+    for test_4bpp in range(0, 128):  # 0-127
+        # 应用正向算法
+        test_8bpp = (test_4bpp << 1) + (test_4bpp >> 6)
+        diff = abs(a_8bpp - test_8bpp)
+
+        if diff < min_diff:
+            min_diff = diff
+            best_match = test_4bpp
+
+    return best_match
+
+
+def get_rgba_palette(img: Image.Image, palette_count: int):
+    """
+    从 PIL P 模式图像中获取调色板 (RGBA)，返回一个 list。
+    """
+    # 取出原始色板
+    if img.mode == "P":
+        # 获取调色板信息
+        palette = img.getpalette()
+
+        # 检查是否有透明度信息
+        transparency = img.info.get('transparency')
+
+        # 将调色板转换为 RGBA 格式
+        rgba_palette = []
+        for i in range(0, min(len(palette), palette_count * 3), 3):
+            r, g, b = palette[i], palette[i + 1], palette[i + 2]
+            alpha = 255  # 默认 alpha
+
+            # 如果有透明度信息，检查当前索引是否在透明度表中
+            if transparency is not None:
+                if isinstance(transparency, dict):
+                    # 透明度是字典形式 {index: alpha}
+                    alpha = transparency.get(i // 3, 255)
+                elif isinstance(transparency, (bytes, tuple, list)):
+                    # 透明度是字节序列或列表形式
+                    if i // 3 < len(transparency):
+                        alpha = transparency[i // 3] if isinstance(transparency[i // 3], int) else 255
+                elif isinstance(transparency, int):
+                    # 单个透明度值（通常表示透明色的索引）
+                    alpha = 0 if i // 3 == transparency else 255
+
+            alpha = alpha_8bpp_to_4bpp_precise(alpha)
+            rgba_palette.append((r, g, b, alpha))
+
+        # 用 (0,0,0,0) 补全到 palette_count
+        if len(rgba_palette) < palette_count:
+            rgba_palette += [(0, 0, 0, 0)] * (palette_count - len(rgba_palette))
+
+        return img, rgba_palette
+    # 取出 RGB 调色板
+    elif img.mode == "RGBA":
+        p_img = img.convert("P")
+        # 需要解决过度不平滑的问题
+        rgba_palette = [None] * len(p_img.palette.colors)
+        for rgba, idx in p_img.palette.colors.items():
+            # rgba_palette[idx] = rgba
+            r = rgba[0]
+            g = rgba[1]
+            b = rgba[2]
+            a = alpha_8bpp_to_4bpp_precise(rgba[3])
+            rgba_palette[idx] = (r, g, b, a)
+
+        # 用 (0,0,0,0) 补全到 palette_count
+        if len(rgba_palette) < palette_count:
+            rgba_palette += [(0, 0, 0, 0)] * (palette_count - len(rgba_palette))
+
+        return p_img, rgba_palette
+    else:
+        raise Exception(f"Unsupported image mode: {img.mode}")
+
+
 class MzpEntry:
     KEY_ENTRY_0_START_OFFSET = "entry_0_start_offset"
     KEY_ENTRY_COUNT = "entry_count"
@@ -526,60 +611,6 @@ class MzpEntry:
         else:
             raise Exception(f"Unsupported image mode: {mode}")
 
-    def get_rgba_palette(self, img: Image.Image, palette_count: int):
-        """
-        从 PIL P 模式图像中获取调色板 (RGBA)，返回一个 list。
-        """
-        # 取出原始色板
-        if img.mode == "P":
-            # 获取调色板信息
-            palette = img.getpalette()
-
-            # 检查是否有透明度信息
-            transparency = img.info.get('transparency')
-
-            # 将调色板转换为 RGBA 格式
-            rgba_palette = []
-            for i in range(0, min(len(palette), palette_count * 3), 3):
-                r, g, b = palette[i], palette[i + 1], palette[i + 2]
-                alpha = 255  # 默认 alpha
-
-                # 如果有透明度信息，检查当前索引是否在透明度表中
-                if transparency is not None:
-                    if isinstance(transparency, dict):
-                        # 透明度是字典形式 {index: alpha}
-                        alpha = transparency.get(i // 3, 255)
-                    elif isinstance(transparency, (bytes, tuple, list)):
-                        # 透明度是字节序列或列表形式
-                        if i // 3 < len(transparency):
-                            alpha = transparency[i // 3] if isinstance(transparency[i // 3], int) else 255
-                    elif isinstance(transparency, int):
-                        # 单个透明度值（通常表示透明色的索引）
-                        alpha = 0 if i // 3 == transparency else 255
-
-                rgba_palette.append((r, g, b, alpha))
-
-            # 用 (0,0,0,0) 补全到 palette_count
-            if len(rgba_palette) < palette_count:
-                rgba_palette += [(0, 0, 0, 0)] * (palette_count - len(rgba_palette))
-
-            return img, rgba_palette
-        # 取出 RGB 调色板
-        elif img.mode == "RGBA":
-            p_img = img.convert("P")
-            # 需要解决过度不平滑的问题
-            rgba_palette = [None] * len(p_img.palette.colors)
-            for rgba, idx in p_img.palette.colors.items():
-                rgba_palette[idx] = rgba
-
-            # 用 (0,0,0,0) 补全到 palette_count
-            if len(rgba_palette) < palette_count:
-                rgba_palette += [(0, 0, 0, 0)] * (palette_count - len(rgba_palette))
-
-            return p_img, rgba_palette
-        else:
-            raise Exception(f"Unsupported image mode: {img.mode}")
-
     def repack_to_mzp(self):
         img = Image.open(self.in_png)
 
@@ -622,7 +653,7 @@ class MzpEntry:
                 log_error("Unknown depth 0x{:02X}".format(self.bmp_depth))
                 sys.exit(EXIT_WITH_ERROR)
 
-            p_img, palette = self.get_rgba_palette(img, self.palette_count)
+            p_img, palette = get_rgba_palette(img, self.palette_count)
             img = p_img
 
             if self.bmp_depth in [0x00, 0x10]:
