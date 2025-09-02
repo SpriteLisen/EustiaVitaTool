@@ -1,11 +1,13 @@
 import io
 import json
 import zlib
-import numpy as np
-from PIL import Image
-from Constants import *
 from pathlib import Path
 from struct import unpack, pack
+
+import numpy as np
+from PIL import Image
+
+from Constants import *
 from mzx_tool import mzx_compress, mzx_decompress
 
 output_dir = "mzp-unpacked"
@@ -211,40 +213,13 @@ class MzpEntry:
 
         log_info("Dumps key data to {0} succeed.".format(save_file.name))
 
-    def dump_act_from_png(self, png_file: Path):
-        if is_indexed_bitmap(self.bmp_type):
-            img = Image.open(png_file)
-            if img.mode == "P":
-                log_info("Start dumps palette to act file.")
-                palette = img.getpalette()[:256 * 3]
-                palette_file_path = png_file.with_suffix(".act")
-                with open(palette_file_path, "wb") as palette_file:
-                    palette_file.write(bytes(palette))
-                    palette_file.write(b'\x00\x00')  # ACT 文件尾部需2个空字节
-                img.close()
-                log_info("Dumps palette to {0} succeed.".format(palette_file_path.name))
-        else:
-            log_info("Png file not index mode, pass act dumps.")
-
     def extract_desc(self):
         self.mzp_data.seek(self.entries_descriptors[0].real_offset)
         self.width, self.height, self.tile_width, self.tile_height, self.tile_x_count, self.tile_y_count, \
-        self.bmp_type, self.bmp_depth, self.tile_crop = unpack('<HHHHHHHBB', self.mzp_data.read(0x10))
+            self.bmp_type, self.bmp_depth, self.tile_crop = unpack('<HHHHHHHBB', self.mzp_data.read(0x10))
 
         # 记录 entry0 当前的位置
         self.entry_0_start_offset = self.mzp_data.tell()
-
-        # entry0:
-        # 头数据需要更新:
-        #
-        # 08~0F的位置分别写入 <HHHH => ArchiveEntry(
-        #     sector_offset, offset,
-        #     sector_size_upper_boundary, size, self.entry_count
-        # )
-        #
-        #
-        # entry0_real_offset
-        # mzp.seek(entry0_real_offset + 0x10)
 
         self.tile_size = self.tile_width * self.tile_height
         if self.bmp_type not in [0x01, 0x03, 0x08, 0x0B]:
@@ -463,7 +438,6 @@ class MzpEntry:
         self.dump_to_json(
             png_path.with_suffix(".json"),
         )
-        self.dump_act_from_png(png_path)
 
         log_succeed("Extracted {0} to {1} succeed.".format(self.in_mzp.name, png_file_name))
 
@@ -556,67 +530,55 @@ class MzpEntry:
         """
         从 PIL P 模式图像中获取调色板 (RGBA)，返回一个 list。
         """
+        # 取出原始色板
+        if img.mode == "P":
+            # 获取调色板信息
+            palette = img.getpalette()
+
+            # 检查是否有透明度信息
+            transparency = img.info.get('transparency')
+
+            # 将调色板转换为 RGBA 格式
+            rgba_palette = []
+            for i in range(0, min(len(palette), palette_count * 3), 3):
+                r, g, b = palette[i], palette[i + 1], palette[i + 2]
+                alpha = 255  # 默认 alpha
+
+                # 如果有透明度信息，检查当前索引是否在透明度表中
+                if transparency is not None:
+                    if isinstance(transparency, dict):
+                        # 透明度是字典形式 {index: alpha}
+                        alpha = transparency.get(i // 3, 255)
+                    elif isinstance(transparency, (bytes, tuple, list)):
+                        # 透明度是字节序列或列表形式
+                        if i // 3 < len(transparency):
+                            alpha = transparency[i // 3] if isinstance(transparency[i // 3], int) else 255
+                    elif isinstance(transparency, int):
+                        # 单个透明度值（通常表示透明色的索引）
+                        alpha = 0 if i // 3 == transparency else 255
+
+                rgba_palette.append((r, g, b, alpha))
+
+            # 用 (0,0,0,0) 补全到 palette_count
+            if len(rgba_palette) < palette_count:
+                rgba_palette += [(0, 0, 0, 0)] * (palette_count - len(rgba_palette))
+
+            return img, rgba_palette
         # 取出 RGB 调色板
-        # p_img = img.convert("P")
-        # 需要解决过度不平滑的问题
-        p_img = img.quantize(colors=256, method=3)
-        rgba_palette = [None] * len(p_img.palette.colors)
-        for rgba, idx in p_img.palette.colors.items():
-            rgba_palette[idx] = rgba
+        elif img.mode == "RGBA":
+            p_img = img.convert("P")
+            # 需要解决过度不平滑的问题
+            rgba_palette = [None] * len(p_img.palette.colors)
+            for rgba, idx in p_img.palette.colors.items():
+                rgba_palette[idx] = rgba
 
-        # 用 (0,0,0,0) 补全到 palette_count
-        if len(rgba_palette) < palette_count:
-            rgba_palette += [(0, 0, 0, 0)] * (palette_count - len(rgba_palette))
+            # 用 (0,0,0,0) 补全到 palette_count
+            if len(rgba_palette) < palette_count:
+                rgba_palette += [(0, 0, 0, 0)] * (palette_count - len(rgba_palette))
 
-        return p_img, rgba_palette
-
-    def generate_p_and_palette(self, img, palette_count):
-        """
-        将 RGBA 图片转换为 P 模式，并返回对应的 RGBA 调色板列表
-        """
-        pixels = list(img.getdata())
-        palette_colors = []
-        seen_colors = {}
-
-        # 收集前 palette_count 个唯一颜色
-        for r, g, b, a in pixels:
-            if (r, g, b, a) not in seen_colors:
-                palette_colors.append((r, g, b, a))
-                seen_colors[(r, g, b, a)] = None
-            if len(palette_colors) >= palette_count:
-                break
-
-        # 补齐到 palette_count
-        while len(palette_colors) < palette_count:
-            palette_colors.append((0, 0, 0, 0))
-
-        # 创建 P 图并填充调色板 (只用 RGB)
-        p_img = Image.new("P", img.size)
-        flat_palette = [v for rgba in palette_colors for v in rgba[:3]]
-        p_img.putpalette(flat_palette)
-
-        # nearest color 缓存
-        color_to_index = {}
-
-        def nearest_idx(r, g, b):
-            if (r, g, b) in color_to_index:
-                return color_to_index[(r, g, b)]
-            best = 0
-            mindist = 999999
-            for i in range(palette_count):
-                pr, pg, pb = flat_palette[i * 3:i * 3 + 3]
-                d = (pr - r) ** 2 + (pg - g) ** 2 + (pb - b) ** 2
-                if d < mindist:
-                    mindist = d
-                    best = i
-            color_to_index[(r, g, b)] = best
-            return best
-
-        # 映射每个像素到调色板索引
-        pixels_idx = [nearest_idx(r, g, b) for r, g, b, a in pixels]
-        p_img.putdata(pixels_idx)
-
-        return p_img, palette_colors  # 返回 P 图和 RGBA 调色板
+            return p_img, rgba_palette
+        else:
+            raise Exception(f"Unsupported image mode: {img.mode}")
 
     def repack_to_mzp(self):
         img = Image.open(self.in_png)
@@ -660,9 +622,7 @@ class MzpEntry:
                 log_error("Unknown depth 0x{:02X}".format(self.bmp_depth))
                 sys.exit(EXIT_WITH_ERROR)
 
-            # p_img, palette = self.get_rgba_palette(img, self.palette_count)
-            p_img, palette = self.generate_p_and_palette(img, self.palette_count)
-            # 覆盖掉旧的 RGBA 图片
+            p_img, palette = self.get_rgba_palette(img, self.palette_count)
             img = p_img
 
             if self.bmp_depth in [0x00, 0x10]:
