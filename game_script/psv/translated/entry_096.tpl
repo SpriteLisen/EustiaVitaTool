@@ -877,7 +877,7 @@
 ~_FADS())~
 <0877>_ZM88cd3(‹J‰óˆÑ’“µC\rŠø‚ÂŽ©‰Õ‚ÛÐ’r‹¿èCâƒe•ÌƒK–ò‚È‹‹”™˜SB)
 ~_IFF_(0,F203,1,LB_LF203_EQ_1)~
-<0879>_ZM88cd4(ƒKŒÃ•í‚­ƒeŒh]Š¹”@‘õƒaŠFB)
+<0879>_ZM88cd4(ƒKŒÃ•í‚­ƒeŒh]Š¹”@‘õƒaŠFB.)
 ~_ATSV(1)/)~
 <0881>_SELR(0;/Ð‚Ô–ñ•˜‹ñˆØ’ˆŸ))
 <0882>_SELR(1;/Ð’ˆŸ‹ªƒS‚¹‚¼))

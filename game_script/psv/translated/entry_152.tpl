@@ -63,7 +63,7 @@
 <0062>_ZMb2b11(uccv)
 <0063>_ZMb2b12(ŒÃ•í^‚ÈŠkƒKƒS„ŽIŠ_B)
 <0064>_ZMb2b13(‰óˆÑæ“‚‰¸ƒƒF‚¼—xŒŸ—xŒüC—x‚­ƒe‰Ê‘¸‘µ‘²‘Ê’r‚ñ{B)
-<0065>_ZMb2b14(‹¬Â‹¬‹ù‹KŠX•àƒKƒSCšB‹k‚ËUŒW‚­•r—‘—®’r’“¦‚ÔƒeŽñ‰ÖŠFB)
+<0065>_ZMb2b14(‹¬Â‹¬‹ù‹KŠX•àƒKƒSCšB‹k‚ËUŒW‚­•r—‘—®’r’“¦‚ÔƒeŽñ‰ÖŠFB.)
 ~_ATSV(1)/)~
 <0067>_SELR(0;/‹ù•é‹ù•ö))
 <0068>_SELR(1;/•ŽH‰óˆÑ))

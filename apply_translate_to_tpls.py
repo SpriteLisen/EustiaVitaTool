@@ -90,8 +90,9 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
             if match_text is not None and trans_idx < len(translations):
                 src, tgt = translations[trans_idx]
                 if src == match_text.strip().replace("」.", "」"):
+                    has_dot = match_text.strip().endswith(".")
                     # 替换文本
-                    line = orig_line.replace(match_text, tgt)
+                    line = orig_line.replace(match_text, tgt + "." if has_dot else tgt)
                     replaced = True
                     trans_idx += 1
                     processed_count += 1
