@@ -115,7 +115,7 @@ def alpha_8bpp_to_4bpp_precise(a_8bpp):
 
 def get_rgba_palette(img: Image.Image, palette_count: int):
     """
-    从 PIL P 模式图像中获取调色板 (RGBA)，返回一个 list。
+    从不同格式的图转换回调色板 rgba 信息
     """
     # 取出原始色板
     if img.mode == "P":
@@ -144,6 +144,8 @@ def get_rgba_palette(img: Image.Image, palette_count: int):
                     # 单个透明度值（通常表示透明色的索引）
                     alpha = 0 if i // 3 == transparency else 255
 
+            # 重新解包时是平滑的, 因为解包时做了转换, 所以重新封回时也需要进行逆转换
+            # 配合游戏引擎中奇怪的 alpha 换算
             alpha = alpha_8bpp_to_4bpp_precise(alpha)
             rgba_palette.append((r, g, b, alpha))
 
@@ -155,14 +157,17 @@ def get_rgba_palette(img: Image.Image, palette_count: int):
     # 取出 RGB 调色板
     elif img.mode == "RGBA":
         p_img = img.convert("P")
-        # 需要解决过度不平滑的问题
         rgba_palette = [None] * len(p_img.palette.colors)
         for rgba, idx in p_img.palette.colors.items():
             # rgba_palette[idx] = rgba
             r = rgba[0]
             g = rgba[1]
             b = rgba[2]
+
+            # 重新解包时是平滑的, 因为解包时做了转换, 所以重新封回时也需要进行逆转换
+            # 配合游戏引擎中奇怪的 alpha 换算
             a = alpha_8bpp_to_4bpp_precise(rgba[3])
+
             rgba_palette[idx] = (r, g, b, a)
 
         # 用 (0,0,0,0) 补全到 palette_count
@@ -641,7 +646,7 @@ class MzpEntry:
             log_error("Unknown type 0x{:02X}".format(self.bmp_type))
             sys.exit(EXIT_WITH_ERROR)
 
-        # 索引模型则往回覆盖调色板信息
+        # 索引模式则往回覆盖调色板信息
         if is_indexed_bitmap(self.bmp_type):
             if self.bmp_depth == 0x01:
                 self.palette_count = 0x100
