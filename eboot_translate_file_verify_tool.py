@@ -14,7 +14,7 @@ def map_string_with_dict(mapping: dict, text: str) -> str:
 if __name__ == "__main__":
     translation_path = "eboot/translate-info.csv"  # 翻译文件
 
-    json_file = open("glyphTable/character-mapping.json", mode="r")
+    json_file = open("glyphTable/character-mapping.json", mode="r", encoding='utf-8')
     mapping_data = json.load(json_file)
     json_file.close()
 
