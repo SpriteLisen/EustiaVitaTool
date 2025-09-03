@@ -19,6 +19,9 @@ def load_translations(csv_file):
     with open("glyphTable/character-mapping.json", mode="r", encoding="utf-8") as json_file:
         mapping_data = json.load(json_file)
 
+    # 生成反向映射
+    reverse_mapping = {v: k for k, v in mapping_data.items()}
+
     translations = []
     with open(csv_file, "r", encoding="utf-8-sig", errors="ignore") as f:
         reader = csv.reader(f)
@@ -27,7 +30,7 @@ def load_translations(csv_file):
                 src, tgt = row[0], row[1]
                 mapping_text = map_string_with_dict(mapping_data, tgt)
                 translations.append((src, mapping_text))
-    return translations
+    return translations, reverse_mapping
 
 
 def apply_translate_to_script(psv_script_path, csv_file, output_dir):
@@ -36,7 +39,7 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
     output_path.mkdir(parents=True, exist_ok=True)
 
     # 加载翻译
-    translations = load_translations(csv_file)
+    translations, reverse_mapping = load_translations(csv_file)
     trans_idx = 0  # 翻译表索引指针
 
     processed_count = 0
@@ -46,6 +49,8 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
     zmyyyy_pattern = re.compile(r'<\w+>_ZM\w+\(([^)]*)\)')
     mtlk_pattern = re.compile(r'!_MTLK\([^,]*,\s*([^)]*)\)')
     selr_pattern = re.compile(r'<\w+>_SELR\([^;]*;/([^)]*)\)\)')
+
+    over_count = 0
 
     files = sorted(file_path.glob('*.tpl'), key=lambda x: x.name.lower())
     for psv_script in files:
@@ -92,7 +97,7 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
                     else:
                         tgt_body = tgt
 
-                    # 按字节长度补齐
+                    # 按字节长度补齐, 游戏对文案的长度有及其苛刻的要求, 不能长也不能短, 否则会影响控制语句
                     encoding = "cp932"
                     orig_bytes = match_text.encode(encoding)
                     tgt_bytes = tgt_body.encode(encoding)
@@ -111,6 +116,11 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
                                 tgt_bytes += " ".encode(encoding)  # 半角
                                 diff_len -= 1
                         else:
+                            # 不能超出原文的长度
+                            print(
+                                "长度超出原文 => " + map_string_with_dict(reverse_mapping, tgt_bytes.decode(encoding))
+                            )
+                            over_count += 1
                             # 长度超出时截断
                             tgt_bytes = tgt_bytes[:diff_len]  # 去掉多余字节
                             diff_len = 0
@@ -136,6 +146,7 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
             f.writelines(new_lines)
 
     print(f"All tpl files processed. {processed_count} count.")
+    print(f"总超出文案: {over_count}")
 
 
 if __name__ == "__main__":
