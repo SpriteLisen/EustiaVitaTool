@@ -118,7 +118,7 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
                         else:
                             # 不能超出原文的长度
                             print(
-                                "长度超出原文 => " + map_string_with_dict(reverse_mapping, tgt_bytes.decode(encoding))
+                                f"长度超出原文, 预期: {len(match_text)} 实际  => ({len(tgt)}) " + map_string_with_dict(reverse_mapping, tgt_bytes.decode(encoding))
                             )
                             over_count += 1
                             # 长度超出时截断
