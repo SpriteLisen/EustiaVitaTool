@@ -2,8 +2,8 @@ import io
 import re
 from Constants import *
 from pathlib import Path
-from struct import unpack
-from mzx_tool import mzx_compress, mzx_decompress
+from struct import unpack, pack
+from mzx_tool import mzx_decompress
 
 tpl_output_dir = "mzx-tpl"
 mzx_output_dir = "tpl-mzx"
@@ -24,6 +24,43 @@ def parse_args():
                                  help='show this help message and exit')
 
     return parser_instance, parser_instance.parse_args()
+
+
+def mzx0_compress(f, inlen, xorff=False):
+    """Compress a block of data.
+    """
+    dout = bytearray(b'MZX0')
+    dout.extend(pack('<L', inlen))
+
+    key32 = 0xFFFFFFFF if xorff else 0
+    while inlen >= 0x80:
+        dout.append(0xFF)
+        for _ in range(0x20):
+            chunk = f.read(4)
+            if len(chunk) < 4:
+                raise EOFError("Unexpected end of file while reading 128-byte block")
+            dout.extend(pack('<L', unpack('<L', chunk)[0] ^ key32))
+        inlen -= 0x80
+
+    key8 = 0xFF if xorff else 0
+    if inlen >= 2:
+        dout.append(((inlen >> 1) - 1) * 4 + 3)
+        for _ in range((inlen >> 1) * 2):
+            b = f.read(1)
+            if not b:
+                raise EOFError("Unexpected end of file while reading remainder")
+            dout.append(b[0] ^ key8)
+        inlen -= (inlen >> 1) * 2
+
+    if inlen == 1:
+        dout.append(0x03)
+        b = f.read(1)
+        if not b:
+            raise EOFError("Unexpected end of file while reading last byte")
+        dout.append(b[0] ^ key8)
+        dout.append(0x00)
+
+    return bytes(dout)
 
 
 class TplEntry:
@@ -57,9 +94,12 @@ class TplEntry:
         dec_buf = mzx_decompress(src=content_data, invert_bytes=True)
         dec_buf.truncate(size)
 
+        origin_data = []
         out_text = []
         for index, instr in enumerate(dec_buf.read().split(b';')):
-            instr_text = instr.decode(MZX_ENCODING, 'surrogateescape')
+            instr_text = instr.decode(MZX_ENCODING)
+            # out_text.append(instr_text)
+            origin_data.append(instr_text)
             if re.search(r'_LVSV|_STTI|_MSAD|_ZM|SEL[R]', instr_text) is not None:
                 out_text.append(
                     "<{0:04d}>".format(index) + instr_text.replace("^", "_r")
@@ -79,7 +119,12 @@ class TplEntry:
                 log_warn("Remove exists tpl file {0}".format(out_tpl_file_path.name))
                 out_tpl_file_path.unlink()
 
-            with out_tpl_file_path.open('wt', encoding=MZX_ENCODING, errors='surrogateescape') as tpl_file:
+            out_origin_file_path = tpl_out_path / f"{self.in_mzx.stem}{SUFFIX_BIN}"
+
+            with out_origin_file_path.open('wt', encoding=MZX_ENCODING) as origin_file:
+                origin_file.write(";".join(origin_data))
+
+            with out_tpl_file_path.open('wt', encoding=MZX_ENCODING) as tpl_file:
                 tpl_file.write('\n'.join(out_text))
 
             log_succeed(f"Successfully extracted tpl file => {out_tpl_file_path.name}")
@@ -92,28 +137,29 @@ class TplEntry:
         processed_lines = []
 
         line_num = 1
-
         for line in self.tpl_lines:
             line = line.rstrip('\r\n')
-
             m = re.search(r'^<[0-9]+>(.+)', line)
             if m is not None:
-                line = m.group(1)
+                parts = m.group(1).split('=', 2)
+                line = parts[0] if len(parts) < 2 else parts[1]
+                expr = re.search(r'^([^(]+)\((.+)\)', line)
 
-                # 替换换行符和特殊标定
-                # ;/ 是分支的标定, 如果不按照规则替换, 会导致无限跳循环
-                line = line.replace(
+                if expr is not None:
+                    before = expr.group(1) + "("
+                    subj = expr.group(2)
+                    after = ")"
+                else:
+                    before = after = ""
+                    subj = line
+
+                line = before + subj.replace(
                     ";/", ","
                 ).replace(
                     "_n", "@n"
                 ).replace(
                     "_r", "^"
-                )
-
-                if line.count("(") != line.count(")"):
-                    log_warn(f"Bracket mismatch at line {line_num}: {line}")
-                if line.count(chr(0xff08)) != line.count(chr(0xff09)):
-                    log_warn(f"Bracket mismatch at line {line_num}: {line}")
+                ) + after
 
                 processed_lines.append(line)
             elif len(line) > 1 and line[0] == '!':
@@ -129,34 +175,23 @@ class TplEntry:
                         processed_lines.append(m.group(1))
             line_num += 1
 
+        result_bytes = ';'.join(processed_lines).encode(MZX_ENCODING)
+
         mzx_out_path = self.in_tpl.with_name(mzx_output_dir)
         mzx_out_path.mkdir(parents=True, exist_ok=True)
+
+        # out_origin_file_path = mzx_out_path / f"{self.in_tpl.stem}{SUFFIX_BIN}"
+        # with out_origin_file_path.open('wb') as out_origin_file:
+        #     out_origin_file.write(result_bytes)
 
         out_mzx_file_path = mzx_out_path / f"{self.in_tpl.stem}{SUFFIX_MZX}"
         if out_mzx_file_path.exists():
             log_warn("Remove exists mzx file {0}".format(out_mzx_file_path.name))
             out_mzx_file_path.unlink()
 
-        total_length = 0
-        processed_lines = [(l + ";").encode(MZX_ENCODING) for l in processed_lines]
-        output_bytes = io.BytesIO()
-        for line in processed_lines:
-            # 强行进行补位, 防止压缩算法导致出现奇怪的问题
-            if len(line) % 2 == 1:
-                line += b'\x00'
-
-            total_length += len(line)
-
-            # 改成不用复制的压缩算法, 否则在多个日文字符粘连时会导致脚本出错
-            compressed_line = mzx_compress(io.BytesIO(line), invert=True, level=0)
-            compressed_line.seek(8)  # 跳过每行压缩头
-            output_bytes.write(compressed_line.read())
-
+        mzx_data = mzx0_compress(io.BytesIO(result_bytes), len(result_bytes), xorff=True)
         with open(out_mzx_file_path, 'wb') as outfile:
-            # 用逐行压缩内容替换掉整段压缩, 重新构建头信息
-            outfile.write(MZX_MAGIC)
-            outfile.write(total_length.to_bytes(4, 'little'))
-            outfile.write(output_bytes.getvalue())
+            outfile.write(mzx_data)
 
         log_succeed(f"Successfully repacked mxz file => {out_mzx_file_path.name}")
 
