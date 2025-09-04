@@ -33,6 +33,13 @@ def load_translations(csv_file):
     return translations, reverse_mapping
 
 
+target_script = [
+    "entry_006.tpl", "entry_007.tpl", "entry_014.tpl", "entry_021.tpl", "entry_030.tpl",
+    "entry_033.tpl", "entry_059.tpl", "entry_065.tpl", "entry_066.tpl", "entry_092.tpl",
+    "entry_096.tpl", "entry_112.tpl", "entry_116.tpl", "entry_130.tpl", "entry_152.tpl",
+]
+
+
 def apply_translate_to_script(psv_script_path, csv_file, output_dir):
     file_path = Path(psv_script_path)
     output_path = Path(output_dir)
@@ -60,6 +67,15 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
         with open(psv_script, "r", encoding="shift_jis", errors="ignore") as f:
             lines = f.readlines()
 
+        has_more_limit = False
+        has_select = False
+        has_goto = False
+        has_define = False
+
+        is_target = psv_script.name in target_script
+        if is_target:
+            print("-" * 20 + f"{psv_script.name} 开始" + "-" * 20)
+
         new_lines = []
         for line in lines:
             orig_line = line
@@ -84,7 +100,14 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
             elif '_SELR(' in line:
                 match = selr_pattern.search(line)
                 if match:
+                    has_select = True
                     match_text = match.group(1)
+
+            elif "_GOTO" in line and "SELECT" in line:
+                has_goto = True
+
+            elif "_ZZ" in line and "SELECT" in line:
+                has_define = True
 
             # 如果匹配到文本，就尝试替换
             if match_text is not None and trans_idx < len(translations):
@@ -98,6 +121,7 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
                         tgt_body = tgt
 
                     # 按字节长度补齐, 游戏对文案的长度有及其苛刻的要求, 不能长也不能短, 否则会影响控制语句
+                    # 不过貌似只需要保障在有定义跳转和跳转行为的 entry 中的脚本不超出即可, 此时程序就能算对 offset
                     encoding = "cp932"
                     orig_bytes = match_text.encode(encoding)
                     tgt_bytes = tgt_body.encode(encoding)
@@ -116,21 +140,27 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
                                 tgt_bytes += " ".encode(encoding)  # 半角
                                 diff_len -= 1
                         else:
+                            has_more_limit = True
                             # 不能超出原文的长度
-                            print(
-                                f"({len(match_text)})" + map_string_with_dict(
-                                    reverse_mapping, tgt)
-                            )
                             # print(
-                            #     f"长度超出原文, 预期: {len(match_text)} 实际  => ({len(tgt)}) " + map_string_with_dict(reverse_mapping, tgt)
+                            #     f"({len(match_text)})" + map_string_with_dict(
+                            #         reverse_mapping, tgt)
                             # )
-                            over_count += 1
-                            # 长度超出时截断
-                            tgt_bytes = tgt_bytes[:diff_len]  # 去掉多余字节
-                            diff_len = 0
+
+                            if is_target:
+                                print(
+                                    f"长度超出原文, 预期: {len(match_text)} 实际  => ({len(tgt)}) " + map_string_with_dict(
+                                        reverse_mapping, tgt)
+                                )
+                                over_count += 1
+                                # 长度超出时截断
+                                tgt_bytes = tgt_bytes[:diff_len]  # 去掉多余字节
+                                diff_len = 0
+                            else:
+                                diff_len = 0
 
                     # 补回 "."
-                    if has_dot:
+                    if has_dot and is_target:
                         tgt_bytes += ".".encode(encoding)
 
                     # 解码回字符串
@@ -143,6 +173,18 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
                     processed_count += 1
 
             new_lines.append(line if line_changed else orig_line)
+
+        if has_more_limit and has_goto and has_select and has_define:
+            print(f"有分支、跳转、定义 => {psv_script.name}")
+        elif has_more_limit and has_select and has_define:
+            print(f"只有分支和定义，无跳转 => {psv_script.name}")
+        elif has_more_limit and has_goto and has_define:
+            print(f"只有跳转和定义，无分支 => {psv_script.name}")
+        elif not has_more_limit and has_goto and has_select and has_define:
+            print(f"没超限, 但有跳转、分支、定义 => {psv_script.name}")
+
+        if is_target:
+            print("-" * 20 + f"{psv_script.name} 结束" + "-" * 20 + "\n")
 
         # 写入新文件
         out_file = output_path / psv_script.name
