@@ -67,6 +67,7 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
         with open(psv_script, "r", encoding="shift_jis", errors="ignore") as f:
             lines = f.readlines()
 
+        need_fix_count = 0
         has_more_limit = False
         has_select = False
         has_goto = False
@@ -152,6 +153,7 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
                                     f"长度超出原文, 预期: {len(match_text)} 实际  => ({len(tgt)}) " + map_string_with_dict(
                                         reverse_mapping, tgt)
                                 )
+                                need_fix_count += 1
                                 over_count += 1
                                 # 长度超出时截断
                                 tgt_bytes = tgt_bytes[:diff_len]  # 去掉多余字节
@@ -184,6 +186,8 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
             print(f"没超限, 但有跳转、分支、定义 => {psv_script.name}")
 
         if is_target:
+            if need_fix_count > 0:
+                print(f"总计需修复: {need_fix_count}")
             print("-" * 20 + f"{psv_script.name} 结束" + "-" * 20 + "\n")
 
         # 写入新文件
