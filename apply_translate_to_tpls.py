@@ -37,6 +37,7 @@ target_script = [
     "entry_006.tpl", "entry_007.tpl", "entry_014.tpl", "entry_021.tpl", "entry_030.tpl",
     "entry_033.tpl", "entry_059.tpl", "entry_065.tpl", "entry_066.tpl", "entry_092.tpl",
     "entry_096.tpl", "entry_112.tpl", "entry_116.tpl", "entry_130.tpl", "entry_152.tpl",
+    "entry_201.tpl",
 ]
 
 
@@ -133,13 +134,17 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
                     # 按字节补齐
                     while diff_len != 0:
                         if diff_len > 0:
-                            # 补空格
-                            if diff_len % 2 == 0:
-                                tgt_bytes += "　".encode(encoding)  # 全角
-                                diff_len -= 2
+                            if is_target:
+                                # 只对目标 part 补空格
+                                if diff_len % 2 == 0:
+                                    tgt_bytes += "　".encode(encoding)  # 全角
+                                    diff_len -= 2
+                                else:
+                                    tgt_bytes += " ".encode(encoding)  # 半角
+                                    diff_len -= 1
                             else:
-                                tgt_bytes += " ".encode(encoding)  # 半角
-                                diff_len -= 1
+                                # 非目标 part 不管他即可
+                                diff_len = 0
                         else:
                             has_more_limit = True
                             # 不能超出原文的长度
