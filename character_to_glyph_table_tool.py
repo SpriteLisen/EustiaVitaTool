@@ -52,18 +52,20 @@ def build_gray_to_palette_map(palette):
     return gray_map
 
 
-def draw_char_into_cell_mask(char, cell_w, cell_h, ttf_path,
-                             max_fontsize=None, scale=10, gray_levels=6):
+def draw_char_into_cell_mask(
+        char, cell_w, cell_h, ttf_path,
+        max_font_size=None, base_font_size=6, scale=10, gray_levels=6
+):
     """返回一个 L 模式 mask，文字为白(255)背景黑(0)，灰度可量化"""
-    if max_fontsize is None:
-        max_fontsize = min(cell_w, cell_h)
+    if max_font_size is None:
+        max_font_size = min(cell_w, cell_h)
 
     w_big, h_big = cell_w * scale, cell_h * scale
-    fontsize = (max_fontsize - 4) * scale  # 调小留边
+    font_size = (max_font_size - base_font_size) * scale  # 调小留边
 
-    while fontsize > 4 * scale:
+    while font_size > 4 * scale:
         try:
-            font = ImageFont.truetype(ttf_path, fontsize)
+            font = ImageFont.truetype(ttf_path, font_size)
         except Exception:
             font = ImageFont.load_default()
         mask_big = Image.new("L", (w_big, h_big), 0)
@@ -83,7 +85,7 @@ def draw_char_into_cell_mask(char, cell_w, cell_h, ttf_path,
 
             mask = mask.point(quantize_gray)
             return mask, font
-        fontsize -= scale
+        font_size -= scale
 
     font = ImageFont.truetype(ttf_path, max(8, 4) * scale)
     mask_big = Image.new("L", (w_big, h_big), 0)
@@ -110,6 +112,7 @@ def render_chars_to_images(
         ttf_path,
         output_dir="out",
         cols=14, rows=14,
+        base_font_size=6,
         mapping_output="char_mapping.json"
 ):
     os.makedirs(output_dir, exist_ok=True)
@@ -142,7 +145,7 @@ def render_chars_to_images(
         # if len(table_text) != rows * cols:
         #     raise ValueError(f"{table_file} size mismatch, expected {rows * cols} chars, got {len(table_text)}")
 
-        img_mapping = {}
+        # img_mapping = {}
 
         # 行范围规则
         row_start = 10 if idx == 0 else 0
@@ -171,8 +174,11 @@ def render_chars_to_images(
                 if ch is None:
                     continue
 
-                mask, used_font = draw_char_into_cell_mask(ch, cell_w, cell_h, ttf_path,
-                                                           max_fontsize=min(cell_h, cell_w))
+                mask, used_font = draw_char_into_cell_mask(
+                    ch, cell_w, cell_h, ttf_path,
+                    max_font_size=min(cell_h, cell_w),
+                    base_font_size=base_font_size
+                )
 
                 for yy in range(cell_h):
                     yy_abs = y0 + yy
@@ -217,21 +223,25 @@ config = {
         "table_dir": "glyphTable/type/se/seif",
         "font": "glyphTable/font/YanZhenQingDuoBaoTaBei.ttf",
         "output_dir": "glyphTable/modified/se",
+        "base_font_size": 5,
     },
     "mar": {
         "table_dir": "glyphTable/type/mar/marf",
         "font": "glyphTable/font/GongFanLiZhongYuan.ttf",
         "output_dir": "glyphTable/modified/mar",
+        "base_font_size": 6,
     },
     "pop": {
         "table_dir": "glyphTable/type/pop/popf",
         "font": "glyphTable/font/KeAiPao-TaoZiJiu.ttf",
         "output_dir": "glyphTable/modified/pop",
+        "base_font_size": 6,
     },
     "got": {
         "table_dir": "glyphTable/type/got/gotf",
         "font": "glyphTable/font/SanJiLuoLiHei-Cu.ttf",
         "output_dir": "glyphTable/modified/got",
+        "base_font_size": 6,
     }
 }
 
@@ -266,5 +276,6 @@ if __name__ == "__main__":
         image_files, table_files, chars,
         choose_config["font"],
         output_dir=choose_config["output_dir"],
-        mapping_output="glyphTable/character-mapping.json"
+        mapping_output="glyphTable/character-mapping.json",
+        base_font_size=choose_config["base_font_size"]
     )
