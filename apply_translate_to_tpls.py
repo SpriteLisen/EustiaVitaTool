@@ -74,6 +74,12 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
         has_goto = False
         has_define = False
 
+        origin_len_count = 0
+        tgt_len_count = 0
+
+        overflow_count = 0
+        overflow_lines = []
+
         is_target = psv_script.name in target_script
         if is_target:
             print("-" * 20 + f"{psv_script.name} 开始" + "-" * 20)
@@ -143,8 +149,42 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
                                     tgt_bytes += " ".encode(encoding)  # 半角
                                     diff_len -= 1
                             else:
-                                # 非目标 part 不管他即可
-                                diff_len = 0
+                                # 非目标 part 尽量对齐 part size
+                                # 上一次是超出的情况, 则需要看谁更小, 谁小就补谁的位
+                                if overflow_count < 0:
+                                    padding_size = min(abs(overflow_count), diff_len)
+                                    diff_len = padding_size
+                                    if diff_len % 2 == 0:
+                                        tgt_bytes += "　".encode(encoding)  # 全角
+                                        diff_len -= 2
+                                        overflow_count += 2
+                                    else:
+                                        tgt_bytes += " ".encode(encoding)  # 半角
+                                        diff_len -= 1
+                                        overflow_count += 1
+
+                                # 本来就是补了更多数据的情况, 继续记录补了数据即可
+                                elif overflow_count > 0:
+                                    if diff_len % 2 == 0:
+                                        tgt_bytes += "　".encode(encoding)  # 全角
+                                        diff_len -= 2
+                                        overflow_count += 2
+                                    else:
+                                        tgt_bytes += " ".encode(encoding)  # 半角
+                                        diff_len -= 1
+                                        overflow_count += 1
+
+                                # 暂时补齐了就不要再增加数据了
+                                else:
+                                    # if diff_len % 2 == 0:
+                                    #     tgt_bytes += "　".encode(encoding)  # 全角
+                                    #     diff_len -= 2
+                                    #     overflow_count += 2
+                                    # else:
+                                    #     tgt_bytes += " ".encode(encoding)  # 半角
+                                    #     diff_len -= 1
+                                    #     overflow_count += 1
+                                    diff_len = 0
                         else:
                             has_more_limit = True
                             # 不能超出原文的长度
@@ -164,6 +204,8 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
                                 tgt_bytes = tgt_bytes[:diff_len]  # 去掉多余字节
                                 diff_len = 0
                             else:
+                                overflow_count += diff_len
+                                overflow_lines.append(map_string_with_dict(reverse_mapping, tgt))
                                 diff_len = 0
 
                     # 补回 "."
@@ -174,6 +216,8 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
                     tgt_final = tgt_bytes.decode(encoding, errors="ignore")
 
                     # 替换文本
+                    origin_len_count += len(orig_bytes)
+                    tgt_len_count += len(tgt_bytes)
                     line = orig_line.replace(match_text, tgt_final)
                     line_changed = True
                     trans_idx += 1
@@ -189,6 +233,19 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir):
             print(f"只有跳转和定义，无分支 => {psv_script.name}")
         elif not has_more_limit and has_goto and has_select and has_define:
             print(f"没超限, 但有跳转、分支、定义 => {psv_script.name}")
+
+        if overflow_count != 0:
+            if overflow_count < 0:
+                for overflow_line in overflow_lines:
+                    print(f"{overflow_line}")
+            print(f"{psv_script.name} 不完全对齐, 总差值: {overflow_count}")
+        else:
+            print(f"{psv_script.name} 已对齐")
+
+        # if origin_len_count == tgt_len_count:
+        #     print(f"{psv_script.name} 已对齐")
+        # else:
+        #     print(f"{psv_script.name} 不完全对齐, 总差值: {origin_len_count - tgt_len_count}")
 
         if is_target:
             if need_fix_count > 0:
