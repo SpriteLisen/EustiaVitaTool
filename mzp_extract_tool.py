@@ -176,25 +176,6 @@ def get_rgba_palette(img: Image.Image, palette_count: int):
             rgba_palette += [(0, 0, 0, 0)] * (palette_count - len(rgba_palette))
 
         return p_img, rgba_palette
-
-    # 取出 RGB 调色板
-    elif img.mode == "RGB":
-        p_img = img.convert("P")
-        rgba_palette = [None] * len(p_img.palette.colors)
-        for rgba, idx in p_img.palette.colors.items():
-            # rgba_palette[idx] = rgba
-            r = rgba[0]
-            g = rgba[1]
-            b = rgba[2]
-            a = 0
-
-            rgba_palette[idx] = (r, g, b, a)
-
-        # 用 (0,0,0,0) 补全到 palette_count
-        if len(rgba_palette) < palette_count:
-            rgba_palette += [(0, 0, 0, 0)] * (palette_count - len(rgba_palette))
-
-        return p_img, rgba_palette
     else:
         raise Exception(f"Unsupported image mode: {img.mode}")
 
