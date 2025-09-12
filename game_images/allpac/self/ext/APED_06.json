@@ -1,6 +1,9 @@
 {
+    "entry_0_start_offset": 672,
     "entry_count": 81,
     "bitmap_bpp": 32,
+    "bmp_type": 11,
+    "bmp_depth": 20,
     "width": 1024,
     "height": 640,
     "tile_width": 64,
