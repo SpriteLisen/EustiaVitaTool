@@ -44,7 +44,7 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir, verbose=Fal
     """
     参数:
       verbose: 如果 True，打印每行替换前后的长度与 offset 变化（便于调试）
-      allow_truncate_non_target: 如果 True，非目标脚本也会在必要时裁切超出的翻译（你之前说不想裁切，默认 False）
+      allow_truncate_non_target: 如果 True，非目标脚本也会在必要时裁切超出的翻译
     """
     file_path = Path(psv_script_path)
     output_path = Path(output_dir)

@@ -32,7 +32,7 @@ def get_space_padding(original_bytes, target_length):
     if remaining <= 0:
         return original_bytes
 
-    # 尝试找到一个可以用来填充的安全字节, 00, ff 都不行
+    # 尝试找到一个可以用来填充的安全字节
     safe_byte = b'\x00'
     padding_bytes = safe_byte * remaining
 
