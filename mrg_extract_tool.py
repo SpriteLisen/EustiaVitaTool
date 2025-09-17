@@ -181,6 +181,7 @@ class MergedPack:
             assert in_mrg.suffix.lower() == SUFFIX_MRG, "Input file must be .mrg!"
 
             self.mrg_file = open(in_mrg, 'rb')
+            self.mrg_file_size = in_mrg.stat().st_size
             suffix_isupper = in_mrg.suffix.isupper()
 
             in_hed = in_mrg.with_suffix(".HED" if suffix_isupper else SUFFIX_HED)
@@ -258,6 +259,17 @@ class MergedPack:
                     size=size, number_of_entries=entry_count
                 )
             )
+
+        # 按 real_offset 排序，确保顺序正确
+        entries_descriptors.sort(key=lambda e: e.real_offset)
+
+        # 修正 real_size
+        for i in range(len(entries_descriptors)):
+            if i < len(entries_descriptors) - 1:
+                entries_descriptors[i].real_size = entries_descriptors[i + 1].real_offset - entries_descriptors[i].real_offset
+            else:
+                # 最后一个 entry 用文件总长度减去 real_offset
+                entries_descriptors[i].real_size = self.mrg_file_size - entries_descriptors[i].real_offset
 
         # Parse name
         file_names = []
