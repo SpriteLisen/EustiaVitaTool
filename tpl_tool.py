@@ -78,7 +78,7 @@ class TplEntry:
         elif in_tpl is not None:
             self.in_tpl = in_tpl
 
-            tpl_file = in_tpl.open("rt", encoding=MZX_ENCODING)
+            tpl_file = in_tpl.open("rt", encoding=MZX_ENCODING, errors="surrogateescape")
             self.tpl_lines = tpl_file.readlines()
             tpl_file.close()
         else:
@@ -97,7 +97,8 @@ class TplEntry:
         origin_data = []
         out_text = []
         for index, instr in enumerate(dec_buf.read().split(b';')):
-            instr_text = instr.decode(MZX_ENCODING)
+            instr_text = instr.decode(MZX_ENCODING, errors="surrogateescape")
+
             # out_text.append(instr_text)
             origin_data.append(instr_text)
             if re.search(r'_LVSV|_STTI|_MSAD|_ZM|SEL[R]', instr_text) is not None:
@@ -121,10 +122,10 @@ class TplEntry:
 
             out_origin_file_path = tpl_out_path / f"{self.in_mzx.stem}{SUFFIX_BIN}"
 
-            with out_origin_file_path.open('wt', encoding=MZX_ENCODING) as origin_file:
+            with out_origin_file_path.open('wt', encoding=MZX_ENCODING, errors="surrogateescape") as origin_file:
                 origin_file.write(";".join(origin_data))
 
-            with out_tpl_file_path.open('wt', encoding=MZX_ENCODING) as tpl_file:
+            with out_tpl_file_path.open('wt', encoding=MZX_ENCODING, errors="surrogateescape") as tpl_file:
                 tpl_file.write('\n'.join(out_text))
 
             log_succeed(f"Successfully extracted tpl file => {out_tpl_file_path.name}")
@@ -175,7 +176,7 @@ class TplEntry:
                         processed_lines.append(m.group(1))
             line_num += 1
 
-        result_bytes = ';'.join(processed_lines).encode(MZX_ENCODING)
+        result_bytes = ';'.join(processed_lines).encode(MZX_ENCODING, errors="surrogateescape")
 
         mzx_out_path = self.in_tpl.with_name(mzx_output_dir)
         mzx_out_path.mkdir(parents=True, exist_ok=True)
