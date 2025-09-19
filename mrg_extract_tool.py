@@ -148,7 +148,7 @@ class NameEntry:
             self.nam_file.seek(NAM_ENTRY_BLOCK_SIZE)
             self.nam_index = {}
             for i in range(self.entry_count):
-                self.nam_index[i] = unpack("<I", self.nam_file.read(0x4))
+                self.nam_index[i] = unpack("<I", self.nam_file.read(0x4))[0]
             self.nam_index[self.entry_count] = os.path.getsize(in_nam)
 
     def get_name(self, index):
