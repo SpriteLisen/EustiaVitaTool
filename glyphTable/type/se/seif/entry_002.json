@@ -1,0 +1,15 @@
+{
+    "entry_0_start_offset": 40,
+    "entry_count": 2,
+    "bitmap_bpp": 4,
+    "bmp_type": 1,
+    "bmp_depth": 0,
+    "width": 512,
+    "height": 504,
+    "tile_width": 512,
+    "tile_height": 512,
+    "tile_x_count": 1,
+    "tile_y_count": 1,
+    "tile_crop": 0,
+    "origin_head_data": "6d7267643030020000000000010051000000580016008caf0002f80100020002010001000100000000000000000000177c7c7c7e00000046ffffff7f0000007fe2e2e27f3e3e3e7e0000007dbcbcbc7f000000681d1d1d7e9999997e0000004a5959597e0000007a01ffffffffffffff"
+}
