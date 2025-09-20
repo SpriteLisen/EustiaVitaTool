@@ -65,7 +65,7 @@ def draw_char_into_cell_mask(
         draw.text((x, y), char, font=font, fill=(255, 255, 255, 255))
 
     # 优化Alpha通道 - 量化透明值
-    mask = quantize_alpha(mask, threshold=10, levels=8)
+    mask = quantize_alpha(mask, threshold=10, levels=4)
 
     return mask, font
 
@@ -248,7 +248,7 @@ def render_chars_to_images(
 
         # 优化图像调色板
         if optimize_palette:
-            img = optimize_image_palette(img, max_colors=12)
+            img = optimize_image_palette(img, max_colors=8)
 
         out_name = os.path.basename(img_path)
         out_path = os.path.join(output_dir, out_name)
@@ -259,8 +259,9 @@ def render_chars_to_images(
         subprocess.run([
             "pngquant",
             "--force",
+            "--ordered",
             "--output", out_path,
-            "--colors", "12",
+            "--colors", "6",
             "--speed", "1",
             out_path
         ])
@@ -279,7 +280,7 @@ config = {
         "table_dir": "glyphTable/type/se/seif",
         "font": "glyphTable/font/YanZhenQingDuoBaoTaBei.ttf",
         "output_dir": "glyphTable/modified/seif",
-        "base_font_size": 8,
+        "base_font_size": 6,
         "outline_width": 1,
         "mode": FONT_STYLE_OUTLINE,
     },
@@ -287,7 +288,7 @@ config = {
         "table_dir": "glyphTable/type/se/sein",
         "font": "glyphTable/font/YanZhenQingDuoBaoTaBei.ttf",
         "output_dir": "glyphTable/modified/sein",
-        "base_font_size": 8,
+        "base_font_size": 6,
         "outline_width": 1,
         "mode": FONT_STYLE_WHITE,
     },
@@ -296,7 +297,7 @@ config = {
         "table_dir": "glyphTable/type/mar/marf",
         "font": "glyphTable/font/GongFanLiZhongYuan.ttf",
         "output_dir": "glyphTable/modified/marf",
-        "base_font_size": 12,
+        "base_font_size": 10,
         "outline_width": 1,
         "mode": FONT_STYLE_OUTLINE,
     },
@@ -304,7 +305,7 @@ config = {
         "table_dir": "glyphTable/type/mar/marn",
         "font": "glyphTable/font/GongFanLiZhongYuan.ttf",
         "output_dir": "glyphTable/modified/marn",
-        "base_font_size": 12,
+        "base_font_size": 10,
         "outline_width": 1,
         "mode": FONT_STYLE_WHITE,
     },
@@ -313,7 +314,7 @@ config = {
         "table_dir": "glyphTable/type/pop/popf",
         "font": "glyphTable/font/KeAiPao-TaoZiJiu.ttf",
         "output_dir": "glyphTable/modified/popf",
-        "base_font_size": 10,
+        "base_font_size": 8,
         "outline_width": 1,
         "mode": FONT_STYLE_OUTLINE,
     },
@@ -321,7 +322,7 @@ config = {
         "table_dir": "glyphTable/type/pop/popn",
         "font": "glyphTable/font/KeAiPao-TaoZiJiu.ttf",
         "output_dir": "glyphTable/modified/popn",
-        "base_font_size": 10,
+        "base_font_size": 8,
         "outline_width": 1,
         "mode": FONT_STYLE_WHITE,
     },
@@ -330,7 +331,7 @@ config = {
         "table_dir": "glyphTable/type/got/gotf",
         "font": "glyphTable/font/SanJiLuoLiHei-Cu.ttf",
         "output_dir": "glyphTable/modified/gotf",
-        "base_font_size": 12,
+        "base_font_size": 10,
         "outline_width": 1,
         "mode": FONT_STYLE_OUTLINE,
     },
@@ -338,7 +339,7 @@ config = {
         "table_dir": "glyphTable/type/got/gotn",
         "font": "glyphTable/font/SanJiLuoLiHei-Cu.ttf",
         "output_dir": "glyphTable/modified/gotn",
-        "base_font_size": 12,
+        "base_font_size": 10,
         "outline_width": 1,
         "mode": FONT_STYLE_WHITE,
     }
