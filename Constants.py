@@ -116,7 +116,7 @@ SUFFIX_HED = ".hed"
 SUFFIX_NAM = ".nam"
 SUFFIX_MRG = ".mrg"
 SUFFIX_MZX = ".mzx"
-SUFFIX_TPL = ".tpl"
+SUFFIX_SCR = ".scr"
 SUFFIX_MZP = ".mzp"
 SUFFIX_BIN = ".bin"
 
