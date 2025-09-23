@@ -1,5 +1,6 @@
 import io
 import json
+import os.path
 import zlib
 from pathlib import Path
 from struct import unpack, pack
@@ -499,10 +500,15 @@ class MzpEntry:
         if not output_target_dir.exists():
             output_target_dir.mkdir(parents=True)
 
-        self.loop_data()
-
         png_file_name = self.in_mzp.with_suffix(".png").name
         png_path = output_target_dir / png_file_name
+
+        if os.path.isfile(png_path):
+            log_warn(f"{png_path} exist, ignore.")
+            return
+
+        self.loop_data()
+
         with png_path.open('wb') as png:
             write_pngsig(png)
             width = self.width - self.tile_x_count * self.tile_crop * 2
