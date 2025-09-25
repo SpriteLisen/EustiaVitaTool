@@ -1,5 +1,7 @@
+import re
 import sys
 import argparse
+
 
 assert sys.version_info >= (3, 7), "Python 3.7 or higher is required"
 
@@ -100,6 +102,25 @@ END_PADDING_DATA: bytes = b'\xFF'
 EMPTY_PADDING_DATA: bytes = b"\x00"
 
 LIST_FILE_NAME = "list.txt"
+
+# 脚本文件 mrg 封包的文件名
+SCRIPT_MRG_FILE_NAME = "allscr.mrg"
+# 脚本文件 mrg 文件名集合封包的文件名
+SCRIPT_NAM_FILE_NAME = "allscr.nam"
+# 脚本文件中, mrg 文件名集合封包的文件名
+SCRIPT_COMMAND_INDEX_FILE_NAME = "command_index.mrg"
+# 脚本文件中, icon mzp 的文件名
+SCRIPT_ICON_FILE_NAME = "icon.mzp"
+
+# 脚本索引文件的正则匹配规则
+script_command_index_pattern = re.compile(rb'[0-9A-Za-z]{3}\x2C[0-9A-Za-z]{5}\x0D\x0A')
+
+def is_script_command_index_file(data):
+    """
+    判断输入的数据是否符合脚本索引文件的规则
+    """
+    matches = list(script_command_index_pattern.finditer(data))
+    return len(matches) >= 5
 
 HEADER_FORMAT = "<HHHH"
 

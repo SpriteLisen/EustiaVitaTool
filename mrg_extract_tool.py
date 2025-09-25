@@ -180,6 +180,7 @@ class MergedPack:
         if in_mrg is not None:
             assert in_mrg.suffix.lower() == SUFFIX_MRG, "Input file must be .mrg!"
 
+            self.in_mrg = in_mrg
             self.mrg_file = open(in_mrg, 'rb')
             self.mrg_file_size = in_mrg.stat().st_size
             suffix_isupper = in_mrg.suffix.isupper()
@@ -274,19 +275,56 @@ class MergedPack:
         # Parse name
         file_names = []
         for i in range(entry_count):
-            file_name = "entry_{i:03}{suffix}".format(
-                i=i, suffix=SUFFIX_MZX
+            file_name = "entry_{i:03}".format(
+                i=i
             )
             file_names.append(file_name)
 
         # Do extract action
+        special_file_count = 0
         extract_count = 0
+        nam_names = []
+
         for index, entry in enumerate(entries_descriptors):
             self.mrg_file.seek(entry.real_offset)
             data = self.mrg_file.read(entry.real_size)
             suffix = detect_file_extension_with_bytes(data)
 
-            real_file_name = file_names[index].replace(SUFFIX_MZX, suffix)
+            is_script_file = self.in_mrg.name == SCRIPT_MRG_FILE_NAME
+
+            # 脚本封包时, 如果前两个 entry 符合脚本索引文件的规范
+            if is_script_file and suffix == SUFFIX_MRG and index in (0, 1)  and is_script_command_index_file(data):
+                real_file_name = SCRIPT_COMMAND_INDEX_FILE_NAME
+                special_file_count += 1
+
+            # 脚本封包时, 如果前两个 entry 是 bin 则大概率是 nam 文件
+            elif is_script_file and suffix == SUFFIX_BIN and index in (0, 1):
+                real_file_name = SCRIPT_NAM_FILE_NAME
+                special_file_count += 1
+
+                # 解析脚本自己的文件名
+                for i in range(0, len(data), 32):
+                    chunk = data[i:i + 32]
+
+                    # 如果连续出现 24 个 0x00 说明文件结束, 后面的数据可以丢弃掉
+                    if b'\x00' * 24 in chunk:
+                        break
+
+                    nam_names.append(
+                        chunk.replace(b'\x00', b'').rstrip().decode(MZX_ENCODING, errors='ignore')
+                    )
+
+            # 脚本封包时, 如果第 3 个 entry 是 mzp 则大概率是 icon 文件
+            elif is_script_file and suffix == SUFFIX_MZP and index == 2:
+                real_file_name = SCRIPT_ICON_FILE_NAME
+                special_file_count += 1
+
+            else:
+                # 名称对应去除掉特殊文件的数量能匹配上, 才使用原始文件名, 否则使用系统分配的名称
+                if len(nam_names) >= entry_count - special_file_count:
+                    real_file_name = f"{file_names[index - special_file_count]}-{nam_names[index - special_file_count]}{suffix}"
+                else:
+                    real_file_name = f"{file_names[index - special_file_count]}{suffix}"
 
             output_file_name = self.output_dir.joinpath(real_file_name)
             with open(output_file_name, 'wb') as output_file:
