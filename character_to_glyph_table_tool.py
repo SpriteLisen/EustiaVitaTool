@@ -274,6 +274,12 @@ def render_chars_to_images(
     print(f"All images processed. Mapping saved to {mapping_output}")
 
 
+# 备选字体方案
+# seif/sein: 都选用 YanZhenQingDuoBaoTaBei.ttf【颜真卿多宝塔碑体】(对应游戏默认字体: 明朝)
+# marf/marn: 都选用 GongFanLiZhongYuan.ttf【中圆】(对应游戏默认字体: 丸ゴシック{圆黑体})
+# popf/popn: 都选用 KeAiPao-TaoZiJiu.ttf【可爱泡芙-桃子酒】(对应游戏默认字体: ボップ{泡泡体})
+# gotf/gotn: 都选用 SanJiLuoLiHei-Cu.ttf【三极罗丽黑-粗】(对应游戏默认字体: ゴシック{黑体})
+
 # 配置选项
 config = {
     "seif": {
