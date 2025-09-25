@@ -192,7 +192,7 @@ class MergedPack:
             self.name_entry = NameEntry(in_nam) if in_nam.exists() and in_nam.is_file() else None
 
             if self.head_entry is not None and self.name_entry is not None:
-                assert self.head_entry.entry_count == self.name_entry.entry_count, "The entry count in .hed and .nam must be the same."
+                assert self.head_entry.entry_count <= self.name_entry.entry_count, "The .hed entry count must less zhan .nam entry count."
 
             self.output_dir = in_mrg.with_name(in_hed.stem + '-unpacked')
 
