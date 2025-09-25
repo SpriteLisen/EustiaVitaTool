@@ -33,10 +33,10 @@ def load_translations(csv_file):
 
 
 target_script = [
-    "entry_006.scr", "entry_007.scr", "entry_014.scr", "entry_021.scr", "entry_030.scr",
-    "entry_033.scr", "entry_059.scr", "entry_065.scr", "entry_066.scr", "entry_092.scr",
-    "entry_096.scr", "entry_112.scr", "entry_116.scr", "entry_130.scr", "entry_152.scr",
-    "entry_201.scr",
+    "entry_005.scr", "entry_006.scr", "entry_013.scr", "entry_020.scr", "entry_029.scr",
+    "entry_032.scr", "entry_058.scr", "entry_064.scr", "entry_065.scr", "entry_091.scr",
+    "entry_095.scr", "entry_111.scr", "entry_115.scr", "entry_12+.scr", "entry_151.scr",
+    "entry_200.scr",
 ]
 
 
@@ -64,7 +64,7 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir, verbose=Fal
 
     files = sorted(file_path.glob('*.scr'), key=lambda x: x.name.lower())
     for psv_script in files:
-        if psv_script.name == "entry_200.scr":
+        if psv_script.name == "entry_199.scr":
             continue
 
         with open(psv_script, "r", encoding="shift_jis", errors="ignore") as f:
