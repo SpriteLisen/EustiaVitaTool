@@ -482,8 +482,12 @@ class MzpEntry:
                     continue
                 if (i - self.tile_crop) >= rowcount:
                     break
-                cur_width = len(self.rows[start_row + i - self.tile_crop])
-                px_count = min(self.width, cur_width + self.tile_width) * self.bytesprepx - cur_width
+                # cur_width = len(self.rows[start_row + i - self.tile_crop])
+                # px_count = min(self.width, cur_width + self.tile_width) * self.bytesprepx - cur_width
+
+                cur_px = len(self.rows[start_row + i - self.tile_crop]) // self.bytesprepx
+                px_count = (min(self.width, cur_px + self.tile_width) - cur_px) * self.bytesprepx
+
                 try:
                     temp_row = tile_row_px[:px_count]
                     self.rows[start_row + i - self.tile_crop] += temp_row[self.tile_crop * self.bytesprepx: len(
@@ -784,7 +788,10 @@ def do_unpack(input_args):
     input_path: Path = input_args.input
 
     if input_path.is_dir():
-        target_files = list(input_path.glob('*.[Mm][Zz][Pp]'))
+        target_files = sorted(
+            input_path.glob('*.[Mm][Zz][Pp]'),
+            key=lambda x: x.name.lower()
+        )
         file_count = len(target_files)
 
         for index, mzp_file_path in enumerate(target_files):
@@ -802,7 +809,10 @@ def do_repack(input_args):
     input_path: Path = input_args.input
 
     if input_path.is_dir():
-        target_files = list(input_path.glob('*.[Pp][Nn][Gg]'))
+        target_files = sorted(
+            input_path.glob('*.[Pp][Nn][Gg]'),
+            key=lambda x: x.name.lower()
+        )
         file_count = len(target_files)
 
         for index, png_file_path in enumerate(target_files):
