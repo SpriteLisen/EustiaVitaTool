@@ -1,13 +1,92 @@
 import os
 import json
+import subprocess
+import numpy as np
 from pathlib import Path
 from Constants import normal_char
-from PIL import Image, ImageDraw, ImageFont
-import numpy as np
-import subprocess
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 FONT_STYLE_WHITE = "white"
 FONT_STYLE_OUTLINE = "outline"
+
+# 最终的颜色值 = MAX_COLORS_PER_IMAGE * ALPHA_LEVELS
+# 例如 4bpp = 8 * 2 = 4 * 4
+# 最大的调色板数量
+MAX_COLORS_PER_IMAGE = 8
+# 透明度分级数量（比如 2/4/6/8）
+ALPHA_LEVELS = 2
+# Unsharp 强度（0.5 - 2.0 范围）
+UNSHARP_AMOUNT = 0.8
+# Unsharp 高斯模糊半径
+UNSHARP_RADIUS = 2.0
+
+
+def optimize_alpha_unsharp(pil_img, amount=1.2, radius=1.0, threshold=0):
+    """
+    对 RGBA 图像的 alpha 通道做 Unsharp Mask，返回修改后 RGBA PIL Image。
+    如果没有 scipy，也会使用 PIL 的 GaussianBlur 做近似。
+    """
+    if pil_img.mode != "RGBA":
+        pil_img = pil_img.convert("RGBA")
+    arr = np.array(pil_img, dtype=np.float32)
+    alpha = arr[:, :, 3]
+
+    try:
+        # 优先使用 scipy 的 gaussian_filter
+        from scipy import ndimage
+        blurred = ndimage.gaussian_filter(alpha, sigma=radius)
+    except Exception:
+        # 回退：PIL 的 GaussianBlur（注意：PIL blur 对数组要先转回图像）
+        blurred_img = Image.fromarray(alpha.astype(np.uint8)).filter(ImageFilter.GaussianBlur(radius))
+        blurred = np.array(blurred_img, dtype=np.float32)
+
+    mask = alpha - blurred
+    if threshold > 0:
+        mask = np.where(np.abs(mask) > threshold, mask, 0.0)
+
+    enhanced = alpha + amount * mask
+    enhanced = np.clip(enhanced, 0, 255)
+
+    # 保留原始严格透明和完全不透明的决策（避免核心被扭曲）
+    core_mask = alpha >= 240
+    enhanced[core_mask] = 255
+
+    arr[:, :, 3] = enhanced.astype(np.uint8)
+    return Image.fromarray(arr.astype(np.uint8))
+
+
+def quantize_alpha_levels(image, levels=4, threshold=10):
+    """
+    将 alpha 通道量化为指定数量 levels（包含 0 和 255），返回 RGBA PIL Image。
+    levels >= 2
+    """
+    if image.mode != "RGBA":
+        image = image.convert("RGBA")
+    arr = np.array(image)
+    alpha = arr[:, :, 3].astype(np.float32)
+
+    alpha[alpha < threshold] = 0.0
+
+    if levels <= 2:
+        alpha = np.where(alpha >= threshold, 255.0, 0.0)
+    else:
+        # 包括 0 和 255 在内，生成 levels 个值均匀分布
+        quant_values = np.linspace(0, 255, levels)
+        # boundaries between quant values
+        boundaries = (quant_values[:-1] + quant_values[1:]) / 2.0
+        out = np.zeros_like(alpha)
+        for i, v in enumerate(quant_values):
+            if i == 0:
+                mask = alpha <= boundaries[0]
+            elif i == len(quant_values) - 1:
+                mask = alpha > boundaries[-1]
+            else:
+                mask = (alpha > boundaries[i - 1]) & (alpha <= boundaries[i])
+            out[mask] = v
+        alpha = out
+
+    arr[:, :, 3] = alpha.astype(np.uint8)
+    return Image.fromarray(arr)
 
 
 def draw_char_into_cell_mask(
@@ -64,8 +143,19 @@ def draw_char_into_cell_mask(
 
         draw.text((x, y), char, font=font, fill=(255, 255, 255, 255))
 
-    # 优化Alpha通道 - 量化透明值
-    mask = quantize_alpha(mask, threshold=10, levels=4)
+        # 优化Alpha通道 - 量化透明值
+        # mask = quantize_alpha(mask, threshold=10, levels=4)
+
+        # 先用 Unsharp 对 alpha 做增强（防止后续量化导致断层）
+        mask = optimize_alpha_unsharp(
+            mask,
+            # 白色无描边字形不需要要 unsharp, 否则会变狗牙
+            amount=UNSHARP_AMOUNT if mode == FONT_STYLE_OUTLINE else 0.0,
+            radius=UNSHARP_RADIUS
+        )
+
+        # 再把 alpha 量化成指定级别（减少中间 alpha 的数量）
+        mask = quantize_alpha_levels(mask, levels=ALPHA_LEVELS, threshold=6)
 
     return mask, font
 
@@ -248,23 +338,23 @@ def render_chars_to_images(
 
         # 优化图像调色板
         if optimize_palette:
-            img = optimize_image_palette(img, max_colors=8)
+            img = optimize_image_palette(img, max_colors=MAX_COLORS_PER_IMAGE)
 
         out_name = os.path.basename(img_path)
         out_path = os.path.join(output_dir, out_name)
 
-        img.save(out_path)
+        img.save(out_path, optimize=True)
 
         # 把图片压缩，用最大颜色数限制
-        subprocess.run([
-            "pngquant",
-            "--force",
-            "--ordered",
-            "--output", out_path,
-            "--colors", "6",
-            "--speed", "1",
-            out_path
-        ])
+        # subprocess.run([
+        #     "pngquant",
+        #     "--force",
+        #     "--ordered",
+        #     "--output", out_path,
+        #     "--colors", f"{MAX_COLORS_PER_IMAGE}",
+        #     "--speed", "1",
+        #     out_path
+        # ])
         print(f"Saved {out_path}")
 
     # 保存映射文件
@@ -337,7 +427,7 @@ config = {
         "table_dir": "glyphTable/type/got/gotf",
         "font": "glyphTable/font/SanJiLuoLiHei-Cu.ttf",
         "output_dir": "glyphTable/modified/gotf",
-        "base_font_size": 10,
+        "base_font_size": 9,
         "outline_width": 1,
         "mode": FONT_STYLE_OUTLINE,
     },
@@ -345,7 +435,7 @@ config = {
         "table_dir": "glyphTable/type/got/gotn",
         "font": "glyphTable/font/SanJiLuoLiHei-Cu.ttf",
         "output_dir": "glyphTable/modified/gotn",
-        "base_font_size": 10,
+        "base_font_size": 9,
         "outline_width": 1,
         "mode": FONT_STYLE_WHITE,
     }
