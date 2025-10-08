@@ -12,9 +12,9 @@ FONT_STYLE_OUTLINE = "outline"
 # 最终的颜色值 = MAX_COLORS_PER_IMAGE * ALPHA_LEVELS
 # 例如 4bpp = 8 * 2 = 4 * 4
 # 最大的调色板数量
-MAX_COLORS_PER_IMAGE = 8
+MAX_COLORS_PER_IMAGE = 4
 # 透明度分级数量（比如 2/4/6/8）
-ALPHA_LEVELS = 2
+ALPHA_LEVELS = 4
 # Unsharp 强度（0.5 - 2.0 范围）
 UNSHARP_AMOUNT = 0.8
 # Unsharp 高斯模糊半径
@@ -55,37 +55,33 @@ def optimize_alpha_unsharp(pil_img, amount=1.2, radius=1.0, threshold=0):
     return Image.fromarray(arr.astype(np.uint8))
 
 
-def quantize_alpha_levels(image, levels=4, threshold=10):
+def quantize_alpha_levels_fixed(image, levels=[0, 64, 128, 255]):
     """
-    将 alpha 通道量化为指定数量 levels（包含 0 和 255），返回 RGBA PIL Image。
-    levels >= 2
+    将 RGBA 图像的 alpha 通道量化到指定的 levels。
+    alpha 落在相邻 level 中点区间就归到该 level
     """
     if image.mode != "RGBA":
         image = image.convert("RGBA")
     arr = np.array(image)
     alpha = arr[:, :, 3].astype(np.float32)
 
-    alpha[alpha < threshold] = 0.0
+    # 计算每两个 level 的中点作为区间边界
+    boundaries = [(levels[i] + levels[i+1]) / 2 for i in range(len(levels)-1)]
 
-    if levels <= 2:
-        alpha = np.where(alpha >= threshold, 255.0, 0.0)
-    else:
-        # 包括 0 和 255 在内，生成 levels 个值均匀分布
-        quant_values = np.linspace(0, 255, levels)
-        # boundaries between quant values
-        boundaries = (quant_values[:-1] + quant_values[1:]) / 2.0
-        out = np.zeros_like(alpha)
-        for i, v in enumerate(quant_values):
-            if i == 0:
-                mask = alpha <= boundaries[0]
-            elif i == len(quant_values) - 1:
-                mask = alpha > boundaries[-1]
-            else:
-                mask = (alpha > boundaries[i - 1]) & (alpha <= boundaries[i])
-            out[mask] = v
-        alpha = out
+    # 创建新的 alpha
+    alpha_quant = np.zeros_like(alpha)
 
-    arr[:, :, 3] = alpha.astype(np.uint8)
+    # 处理每个区间
+    for i, lv in enumerate(levels):
+        if i == 0:
+            mask = alpha <= boundaries[0]
+        elif i == len(levels) - 1:
+            mask = alpha > boundaries[-1]
+        else:
+            mask = (alpha > boundaries[i-1]) & (alpha <= boundaries[i])
+        alpha_quant[mask] = lv
+
+    arr[:, :, 3] = alpha_quant.astype(np.uint8)
     return Image.fromarray(arr)
 
 
@@ -134,28 +130,41 @@ def draw_char_into_cell_mask(
         # 白色透明模式
         draw.text((x, y), char, font=font, fill=(255, 255, 255, 255))
     elif mode == FONT_STYLE_OUTLINE:
-        # 绘制周围描边（减少偏移位置数量）
-        for dx in range(-outline_width, outline_width + 1):
-            for dy in range(-outline_width, outline_width + 1):
-                if dx == 0 and dy == 0:
-                    continue
-                draw.text((x + dx, y + dy), char, font=font, fill=(0, 0, 0, 255))
+        # 绘制周围描边
+        # for dx in range(-outline_width, outline_width + 1):
+        #     for dy in range(-outline_width, outline_width + 1):
+        #         if dx == 0 and dy == 0:
+        #             continue
+        #         draw.text(
+        #             (x + dx, y + dy), char, font=font,
+        #             fill=(0, 0, 0, 255) if mode == FONT_STYLE_OUTLINE else (255, 255, 255, 255)
+        #         )
 
+        for dx, dy in [
+            (-outline_width, 0), (outline_width, 0), (0, -outline_width), (0, outline_width),  # 上下左右
+            (-outline_width, -outline_width), (-outline_width, outline_width), (outline_width, -outline_width),
+            (outline_width, outline_width)  # 四个角
+        ]:
+            draw.text((x + dx, y + dy), char, font=font, fill=(0, 0, 0, 255))
+
+        # 绘制两次文字保障内部字体清晰
+        # draw.text((x, y), char, font=font, fill=(255, 255, 255, 255))
         draw.text((x, y), char, font=font, fill=(255, 255, 255, 255))
 
         # 优化Alpha通道 - 量化透明值
         # mask = quantize_alpha(mask, threshold=10, levels=4)
 
         # 先用 Unsharp 对 alpha 做增强（防止后续量化导致断层）
-        mask = optimize_alpha_unsharp(
-            mask,
-            # 白色无描边字形不需要要 unsharp, 否则会变狗牙
-            amount=UNSHARP_AMOUNT if mode == FONT_STYLE_OUTLINE else 0.0,
-            radius=UNSHARP_RADIUS
-        )
+        # mask = optimize_alpha_unsharp(
+        #     mask,
+        #     # 白色无描边字形不需要要 unsharp, 否则会变狗牙
+        #     amount=UNSHARP_AMOUNT if mode == FONT_STYLE_OUTLINE else 0.0,
+        #     radius=UNSHARP_RADIUS
+        # )
 
         # 再把 alpha 量化成指定级别（减少中间 alpha 的数量）
-        mask = quantize_alpha_levels(mask, levels=ALPHA_LEVELS, threshold=6)
+        # mask = quantize_outline_edges(mask)
+        mask = quantize_alpha_levels_fixed(mask)
 
     return mask, font
 
