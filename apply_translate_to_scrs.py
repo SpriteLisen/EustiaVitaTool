@@ -35,7 +35,7 @@ def load_translations(csv_file):
 target_script = [
     "entry_005.scr", "entry_006.scr", "entry_013.scr", "entry_020.scr", "entry_029.scr",
     "entry_032.scr", "entry_058.scr", "entry_064.scr", "entry_065.scr", "entry_091.scr",
-    "entry_095.scr", "entry_111.scr", "entry_115.scr", "entry_12+.scr", "entry_151.scr",
+    "entry_095.scr", "entry_111.scr", "entry_115.scr", "entry_129.scr", "entry_151.scr",
     "entry_200.scr",
 ]
 
