@@ -11,10 +11,16 @@ FONT_STYLE_OUTLINE = "outline"
 
 # 最终的颜色值 = MAX_COLORS_PER_IMAGE * ALPHA_LEVELS
 # 例如 4bpp = 8 * 2 = 4 * 4
-# 最大的调色板数量
-MAX_COLORS_PER_IMAGE = 8
-# 透明度分级数量（比如 2/4/6/8）
-ALPHA_LEVELS = 2
+# 纯白最大的调色板数量
+WHITE_MAX_COLORS_PER_IMAGE = 8
+# 纯白透明度分级数量（比如 2/4/6/8）
+WHITE_ALPHA_LEVELS = 2
+
+# 黑色描边最大的调色板数量
+OUTLINE_MAX_COLORS_PER_IMAGE = 4
+# 黑色描边透明度分级数量（比如 2/4/6/8）
+OUTLINE_ALPHA_LEVELS = 3
+
 # Unsharp 强度（0.5 - 2.0 范围）
 UNSHARP_AMOUNT = 0.8
 # Unsharp 高斯模糊半径
@@ -143,19 +149,19 @@ def draw_char_into_cell_mask(
 
         draw.text((x, y), char, font=font, fill=(255, 255, 255, 255))
 
-        # 优化Alpha通道 - 量化透明值
-        # mask = quantize_alpha(mask, threshold=10, levels=4)
-
         # 先用 Unsharp 对 alpha 做增强（防止后续量化导致断层）
         mask = optimize_alpha_unsharp(
             mask,
-            # 白色无描边字形不需要要 unsharp, 否则会变狗牙
-            amount=UNSHARP_AMOUNT if mode == FONT_STYLE_OUTLINE else 0.0,
+            amount=UNSHARP_AMOUNT,
             radius=UNSHARP_RADIUS
         )
 
         # 再把 alpha 量化成指定级别（减少中间 alpha 的数量）
-        mask = quantize_alpha_levels(mask, levels=ALPHA_LEVELS, threshold=6)
+        mask = quantize_alpha_levels(
+            mask,
+            levels=WHITE_ALPHA_LEVELS if mode == FONT_STYLE_WHITE else OUTLINE_ALPHA_LEVELS,
+            threshold=6
+        )
 
     return mask, font
 
@@ -213,7 +219,7 @@ def quantize_alpha(image, threshold=10, levels=4):
     return Image.fromarray(img_array)
 
 
-def optimize_image_palette(image, max_colors=16):
+def optimize_image_palette(image, mode, max_colors=16):
     """
     优化图像调色板，减少颜色数量
     :param image: PIL Image (RGBA)
@@ -228,7 +234,16 @@ def optimize_image_palette(image, max_colors=16):
     temp_image = image.convert('RGB')
 
     # 量化到有限的颜色数量
-    quantized = temp_image.quantize(colors=max_colors, method=Image.MEDIANCUT)
+    if mode == FONT_STYLE_WHITE:
+        quantized = temp_image.quantize(colors=max_colors, method=Image.MEDIANCUT)
+    else:
+        quantized = temp_image.quantize(
+            colors=max_colors,
+            method=Image.MAXCOVERAGE,
+            kmeans=4,
+            dither=Image.FLOYDSTEINBERG
+        )
+        # quantized = temp_image.quantize(colors=max_colors, method=Image.FASTOCTREE, kmeans=0)
 
     # 将量化后的图像转换回RGBA，但保留原始Alpha通道
     result = quantized.convert('RGBA')
@@ -336,14 +351,17 @@ def render_chars_to_images(
                     orig_char = table_text[r * cols + c]
                     mapping_data[ch] = orig_char
 
-        # 优化图像调色板
-        if optimize_palette:
-            img = optimize_image_palette(img, max_colors=MAX_COLORS_PER_IMAGE)
-
         out_name = os.path.basename(img_path)
         out_path = os.path.join(output_dir, out_name)
 
-        img.save(out_path, optimize=True)
+        # 优化图像调色板
+        if optimize_palette:
+            img = optimize_image_palette(
+                img, mode,
+                max_colors=WHITE_MAX_COLORS_PER_IMAGE if mode == FONT_STYLE_WHITE else OUTLINE_MAX_COLORS_PER_IMAGE
+            )
+
+            img.save(out_path, optimize=True)
 
         # 把图片压缩，用最大颜色数限制
         # subprocess.run([
