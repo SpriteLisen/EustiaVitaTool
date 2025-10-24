@@ -41,7 +41,7 @@ target_script = [
 
 ignore_script = [
     "entry_199.scr", # 应该全是超长测试文案和选择分支测试代码
-    "entry_178.src" # 终章的全屏图逻辑有点不一样, 完全修改完了之后就不用调整他了
+    "entry_178.scr" # 终章的全屏图逻辑有点不一样, 完全修改完了之后就不用调整他了
 ]
 
 
@@ -70,6 +70,9 @@ def apply_translate_to_script(psv_script_path, csv_file, output_dir, verbose=Fal
     files = sorted(file_path.glob('*.scr'), key=lambda x: x.name.lower())
     for psv_script in files:
         if psv_script.name in ignore_script:
+            # 暂定把指针索引往后挪, 保障后续脚本的翻译索引正确
+            if psv_script.name == ignore_script[1]:
+                trans_idx = 79520
             continue
 
         with open(psv_script, "r", encoding="shift_jis", errors="ignore") as f:
