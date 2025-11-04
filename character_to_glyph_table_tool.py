@@ -98,7 +98,8 @@ def quantize_alpha_levels(image, levels=4, threshold=10):
 def draw_char_into_cell_mask(
         char, cell_w, cell_h, ttf_path,
         max_font_size=None, base_font_size=6,
-        mode=FONT_STYLE_WHITE, outline_width=1
+        mode=FONT_STYLE_WHITE, outline_width=1,
+        baseline_point=0.6
 ):
     """返回一个 RGBA 模式 mask，支持白色透明和描边模式"""
     if max_font_size is None:
@@ -118,9 +119,21 @@ def draw_char_into_cell_mask(
     mask = Image.new("RGBA", (cell_w, cell_h), (0, 0, 0, 0))
     draw = ImageDraw.Draw(mask)
 
-    # 获取文本边界框
-    bbox = draw.textbbox((0, 0), char, font=font)
-    w, h = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    def calc_info(fnt):
+        # 获取字符bbox
+        left, top, right, bottom = draw.textbbox((0, 0), char, font=fnt)
+        text_width = right - left
+
+        # 水平居中
+        calc_x = (cell_w - text_width) // 2 - left
+        # 计算 baseline 区域
+        x_height = font_size * baseline_point
+        x_height_line = cell_w // 2
+        calc_y = x_height_line - x_height
+
+        return calc_x, calc_y, right - left, bottom - top
+
+    x, y, w, h = calc_info(font)
 
     # 如果文字太大，调整字体大小
     while (w > cell_w or h > cell_h) and font_size > 4:
@@ -129,12 +142,8 @@ def draw_char_into_cell_mask(
             font = ImageFont.truetype(ttf_path, font_size)
         except Exception:
             font = ImageFont.load_default()
-        bbox = draw.textbbox((0, 0), char, font=font)
-        w, h = bbox[2] - bbox[0], bbox[3] - bbox[1]
+        x, y, w, h = calc_info(font)
 
-    # 计算文本位置（居中）
-    x = (cell_w - w) // 2 - bbox[0]
-    y = (cell_h - h) // 2 - bbox[1]
 
     if mode == FONT_STYLE_WHITE:
         # 白色透明模式
@@ -268,6 +277,7 @@ def render_chars_to_images(
         mapping_output="char_mapping.json",
         mode=FONT_STYLE_WHITE,
         outline_width=2,
+        baseline_point=0.6,
         optimize_palette=True
 ):
     os.makedirs(output_dir, exist_ok=True)
@@ -333,7 +343,8 @@ def render_chars_to_images(
                         max_font_size=min(cell_h, cell_w),
                         base_font_size=base_font_size,
                         mode=mode,
-                        outline_width=outline_width
+                        outline_width=outline_width,
+                        baseline_point=baseline_point
                     )
 
                 # 将字符mask合成到图像上
@@ -395,6 +406,7 @@ config = {
         "font": "glyphTable/font/YanZhenQingDuoBaoTaBei.ttf",
         "output_dir": "glyphTable/modified/seif",
         "base_font_size": 6,
+        "baseline_point": 0.6,
         "outline_width": 1,
         "mode": FONT_STYLE_OUTLINE,
     },
@@ -403,6 +415,7 @@ config = {
         "font": "glyphTable/font/YanZhenQingDuoBaoTaBei.ttf",
         "output_dir": "glyphTable/modified/sein",
         "base_font_size": 6,
+        "baseline_point": 0.6,
         "outline_width": 1,
         "mode": FONT_STYLE_WHITE,
     },
@@ -412,6 +425,7 @@ config = {
         "font": "glyphTable/font/GongFanLiZhongYuan.ttf",
         "output_dir": "glyphTable/modified/marf",
         "base_font_size": 10,
+        "baseline_point": 0.52,
         "outline_width": 1,
         "mode": FONT_STYLE_OUTLINE,
     },
@@ -420,6 +434,7 @@ config = {
         "font": "glyphTable/font/GongFanLiZhongYuan.ttf",
         "output_dir": "glyphTable/modified/marn",
         "base_font_size": 10,
+        "baseline_point": 0.52,
         "outline_width": 1,
         "mode": FONT_STYLE_WHITE,
     },
@@ -429,6 +444,7 @@ config = {
         "font": "glyphTable/font/KeAiPao-TaoZiJiu.ttf",
         "output_dir": "glyphTable/modified/popf",
         "base_font_size": 8,
+        "baseline_point": 0.6,
         "outline_width": 1,
         "mode": FONT_STYLE_OUTLINE,
     },
@@ -437,6 +453,7 @@ config = {
         "font": "glyphTable/font/KeAiPao-TaoZiJiu.ttf",
         "output_dir": "glyphTable/modified/popn",
         "base_font_size": 8,
+        "baseline_point": 0.6,
         "outline_width": 1,
         "mode": FONT_STYLE_WHITE,
     },
@@ -446,6 +463,7 @@ config = {
         "font": "glyphTable/font/SanJiLuoLiHei-Cu.ttf",
         "output_dir": "glyphTable/modified/gotf",
         "base_font_size": 9,
+        "baseline_point": 0.5,
         "outline_width": 1,
         "mode": FONT_STYLE_OUTLINE,
     },
@@ -454,6 +472,7 @@ config = {
         "font": "glyphTable/font/SanJiLuoLiHei-Cu.ttf",
         "output_dir": "glyphTable/modified/gotn",
         "base_font_size": 9,
+        "baseline_point": 0.5,
         "outline_width": 1,
         "mode": FONT_STYLE_WHITE,
     }
@@ -498,5 +517,6 @@ if __name__ == "__main__":
             mapping_output="glyphTable/character-mapping.json",
             base_font_size=choose_config["base_font_size"],
             mode=choose_config["mode"],
-            outline_width=choose_config["outline_width"]
+            outline_width=choose_config["outline_width"],
+            baseline_point=choose_config["baseline_point"]
         )
