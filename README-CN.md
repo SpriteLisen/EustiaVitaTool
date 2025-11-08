@@ -9,7 +9,7 @@
 ![PSV](https://img.shields.io/badge/-PSVita-003791?style=flat&logo=PlayStation)
 
 
-[English](README) • 中文版
+[English](README.md) • 中文版
 
 ----
 

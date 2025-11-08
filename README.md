@@ -112,7 +112,7 @@ For a deeper understanding of the HuneX engine, please refer to:
 [【root-none】PS-HuneX_Tools-CN](https://github.com/lzhhzl/PS-HuneX_Tools-CN)
 
 > This project does not handle script overflow issues in branching dialogue.
-For more details, see [root-none’s](https://github.com/lzhhzl) article: [Hunex Engine Localization Notes (3)]((https://root-none.pages.dev/#/localization_notes/Hunex_Engine/note_hunex_3)).
+For more details, see [root-none’s](https://github.com/lzhhzl) article: [Hunex Engine Localization Notes (3)](https://root-none.pages.dev/#/localization_notes/Hunex_Engine/note_hunex_3).
 
 ### Disclaimer & Anti-Piracy Statement
 ![免责声明&抵制](screenshot/disclaimer.png)
