@@ -1,0 +1,1928 @@
+﻿#label *aiy30230
+b_filename "aiy30230"
+b_Size 5
+b_f_12f 
+mov %branch_flag, 1:if %3012 = 0 mov %branch_flag, 0
+if FSEL!=0,goto *aiy30230_L00084
+goto *aiy30230_L00084
+#label *aiy30230_L00084
+
+b_f_12f 
+mov %branch_flag, 1:if %3012 != 0 mov %branch_flag, 0
+if FSEL!=0,goto *aiy30230_L00160
+#call bg_1543
+#chara_y 5,77,sgmsgwnd000000,50,0,77,21,tati_zz031129,50,0,21,200
+#bgm bgm_0203_loop
+#goto *aiy30230_L00160
+#label *aiy30230_L00160
+
+#vo aiy310313670
+#say 【凯伊姆】,「你是认真的吗？」
+#chara_y 5,21,tati_zz031129,50,0,21,88,face_031129,19,0,88,200
+b_Refresh 
+#vo aiy030309780
+#say 【柯蕾特】,「我一直……爱慕者凯伊姆先生」
+#chara_y 5,21,tati_zz031155,50,0,21,88,face_031155,19,0,88,200
+b_Refresh 
+#vo aiy030309790
+#say 【柯蕾特】,「能被凯伊姆先生这样抱着，感觉就像是在做梦一般」
+#chara_y 5,21,tati_zz031108,50,0,21,88,face_031108,19,0,88,200
+b_Refresh 
+#vo aiy030309800
+#say 【柯蕾特】,「虽然我也知道这样做不行，但是脑海中的这份幻想却无论如何都挥之不去」
+#chara_y 5,21,tati_zz031149,50,0,21,88,face_031149,19,0,88,200
+b_Refresh 
+#vo aiy030309810
+#say 【柯蕾特】,「真是个没用的圣女呢」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310313680
+#say 【凯伊姆】,「你已经不是圣女了吧」
+#chara_y 5,21,tati_zz031148,50,0,21,88,face_031148,19,0,88,200
+b_Refresh 
+#vo aiy030309820
+#say 【柯蕾特】,「嗯」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#say 我拂起圣女的秀发，温柔地抚摸她的面颊。
+#say 将她紧紧地抱在怀里。
+#say 手伸向抬起头来的圣女光滑的后颈，两人的脸随着彼此相合的视线而不断拉近。
+#chara_y 5,21,tati_zz031155,50,0,21,88,face_031155,19,0,88,200
+b_Refresh 
+#vo aiy030309830
+#say 【柯蕾特】,「凯伊姆先生」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#vo aiy310313690
+#say 【凯伊姆】,「……柯蕾特，我想要你」
+#chara_y 5,21,tati_zz030156,50,0,21,88,face_030156,19,0,88,200
+b_Refresh 
+#vo aiy030309840
+#say 【柯蕾特】,「嗯」
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#say 我将自己的嘴靠近她那小巧玲珑的嘴唇。
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#bg bg_0000,bg_alpha,1000
+
+b_Fadeout 1, 1
+#bgm_stop
+#se_stop
+b__soundstop 1
+b__soundstop 2
+b__soundstop 3
+b_f_15d 1
+#bg hcg_030101,bg_alpha,1000
+#add Shcg_030101,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#bgm bgm_0416_loop
+#text 她那本应看不见的双眼，正在凝视着我。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 那份眼神过于的清澈，让我在那谭清泉中看到了自己。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 面对这无比纯洁的少女，我不禁自问，是否对这种做法而感到歉疚。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 答案，当然是否定的。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「柯蕾特」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030309920
+#text 【柯蕾特】    「嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我低下头，温柔地吻上柯蕾特的香唇。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030309930
+#text 【柯蕾特】    「嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030309940
+#text 【柯蕾特】    「……嗯嗯……啾……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030309950
+#text 【柯蕾特】    「啾……嗯，嗯唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030309960
+#text 【柯蕾特】    「嗯唔，啾噜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030309970
+#text 【柯蕾特】    「啾，嗯……嗯啾」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030309980
+#text 【柯蕾特】    「哈啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特轻轻地吐出一口气。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「可以再多吻一些吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030309990
+#text 【柯蕾特】    「嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 对我的问题一一回答的她，是那么的可爱。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310000
+#text 【柯蕾特】    「嗯……啾」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310010
+#text 【柯蕾特】    「唔唔……啾，啾噜，嗯唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310020
+#text 【柯蕾特】    「……呼……嗯嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 即使感到呼吸痛苦，也还是没有分开双唇。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310030
+#text 【柯蕾特】    「嗯……库啾，噼啾」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310040
+#text 【柯蕾特】    「嗯呼，啾，啾，嗯啾」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310050
+#text 【柯蕾特】    「噗哈……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310060
+#text 【柯蕾特】    「……哈啊……哈啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 实在忍受不住的柯蕾特将嘴唇移开。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310070
+#text 【柯蕾特】    「对不起，呼吸太痛苦了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「你是第一次做这种事吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310080
+#text 【柯蕾特】    「……是的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她低下头去，侧脸微微染上绯红。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310090
+#text 【柯蕾特】    「……没想到，会是这么舒服的事情」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「还想做吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310100
+#text 【柯蕾特】    「那种事情……我说不出口」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我倒是还想做」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310110
+#text 【柯蕾特】    「……呜呜，那种事情……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310120
+#text 【柯蕾特】    「凯伊姆先生，无论如何都想的话……也不是不可以」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「那就好」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310140
+#text 【柯蕾特】    「您讨厌我这种女孩子吗……？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不，喜欢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特的脸羞得通红。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她这种第一次露出来的反应让我很开心。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「这次就稍微激烈一点吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310150
+#text 【柯蕾特】    「激烈……吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我没等她说完，就再次吸住她的嘴唇。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310160
+#text 【柯蕾特】    「哈唔……啾，嗯啾……啾，啾噜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310170
+#text 【柯蕾特】    「咕噜，啾，啾，库啾，啾噜噜，嗯啾」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将那娇小的嘴唇含入口中，舌头在上面游走。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310180
+#text 【柯蕾特】    「嗯……嗯唔……嗯嗯嗯嗯……？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我伸出舌头，探入柯蕾特的口中。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310190
+#text 【柯蕾特】    「嗯嗯嗯……呼唔，嗯唔……啊嗯嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 在柯蕾特的口腔中来回舔舐，与她的舌头交合。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310200
+#text 【柯蕾特】    「嗯嗯，咕噜，呼嗯嗯嗯……凯伊姆先……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 过于激烈了吗？,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我微微地收回舌头。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310210
+#text 【柯蕾特】    「嗯嗯……嗯呼……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310220
+#text 【柯蕾特】    「库啾……啾，啾噜，唔噜，咕噜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这次，换成柯蕾特那小小的舌头潜入了我的口中。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310230
+#text 【柯蕾特】    「啾，凯伊姆先生……咕噜，啾噜噜，啾」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 虽然不习惯，但还是拼命地让舌头纠缠在一起。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310240
+#text 【柯蕾特】    「咕噜，啾噜……呼嗯……嗯唔，咕噜，啾，咕噜噜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310250
+#text 【柯蕾特】    「啊呜，噜，啾噜，嗯啾……唔嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310260
+#text 【柯蕾特】    「啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 双唇慢慢地分开。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特恋恋不舍地缩回舌头，注视着我。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310270
+#text 【柯蕾特】    「那个……请问我做得还好吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我温柔地抚摸着柯蕾特的脸。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 现在的柯蕾特，是如此的娇小。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「……你真的没问题吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310280
+#text 【柯蕾特】    「您是指什么呢？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「把我这种人当做对象」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310290
+#text 【柯蕾特】    「您都已经做得那么激烈了，现在还说什么呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不过，你可是前任圣女啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 纯白的衣服，洁白的肌肤。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 被我这种人玷污，真的没关系吗。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310300
+#text 【柯蕾特】    「您意外地没什么自信呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310310
+#text 【柯蕾特】    「事到如今，您又开始害怕了吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我是在为你考虑」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 甫一说完，柯蕾特就向我扑了过来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 将我压倒在身下。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#se 09720
+#text 【凯伊姆】    「唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#se_stop
+#vo aiy030310320
+#text 【柯蕾特】    「这是我主动要求的事情，所以没有任何问题」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310330
+#text 【柯蕾特】    「请您不要在意这种细节，陪我做下去吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 真是够乱来的。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 不过，也确实很有柯蕾特的风格。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「真的没问题吧，柯蕾特」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310340
+#text 【柯蕾特】    「嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「那么……就交给你了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310350
+#text 【柯蕾特】    「交给我了？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310360
+#text 【柯蕾特】    「那个……可是，我不知道接下来该做什么啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「你一点都不知道么」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310370
+#text 【柯蕾特】    「……倒也不是，一点都不知道……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310380
+#text 【柯蕾特】    「在被教会捡到之前，曾经见过一次男女间的性行为」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310390
+#text 【柯蕾特】    「不过因为离得很远，所以细节就……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310400
+#text 【柯蕾特】    「只，只是恰好碰见哦，是非常偶然的事情」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特慌张地辩解道。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「呵……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310410
+#text 【柯蕾特】    「您，您为什么要笑呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310420
+#text 【柯蕾特】    「我可不是因为有兴趣才在那里目不转睛地看个不停的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310430
+#text 【柯蕾特】    「那个，只是稍微，稍微看到一点而已」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「知道了知道了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她那慌忙辩解的样子非常可爱。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「那么，你就把我下面的纽扣解开吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310440
+#text 【柯蕾特】    「要我来解吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「讨厌么？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310450
+#text 【柯蕾特】    「不，我知道了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特用手摸索着找到纽扣的位置，一个个将其解开。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030102,bg_alpha,1000
+#add Shcg_030102,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#text 然后，已经变大的分身就迫不及待地跳了出来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310460
+#text 【柯蕾特】    「有什么……出来了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 又硬又挺的肉棒，展露在柯蕾特的面前。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030103,bg_alpha,1000
+#add Shcg_030103,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#text 柯蕾特摸索着开始确认其形状。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她的手那令人焦急的缓慢动作，让我微妙的兴奋起来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310470
+#text 【柯蕾特】    「这究竟是什么呢……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「第一次摸吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310480
+#text 【柯蕾特】    「是的……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310490
+#text 【柯蕾特】    「非常的大……也很热……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「因为你很有魅力，所以它才会大起来的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310500
+#text 【柯蕾特】    「这个东西可以变大变小吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊啊，你摸一摸的话会变得更大」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310510
+#text 【柯蕾特】    「我都不知道还有这种事呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030102,bg_alpha,1000
+#add Shcg_030102,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy030310520
+#text 【柯蕾特】    「……啊，非常抱歉……一不小心就碰到了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特慌忙把手拿开。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「没事，继续吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310530
+#text 【柯蕾特】    「可以去摸摸它吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 如今目不见物的柯蕾特，只能靠着手感去确认物体的形状。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她带着有些想要恶作剧的表情，将头抬起。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「如果柯蕾特想摸的话」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310540
+#text 【柯蕾特】    「……请您不要说这种欺负人的话」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030103,bg_alpha,1000
+#add Shcg_030103,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#text 柯蕾特开始将手上下动作起来，探寻着我肉棒的每一个角落。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310550
+#text 【柯蕾特】    「好热……这么热真的没关系吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她将分身用双手包住，在上面摩擦了一下。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 受到刺激的肉棒猛地一挺。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310560
+#text 【柯蕾特】    「它在我手中跳起来了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「……唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310570
+#text 【柯蕾特】    「弄，弄痛您了吗？非常抱歉」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不，不是的。我这是很舒服」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310580
+#text 【柯蕾特】    「这样啊……这样做会让您感到舒服吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特用她的小手握住我的分身。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这双手曾经在看台上向群众挥舞。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 一想到这点，我就兴奋不已。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310590
+#text 【柯蕾特】    「凯伊姆先生的呼吸变乱了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「因为很舒服」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310600
+#text 【柯蕾特】    「非常的……可爱」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我真不想被你这么说」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310610
+#text 【柯蕾特】    「为什么呢？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「因为你才能配得上可爱这个词」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310620
+#text 【柯蕾特】    「……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特红着脸低下头去。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 但是，手上的动作却没有停止。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「……唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她用手指包住龟头，轻轻地抚摸。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 那犹如柔软的绢丝般缠绕上来的手指，给我带来近乎麻痹的甜美快感。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310630
+#text 【柯蕾特】    「它在一颤一颤的……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310640
+#text 【柯蕾特】    「非常的热，而且还变得更大了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310650
+#text 【柯蕾特】    「这样做……不错吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不，停下来吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310660
+#text 【柯蕾特】    「不可以吗……？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「再继续下去我就射出来了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310670
+#text 【柯蕾特】    「是什么要射出来了呢？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她好像真的什么都不知道。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「射精。这是男人最舒服的瞬间」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310680
+#text 【柯蕾特】    「这样啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310690
+#text 【柯蕾特】    「凯伊姆先生，那个……您不想射精吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「当然不可能会不想」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310700
+#text 【柯蕾特】    「那么……我想让凯伊姆先生变得舒服起来」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特坚决地说道,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「……知道了。那么，就把它含住吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310710
+#text 【柯蕾特】    「含住……是要吃吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「只要用嘴含住就好」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310720
+#text 【柯蕾特】    「将这个含入口中……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特头一次犹豫起来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不用勉强自己」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310730
+#text 【柯蕾特】    「只要含下去，凯伊姆先生就能舒服吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「比用手来得更加舒服」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310740
+#text 【柯蕾特】    「这样啊……那么我会做的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她怯生生地将嘴凑近分身，舔了起来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030104,bg_alpha,1000
+#add Shcg_030104,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy030310750
+#text 【柯蕾特】    「……嗯……噼啾……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 舌头慢慢地朝着龟头向上靠近。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310760
+#text 【柯蕾特】    「嗯……嗯啾，哈嗯……咕噜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310770
+#text 【柯蕾特】    「嗯哈……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310780
+#text 【柯蕾特】    「感觉有种不可思议的味道」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「是什么样的味道？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310790
+#text 【柯蕾特】    「怪怪的……感觉头脑中有些恍惚」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310800
+#text 【柯蕾特】    「但是，并不讨厌」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310810
+#text 【柯蕾特】    「咕噜……嗯啾，噜，嗯……啾，咕噜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310820
+#text 【柯蕾特】    「……啾……嗯啾，嗯噗」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310825
+#text 【柯蕾特】    「咕噜……噼啾……嗯啾……啾啪……嗯啾」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特的舌头在肉棒的背面上下游移。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「咕……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 被从根部开始舔舐，让我不禁漏出了声音。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 对于第一次来说，算是做得相当好了。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「舌头动成这样就好，含住它把」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310830
+#text 【柯蕾特】    「知道了，那么，我要开动了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「喂，可别用牙咬啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310840
+#text 【柯蕾特】    「哈唔……啾，嗯啾……库啾」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 分身被柯蕾特的嘴含了进去。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 口腔内那份炽热而濡湿的触感，让我的身体不禁一颤。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「就这样上下动动看」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310850
+#text 【柯蕾特】    「嗯好的……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310860
+#text 【柯蕾特】    「……嗯，啾，噼啾……啾噜，啾……噜啾」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310870
+#text 【柯蕾特】    「嗯噜……嗯，啾噜噜，咕噜，噜啾」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特鼓着脸，按照我说的那样将头上下动了起来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 用她那张小嘴拼命地叼着，收紧嘴唇。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310875
+#text 【柯蕾特】    「嗯……嗯啾……噼恰……啾啪……嗯呼」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310880
+#text 【柯蕾特】    「咕噜……啾……咕噜噜，库啾，嗯啾，啾噜噜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 时不时地，还用牙齿轻碰。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 在这种强烈的刺激下，快感不断地高涨。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310890
+#text 【柯蕾特】    「……哈嗯……凯伊姆先生的那里……有什么东西出来了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「苦吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310900
+#text 【柯蕾特】    「没关，系……的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310910
+#text 【柯蕾特】    「嗯啾，嗯呼，哈唔，啾噜，啾，咕噜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310920
+#text 【柯蕾特】    「咕噜，啾噜噜，嗯啾，啾库，嗯呼，啾」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 双唇滑溜溜地贴紧，舌头刺激着裂缝。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 实在是让人难以忍受。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「……柯蕾特，要出来了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310930
+#text 【柯蕾特】    「嗯唔……嗯库，咕噜……？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她的表情好像在问着，是什么要出来了呢。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310940
+#text 【柯蕾特】    「啾库，啾噜，呜噜噜，啾啾，啾噜噜噜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310950
+#text 【柯蕾特】    「啾啾，啾噜噜，嗯啾，咕咯咯，啾噜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「把嘴拿开……！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310960
+#text 【柯蕾特】    「咕啾，噜噜……啾噜噜，咕噜，啾噜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310970
+#text 【柯蕾特】    「啾噜噜，唔噜噜，噼啾，唔噜，啾噜，啾噜噜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特虽然听到了我的话，但是却仍然没有将嘴唇移开。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 而且，反而更激烈地动起了头。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「咕……！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310975
+#text 【柯蕾特】    「啾，嗯嗯，嗯啾，啾唔唔……啾啪」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310980
+#vo aiy030310985
+#text 【柯蕾特】    「嗯嗯，咕，啾，嗯嗯噗……？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将要抬起，总算是将分身从柯蕾特的口中抽了出来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 0,10,white_sprite,0,0,10,100
+#chara_cls 10,100
+#bg hcg_030105,bg_alpha,1000
+#add Shcg_030105,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#text 咚噗，咚库，哔噜，咚库！,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030310990
+#text 【柯蕾特】    「呀……！？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_y 0,10,NULL,0,0,1,100
+#text 咚库，噼噜噜，咚噗！,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 咚库，咚库咚咕，噼库！,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 精液止不住地喷射而出，将柯蕾特的头部与肩膀满满地玷污。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 过度的快感让我的身体不住颤抖。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「唔…………」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 满溢精液的肉棒从握住根部的柯蕾特手中滑脱。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 绢丝制成的手套被染上了另一种污秽的白色。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030106,bg_alpha,1000
+#add Shcg_030106,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy030311000
+#text 【柯蕾特】    「哈啊……哈啊……哈啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311010
+#text 【柯蕾特】    「……哈啊……好热呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311020
+#vo aiy030311025
+#text 【柯蕾特】    「啊啊……满满地，射出……哈啊……来了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311030
+#text 【柯蕾特】    「身体内有凯伊姆先生的……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特带着陶醉的表情，用脸和身体接住了大量的精液。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「抱歉，我没能忍住」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311040
+#text 【柯蕾特】    「这就是射精吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特沾起脸上的精液，送到口中。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311050
+#text 【柯蕾特】    「嗯啾……嗯……感觉滑溜溜的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311060
+#text 【柯蕾特】    「不是太好喝的东西呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「可能是吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311070
+#text 【柯蕾特】    「不过，感觉……有种非常淫靡的味道」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311080
+#text 【柯蕾特】    「就好像被凯伊姆先生包住了全身一样」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特带着精液的脸上露出微笑。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「娼妇每天都会做这种事」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311090
+#text 【柯蕾特】    「这样啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311100
+#text 【柯蕾特】    「凯伊姆先生曾经去过那种地方吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不能说没有」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311110
+#text 【柯蕾特】    「那么……您感觉我怎么样呢？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「你是说和娼妇比起来吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311120
+#text 【柯蕾特】    「嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 不要问这么奇怪的问题啊。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「以第一次来说算是很优秀了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311130
+#text 【柯蕾特】    「这样啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特露出开心的表情。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她真是够讨厌失败的。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311140
+#text 【柯蕾特】    「我让凯伊姆先生满足了呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊啊，算是吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311150
+#text 【柯蕾特】    「只是算是吧？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我还没有进入柯蕾特的体内」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311160
+#text 【柯蕾特】    「进到我体内……是要将什么东西放到我的哪里呢？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「你很快就会知道了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我站起身子，抱住柯蕾特。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311170
+#text 【柯蕾特】    「啊……您，您要做什么？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「这样做就太费事了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我脱掉柯蕾特长长的下装，将她抱到床上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 5,88,NULL,0,0,1,200 
+b_Refresh 
+#bg bg_0000,bg_alpha,1000
+
+b_Fadeout 1, 1
+#bgm_stop
+#se_stop
+b__soundstop 1
+b__soundstop 2
+b__soundstop 3
+#bg hcg_030201,bg_alpha,1000
+#add Shcg_030201,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#bgm bgm_0417_loop
+#vo aiy030311180
+#text 【柯蕾特】    「呀……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311190
+#text 【柯蕾特】    「啊，请不要将我的脚捉起来……好害羞的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311200
+#text 【柯蕾特】    「您是要打算做什么呢？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「刚才柯蕾特让我舒服了，这是回礼」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我也会让你舒服起来」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311210
+#text 【柯蕾特】    「没关系的，我并没有奢求那种事情」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「那样可就没法和我结为一体了哦」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311220
+#text 【柯蕾特】    「是那样的吗……？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不把那里弄湿点是进不去的啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 而且柯蕾特的身体还尤其的小。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 就算不是第一次应该也会很紧。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311230
+#text 【柯蕾特】    「刚才我也问过您……究竟是要把什么放进来呢？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「你刚才含着的那个东西」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311240
+#text 【柯蕾特】    「将那个放进……哪里呢？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「这里」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我摸了一下柯蕾特的私处。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311250
+#text 【柯蕾特】    「咿呀……您，您在做什么呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「所以说，我要把我的那个东西放进这里」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 说着，我继续隔着内裤抚摸着那个柔软的凹陷处。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311260
+#text 【柯蕾特】    「呀，那，那种地方，不可能放的进去的……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「一开始可能会很疼」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311270
+#text 【柯蕾特】    「就是说……那里会裂开吗……？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我倒不觉得会裂开」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311280
+#text 【柯蕾特】    「这样啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「这可是你所献上的纯洁的证明，要停止吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311290
+#text 【柯蕾特】    「……不，我要做」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311300
+#text 【柯蕾特】    「这是这个世上的每个女性都要越过的坎」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311310
+#text 【柯蕾特】    「那么我肯定也能做，我已经做好觉悟了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 不愧是柯蕾特啊。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「知道了，不过，我还是希望尽可能地不弄疼你」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311320
+#text 【柯蕾特】    「为此您才会揉搓这里的吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311330
+#text 【柯蕾特】    「凯伊姆先生是为了我才这么说的呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311340
+#text 【柯蕾特】    「第一次的对象是凯伊姆先生，真的太好了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这份煽情的美妙天使的笑容，有着足以令人发狂的魅力。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 让人忍不住想要去袭击她。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「要开始了哦」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311350
+#text 【柯蕾特】    「嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「首先从胸部开始」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311360
+#text 【柯蕾特】    「胸部……吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311370
+#text 【柯蕾特】    「那样会感觉舒服吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不知道，毕竟你还没完全发育成熟啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311380
+#text 【柯蕾特】    「……总觉得您刚才说了句非常失礼的话」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「是你的错觉」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我按耐不住地将覆盖在柯蕾特胸前的布料取下。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030202,bg_alpha,1000
+#add Shcg_030202,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy030311390
+#text 【柯蕾特】    「嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她那娇小的乳房露了出来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 在那纯白的肌肤上，有着小小的粉色突起。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 虽然非常的小，但是也别有一番可爱。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311400
+#text 【柯蕾特】    「那个……能请您说点什么吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311410
+#text 【柯蕾特】    「您这么默不作声，我有点害怕……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「抱歉」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特希望得到我的评价。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这种事情不用语言就没法传达。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我看到你的胸部了……十分的漂亮哦」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311420
+#text 【柯蕾特】    「……好害羞」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311423
+#text 【柯蕾特】    「可，可是……我的眼睛看不见真是太好了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311426
+#text 【柯蕾特】    「如果看到凯伊姆先生的样子，估计我都会不好意思得想去死了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她非常可爱地说道。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311430
+#text 【柯蕾特】    「一想到被凯伊姆先生这么看着，心情就变得非常奇怪」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311440
+#text 【柯蕾特】    「有种胸口在缩紧，体内在变热般的……不可思议的感觉」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311450
+#text 【柯蕾特】    「可是，这个感觉并不坏。胸口……非常的闷」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她是有感觉了吧。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我突然将手放到乳房上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311460
+#text 【柯蕾特】    「啊……呼……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311470
+#text 【柯蕾特】    「好痒呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我抚摸着乳房，感受着肌肤滑嫩的触感。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311480
+#text 【柯蕾特】    「嗯唔……嗯，嗯嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311490
+#text 【柯蕾特】    「……呼啊，嗯……哈啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311500
+#text 【柯蕾特】    「嗯嗯……嗯，呼唔……呼嗯嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特扭动着身体，吐出甜美的气息。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text ……稍微试着给点刺激吧。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311510
+#text 【柯蕾特】    「嗯啊啊？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311520
+#text 【柯蕾特】    「……哈，啊呜……不，不行的……尖端那里……！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我轻轻地捻起乳头，在手指间把玩着。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 而柯蕾特的身体则随着我的动作而一跳一跳。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311530
+#text 【柯蕾特】    「哈，啊嗯嗯，嗯嗯……嗯呼……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「舒服吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311540
+#text 【柯蕾特】    「我，我不……知道……嗯嗯，唔嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 纯白的肌肤上沁出微红。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311550
+#text 【柯蕾特】    「呼嗯嗯……嗯唔，哈，啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311560
+#text 【柯蕾特】    「……不要……再这样做了……我会，变得奇怪的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311570
+#text 【柯蕾特】    「求……求求，您了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我放开柯蕾特的乳头。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311580
+#text 【柯蕾特】    「……哈啊……哈啊，哈啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311585
+#text 【柯蕾特】    「哈啊……呜呜呜……啊啊……哈啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特瘫倒在床上，呼吸慌乱。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 只是稍微欺负了一下乳头，就变成这样了。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 说不定她相当的敏感。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「怎么样」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311590
+#text 【柯蕾特】    「身体好热……非常的闷，让人忍耐不住」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311600
+#text 【柯蕾特】    「这是我第一次有这种感觉……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 身体被汗水所浸湿，吐出炽热的呼吸。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这让人难以忍耐地煽情。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「差不多也该碰碰这里了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将手伸向柯蕾特的私处。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311610
+#text 【柯蕾特】    「呀……啊啊，嗯嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030203,bg_alpha,1000
+#add Shcg_030203,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#text 刚碰到裂缝，就响起了粘稠的水声。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311615
+#text 【柯蕾特】    「呀……哈啊啊……啊呜……嗯嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311620
+#text 【柯蕾特】    「不，不行的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特慌忙用手挡住了那里。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不行吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311630
+#text 【柯蕾特】    「好奇怪……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她自己将手伸入内裤中确认着。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 然后打开手掌，任由指缝间的爱液流落。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311640
+#text 【柯蕾特】    「那里变湿了。这是……为什么呢？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「会变湿是因为有感觉，这样男人的那个东西才能进去」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311650
+#text 【柯蕾特】    「原来是这样啊，我都不知道呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊啊，所以就放心吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我隔着内裤，再次揉搓起柯蕾特的私处。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311660
+#text 【柯蕾特】    「哈嗯嗯，可是，刺激太强了，身体……变得好奇怪」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我的手指一边左右移动，一边压到里面。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311670
+#text 【柯蕾特】    「嗯啊，嗯嗯，嗯嗯唔，呼嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311680
+#text 【柯蕾特】    「啊……啊嗯，嗯嗯－」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特的身体大大地后仰。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 私处不断地涌出爱液，透过内裤溢出。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 那里已经相当的湿了。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311690
+#text 【柯蕾特】    「……哈啊……哈啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「要脱掉内裤了哦」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311700
+#text 【柯蕾特】    「啊……呀啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我迫不及待的地扒掉柯蕾特的内裤。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030204,bg_alpha,1000
+#add Shcg_030204,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy030311705
+#text 【柯蕾特】    「怎么……啊……啊啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 漂亮的私处展露在我面前。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311710
+#text 【柯蕾特】    「……您看到我的那里了吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特的肌肤因为羞耻而泛起潮红。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311720
+#text 【柯蕾特】    「好害羞……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我沿着裂缝，微微地望向那桃色的阴唇。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 爱液正不断地从那里滴落。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311730
+#text 【柯蕾特】    「您不觉得奇怪吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「哪里奇怪？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311740
+#text 【柯蕾特】    「我的……那个」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311750
+#text 【柯蕾特】    「凯伊姆先生应该也见过其他女性的那里吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311760
+#text 【柯蕾特】    「您感觉我的那里怎么样呢？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「你的那里是我至今为止所见过的最漂亮的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311770
+#text 【柯蕾特】    「真的吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311780
+#text 【柯蕾特】    「好高兴……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「可以摸吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特害羞地低下头。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311790
+#text 【柯蕾特】    「……凯伊姆先生，请您温柔一些」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「当然了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我伸出手指，向着那湿润的阴唇挺进。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311795
+#text 【柯蕾特】    「……嗯……啊……啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311800
+#text 【柯蕾特】    「啊……嗯嗯，呼，嗯，啊嗯嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311810
+#text 【柯蕾特】    「感，感觉……非常，舒服……那样，非常的……舒服」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311820
+#text 【柯蕾特】    「嗯呼，呼，啊呜……嗯，嗯唔……嗯嗯嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特的身体随着我手指的动作而绷紧。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 溢出的爱液顺着大腿流到床上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311830
+#text 【柯蕾特】    「嗯……嗯唔，嗯嗯……嗯，嗯啊啊啊啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 突然，她的身体激烈地颤了一下。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 那是因为我碰到了藏在阴唇深处的阴蒂。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311835
+#text 【柯蕾特】    「嗯嗯，哈啊……啊，嗯……哈啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311840
+#text 【柯蕾特】    「呀……凯伊姆先生，现在又是怎么了呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「那是女性最敏感的地方，别担心」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311850
+#text 【柯蕾特】    「就算您叫我别担心……现在，还是不行」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「被你这么一说我就更想摸了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311860
+#text 【柯蕾特】    「怎么会……啊，啊嗯嗯，嗯呼，啊嗯，嗯嗯嗯嗯－」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311870
+#text 【柯蕾特】    「不，不行……不行的，啊，啊啊，嗯嗯，嗯啊，嗯呼啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 应该是轻微地高潮了吧。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特的身体微微地颤抖着。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311880
+#text 【柯蕾特】    「哈……哈啊，哈啊……我明明都说不行了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311890
+#text 【柯蕾特】    「这样子……会让我变得好奇怪的……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「那就变得奇怪吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这次，我将手指伸入了阴道里面。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311900
+#text 【柯蕾特】    「嗯唔，啊，啊啊，嗯嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 阴道虽然已经相当的湿润，但却还是在强烈地拒绝着我的侵入。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我稍稍用力，让手指滑了进去。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311910
+#text 【柯蕾特】    「呜……呼，嗯嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特的表情因为痛苦而扭曲。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「疼吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311920
+#text 【柯蕾特】    「……没关系的……请再进得更深些吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 阴道紧紧地收缩，夹得我的手指都有些疼痛。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 只是插进一根手指就这么艰难，更不用提我的分身了。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311930
+#text 【柯蕾特】    「……啊，嗯，嗯嗯……呜嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311940
+#text 【柯蕾特】    「嗯唔，嗯嗯嗯，嗯呼……啊嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我一边让那里习惯我的手指，一边慢慢地反复抽插。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311950
+#text 【柯蕾特】    「嗯嗯，哈呜……嗯库，嗯，嗯啊……咕唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311960
+#text 【柯蕾特】    「呀，那样动的话……我会变得，奇怪起来的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我一点点地让她的抵抗减缓下来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311970
+#text 【柯蕾特】    「嗯，嗯嗯……呼啊，啊嗯嗯，哈，嗯嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311980
+#text 【柯蕾特】    「咕唔……嗯，啊，啊，啊，啊，啊呼」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 手指虽然已经陷得更深，但她看上去却已经不是很疼。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030311990
+#text 【柯蕾特】    「哈啊……啊啊，进到……肚子里了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「怎么样？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312000
+#text 【柯蕾特】    「……我想，应该是很舒服吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「都湿成这样了，还说应该是啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312010
+#text 【柯蕾特】    「我不知道啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将指头拔出，看着吐出甜美喘息的柯蕾特。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 脸微微地上扬，露出恍惚的表情。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「差不多应该可以了吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312020
+#text 【柯蕾特】    「……凯伊姆先生是要将您的那个放入我的体内吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊啊，做好准备了吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312030
+#text 【柯蕾特】    「嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她可爱地点了点头。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将自己的龟头盯在柯蕾特小小的阴唇上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312040
+#text 【柯蕾特】    「那里……好热……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「柯蕾特也是」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 为了尽可能地不让她感到疼痛，我用肉棒蹭着阴唇，沾满爱液。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312050
+#text 【柯蕾特】    「……啊，哈啊，嗯唔，呀，请您不要那么摩擦啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「这样你才会不疼」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312060
+#text 【柯蕾特】    「可，可是……嗯呜，啊嗯嗯……啊啊，请您，进来吧……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特被摩擦着阴蒂，呻吟声渐渐变大。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「知道了，那我要上了哦」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将龟头抵在她的小穴上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 然后，慢慢地向前用力。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030205,bg_alpha,1000
+#add Shcg_030205,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy030312070
+#text 【柯蕾特】    「啊……嗯唔……啊，呜呜……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312080
+#text 【柯蕾特】    「嗯，哈啊……啊啊啊，嗯唔唔唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 肉棒一点点地向柯蕾特的体内挺进。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「……唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312085
+#text 【柯蕾特】    「嗯嗯嗯！……唔……嗯……呜呜……嗯呜……嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 阴道强烈地拒绝着我的侵入。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 感觉只要一放松，就好像会被推出来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312090
+#text 【柯蕾特】    「啊啊，嗯唔……好，好疼……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「抱歉，忍耐一下」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312100
+#text 【柯蕾特】    「好的……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 在龟头挺进的前方，有一道薄壁紧紧地挡着。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 那是柯蕾特纯洁的证明。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我要一口气插进去了哦」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312110
+#text 【柯蕾特】    「嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将力量贯注在腰部，一口气将分身插入柯蕾特的体内。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030206,bg_alpha,1000
+#add Shcg_030206,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy030312120
+#text 【柯蕾特】    「啊，啊啊啊啊，嗯呜呜，啊啊啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312130
+#text 【柯蕾特】    「咿，呜呜呜呜，啊啊啊，啊啊，啊……哈啊……哈啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 破处的血自柯蕾特的大腿流下。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她肯定是相当的疼。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「进到……里面去了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312135
+#text 【柯蕾特】    「咿……啊啊，哈啊，嗯唔……嗯……哈啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我的肉棒全部侵入了柯蕾特娇小的身体。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 一直没到根部。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312140
+#text 【柯蕾特】    「真的吗……？这样就，全部都进去了吗……？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「没错，你很努力啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312145
+#text 【柯蕾特】    「哈啊……啊啊啊……嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312150
+#text 【柯蕾特】    「……肚子里面被填得满满的。凯伊姆先生的那个全部都进来了呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312160
+#text 【柯蕾特】    「好开心。能够为凯伊姆先生……献上这个身体」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 泪珠从柯蕾特的眼眶中滴落。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「很疼吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312170
+#text 【柯蕾特】    「这种程度我能忍得住」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312180
+#text 【柯蕾特】    「……那么，接下来是要做什么呢？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 炽热的阴道将我的肉棒紧紧地夹住。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 只要稍微动作，就带来近乎麻痹的快感。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「要把放进你体内的那个东西在你那里来回进出」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312190
+#text 【柯蕾特】    「原来如此……您是要射精吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「你理解力很强啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312200
+#text 【柯蕾特】    「都是刚才凯伊姆先生教给我的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特露出松软的微笑。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她实在是太可爱了。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「一开始我会慢点动的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312210
+#text 【柯蕾特】    「嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我一点点地将肉棒拔出。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 滋噜噜噜,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312215
+#text 【柯蕾特】    「嗯……啊，啊啊啊啊……！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312220
+#text 【柯蕾特】    「啊，嗯嗯，呼唔……啊呼，嗯嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312230
+#text 【柯蕾特】    「……嗯啊，啊啊，啊嗯，呼啊……咿呜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 阴道配合着我的动作而不断地收紧。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312235
+#text 【柯蕾特】    「哈啊啊啊……啊啊……嗯嗯……呼唔唔……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将肉棒拔到露出龟头的位置，然后再次插入。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 滋溜，滋啾,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312240
+#text 【柯蕾特】    「嗯……啊啊，啊嗯嗯，进来，了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312250
+#text 【柯蕾特】    「唔唔唔……嗯嗯，呀啊，呼唔嗯嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 夹紧我分身的花蕊变得越来越热。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 给我带来灼烧般的快感。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312260
+#text 【柯蕾特】    「啊啊，唔嗯……呼啊，嗯嗯，啊，啊啊嗯……咿呜」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 滋噜噜噜，滋啾,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312270
+#text 【柯蕾特】    「呼呜呜……啊，啊嗯，啊啊，嗯唔唔，嗯嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 慢慢地拔出，插入。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这份令人心痒难搔的刺激感，让我渐渐地开始无法控制自己的欲望。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不要紧吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312280
+#text 【柯蕾特】    「呼啊，是，是的……已经不怎么疼了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「看来是习惯了啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312290
+#text 【柯蕾特】    「嗯……是那样吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我要稍微激烈点动作了哦」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312300
+#text 【柯蕾特】    「哎，请等……啊呜唔唔」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 阴茎突然向着柯蕾特的体内狠狠插入。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312305
+#text 【柯蕾特】    「啊，啊啊，唔啊啊……！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 阴道的阻碍被冲破带来的刺激，让柯蕾特仰起了身子。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 啾，滋啾，咕啾,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312310
+#text 【柯蕾特】    「进去……那么深……啊啊，嗯嗯，啊啊啊，唔嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312320
+#text 【柯蕾特】    「呀，啊啊，咿呀……这样……不行的……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312330
+#text 【柯蕾特】    「啊啊，又，变热了，啊啊，哈啊，嗯啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特的阴道急剧收紧，压迫着我的分身。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312335
+#text 【柯蕾特】    「嗯唔唔，呀呜，啊，嗯嗯嗯！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312340
+#text 【柯蕾特】    「啊，啊啊，啊，这样……忍不，住了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312350
+#text 【柯蕾特】    「不自觉地……发出，声音」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「没关系，出声吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 阴壁的褶皱直缠至根部。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 给人带来心畅神怡的快感。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312360
+#text 【柯蕾特】    「哈啊，啊，咿呜，啊啊啊，好，好害，羞的……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312370
+#text 【柯蕾特】    「啊，嗯嗯，嗯啊，啊嗯，啊，啊啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312380
+#text 【柯蕾特】    「啊啊，好像要，飞起来……脑中，一片空白」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 本来就已经很紧的阴道，更加用力地夹紧。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 过度的快感让我差不多要达到高潮了。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 已经无法忍耐下去。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「……我也要去了哦，柯蕾特」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312390
+#text 【柯蕾特】    「好的……请向我，射出来吧……凯伊姆先生」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312400
+#text 【柯蕾特】    「啊，不行……我，我已经……啊啊，嗯嗯，啊啊啊啊啊！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312405
+#text 【柯蕾特】    「不要……不要……啊……嗯，啊啊，啊，呼唔，啊啊嗯！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312410
+#text 【柯蕾特】    「嗯嗯嗯，呜嗯嗯嗯，啊啊啊，啊啊啊啊啊啊啊啊！！！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_y 0,10,NULL,0,0,1,100
+#bg hcg_030207,bg_alpha,1000
+#add Shcg_030207,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#text 咚库，咚库咚库，哔咕！,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 咚噼呜，哔咕，哔库！,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312415
+#text 【柯蕾特】    「哈啊啊嗯……啊呼呜呜呜……嗯嗯……啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_y 0,10,NULL,0,0,1,100
+#text 大量的精液向柯蕾特的体内喷涌而出。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 射精停不下来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_y 0,10,NULL,0,0,1,100
+#text 咚库，噼咕咕，咚噗！,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312420
+#text 【柯蕾特】    「啊啊……嗯嗯，热热的东西，满满地进来了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312425
+#text 【柯蕾特】    「哈呜呜……啊啊……咕，哈啊，哈啊啊……嗯嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312430
+#text 【柯蕾特】    「啊嗯，唔嗯嗯……非常舒服……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特也同时达到了绝顶，她的身体配合着我的射精而不断痉挛。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312440
+#text 【柯蕾特】    「嗯嗯……哈啊，嗯啊啊……哈啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312450
+#text 【柯蕾特】    「哈啊……啊……嗯嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 最后的精液流入柯蕾特的体内。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 小小的阴道中，装不下的精液满溢而出。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312460
+#text 【柯蕾特】    「嗯嗯，还在……里面……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 分身在柯蕾特的体内不断蠕动。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 过度的快感，让我的脑海中一片空白。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将阴茎从柯蕾特的体内拔出，带起粘稠的水声。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030208,bg_alpha,1000
+#add Shcg_030208,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy030312465
+#text 【柯蕾特】    「哈啊啊啊啊……哈啊……呼哈啊……啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312470
+#text 【柯蕾特】    「啊……凯伊姆先生的……溢出来了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 精液不停地自阴道中溢出，在床上汇成了一滩水洼。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 淡红的液体混杂在白浊的精液中，别添了一份颜色。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312475
+#text 【柯蕾特】    「哈啊……呼啊……啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312480
+#text 【柯蕾特】    「凯伊姆先生……您舒服了吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「啊啊，很舒服」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我没想到会这么早就射出来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她夹得是真紧啊。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「柯蕾特呢？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312490
+#text 【柯蕾特】    「……好热的东西满满地溢出，我还以为肚子在燃烧呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312500
+#text 【柯蕾特】    「不过，感觉非常的幸福」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特露出娇艳的微笑。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这份魅惑的表情……让我的分身再度开始挺立。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我的欲望仍旧没有完全释放完毕。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「柯蕾特」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312510
+#text 【柯蕾特】    「嗯，什么事？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将肉棒抵在柯蕾特的阴唇上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「可以再插进去吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312520
+#text 【柯蕾特】    「哎……？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030209,bg_alpha,1000
+#add Shcg_030209,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#text 滋啾，奴噜噜噜噜,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312525
+#text 【柯蕾特】    「什，啊，啊啊啊……！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312530
+#text 【柯蕾特】    「呼啊啊嗯，唔啊，啊呼」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 突然的刺激让她的身体再次大大地后仰。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312540
+#text 【柯蕾特】    「呀，你要做什么啊？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312550
+#text 【柯蕾特】    「还没有结束吗……？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「就是这么回事」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 说着，我再次深深地插入柯蕾特的体内。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312555
+#text 【柯蕾特】    「呀啊！啊啊……咕呜呜，嗯嗯……！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 滋，奴噜噜,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312560
+#text 【柯蕾特】    「啊啊啊，啊呜呜，不，不行……刺激太强了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特的刚刚到达过绝顶的身体跳了起来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312570
+#text 【柯蕾特】    「啊，满满的……射出来了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 染成桃色的肌肤上，沾上了乳白色的液体。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312575
+#text 【柯蕾特】    「哈啊，哈啊啊……啊啊……嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312580
+#text 【柯蕾特】    「啊啊……又插进来了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「抱歉」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312590
+#text 【柯蕾特】    「您是要再做一次吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我还没有满足啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312600
+#text 【柯蕾特】    「这样啊……那么，就请您动起来吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312610
+#text 【柯蕾特】    「直到凯伊姆先生满足为止，我都会为您献上这个身体的」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 她说的话是如此的可爱。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312620
+#text 【柯蕾特】    「啊，凯伊姆先生的那个……在我的体内变大了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「因为你让我很舒服啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312630
+#text 【柯蕾特】    「是那样的吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我将分身慢慢地自柯蕾特的体内拔出。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312635
+#text 【柯蕾特】    「呀呜呜……啊啊啊……啊啊啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312640
+#text 【柯蕾特】    「哈啊啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 然后，一口气直插至底。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312650
+#text 【柯蕾特】    「呜嗯！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312655
+#text 【柯蕾特】    「呼啊啊……哈啊啊，嗯啊啊啊……哇啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 滋噜噜噜……滋啾！！,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312660
+#text 【柯蕾特】    「哈，啊……啊呜呜！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 然后，重复抽插。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312670
+#text 【柯蕾特】    「这样不行……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「为什么」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312680
+#text 【柯蕾特】    「脑海中……已经好像迸出火花了……呜呜嗯嗯！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312690
+#text 【柯蕾特】    「变得……好奇怪……哈啊啊嗯！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 就算她这么说，我也不会停下来了。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我开始激烈地摆动腰部。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312700
+#text 【柯蕾特】    「呀啊，啊嗯，唔唔嗯，好，激烈」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312710
+#text 【柯蕾特】    「啊，嗯嗯，啊，啊啊，呼唔，哈啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312720
+#text 【柯蕾特】    「咕唔，啊啊啊，嗯嗯，哈啊，嗯啊啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 咕啾，啾，咕啾,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 身体撞击着柯蕾特的大腿内侧，将分身越陷越深。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312730
+#text 【柯蕾特】    「呀啊，好，厉害，这样的，呼啊啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312740
+#text 【柯蕾特】    「呀啊，啊啊，呜呜呜，非常，舒服」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特的口中流出了口水。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 在我身体的撞击下，柯蕾特的脸已经因为快乐而歪曲。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312750
+#text 【柯蕾特】    「哈啊啊，啊啊啊，呼呜嗯，咕啊啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312760
+#text 【柯蕾特】    「啊，啊啊啊，不，不行……身体要，飞起来了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特的阴道紧紧地将分身夹在其中。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 转眼间，射精感就再度涌了上来。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312770
+#text 【柯蕾特】    「啊啊啊，已经，已经忍耐，不住了……！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312780
+#text 【柯蕾特】    「凯伊姆先生，凯伊姆先生！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「我也要射了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030210,bg_alpha,1000
+#add Shcg_030210,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy030312790
+#text 【柯蕾特】    「啊啊，嗯哈啊，呼呜，唔嗯嗯，啊啊啊啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312800
+#text 【柯蕾特】    「嗯唔唔，咿呜，哈啊，啊啊，啊，啊啊啊！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312810
+#text 【柯蕾特】    「已经，凯伊姆先……我，已经」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312815
+#text 【柯蕾特】    「咿呀！嗯嗯！……啊啊啊嗯！嗯啊啊啊！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 肉棒用尽最后一分力气，贪恋地冲击着柯蕾特的阴道。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312820
+#text 【柯蕾特】    「啊啊，去了，我要……去了！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312825
+#text 【柯蕾特】    「呀呜呜……啊啊啊！嗯嗯！啊啊……嗯啊啊！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312830
+#text 【柯蕾特】    「啊啊，啊啊啊，啊啊啊，啊啊啊……啊，嗯嗯嗯嗯嗯！！！」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_y 0,10,NULL,0,0,1,100
+#bg hcg_030211,bg_alpha,1000
+#add Shcg_030211,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#text 咚噗，哔呜，哔呜噜噜！,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 哔库，哔呜，哔呜咕！,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312840
+#text 【柯蕾特】    「呜，啊啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 大量的精液自我用过度激烈的动作拔出的分身中飞射而出。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312850
+#text 【柯蕾特】    「啊啊啊……哈啊，啊啊啊……嗯嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312860
+#text 【柯蕾特】    「好热……凯伊姆先生的精液……满满的射了出来……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#chara_y 0,10,white_sprite,0,0,91,100
+#chara_y 0,10,NULL,0,0,1,100
+#text 【凯伊姆】    「咕……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 哔咕，哔呜，咕噜噜！,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 阴茎无数次地颤抖着，向柯蕾特体内射出白浊的精液。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 这份至高的快感让我的大脑一片空白。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg hcg_030212,bg_alpha,1000
+#add Shcg_030212,1
+#chara_y 5,77,sgmsgwnd200000.grp,50,0,77,200
+#vo aiy030312870
+#text 【柯蕾特】    「哈啊，哈啊，哈啊……哈啊……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312880
+#text 【柯蕾特】    「啊嗯……嗯嗯……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特的身体瘫软地倒在床上。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312890
+#text 【柯蕾特】    「好啊……啊啊……真是太厉害了……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312900
+#text 【柯蕾特】    「没想到男女之间的交合……居然是这么美妙的东西呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「喜欢吗？」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312910
+#text 【柯蕾特】    「……倒也……不能说不喜欢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特怯生生地将手伸向我的肉棒。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 还没有变小的分身，在柯蕾特的手中吐出了残存的精液。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「咕……不要过于去刺激它啊」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312920
+#text 【柯蕾特】    「还在射出……肚子上也有好多……好厉害……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312930
+#text 【柯蕾特】    「居然能射出这么多呢……」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 柯蕾特带着陶醉的表情，捧起我射出的大量精液。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 然后，送到嘴里咕咚一声咽了下去。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312940
+#text 【柯蕾特】    「……嗯，嗯唔，嗯嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「喂，也用不着喝下去吧」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312950
+#text 【柯蕾特】    「没关系的。这是凯伊姆先生为我而射出来的东西」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312960
+#text 【柯蕾特】    「但是……稍微有点难喝呢」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我抓住柯蕾特的手，将自己的脸向她凑近。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 【凯伊姆】    「不用这么做了」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#vo aiy030312970
+#text 【柯蕾特】    「嗯」,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 真是个好孩子。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#text 我擦拭掉沾在柯蕾特脸边的精液，吻上她的嘴唇。,13,88,83,100,#FFFFFF,9,0
+#text_off
+#bg bg_0000,bg_alpha,1000
+
+b_Fadeout 1, 1
+#bgm_stop
+#se_stop
+b_f_15d 0
+b_f_0e6 209, 1
+b_f_12f 
+mov %branch_flag, 1:if %3012 != 0 mov %branch_flag, 0
+#if FSEL!=0,goto *aiy30230_L0d6ec
+b_f_15d 0
+return
+#goto *aiy30230_L0d6ec
+#label *aiy30230_L0d6ec
+
+#label *aiy30230_L0d6f8
+#ret
+return
+#label *aiy30230_end
