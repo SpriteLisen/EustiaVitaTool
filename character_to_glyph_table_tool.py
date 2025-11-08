@@ -387,8 +387,8 @@ def render_chars_to_images(
         print(f"Saved {out_path}")
 
     # 保存映射文件
-    # with open(mapping_output, "w", encoding="utf-8") as f:
-    #     json.dump(mapping_data, f, ensure_ascii=False, indent=2)
+    with open(mapping_output, "w", encoding="utf-8") as f:
+        json.dump(mapping_data, f, ensure_ascii=False, indent=2)
 
     print(f"All images processed. Mapping saved to {mapping_output}")
 
